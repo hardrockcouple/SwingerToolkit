@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Clubs 2.0</title>
+  <link rel="stylesheet" href="./styles.css" />
+  <link rel="stylesheet" href="./clubs2.css" />
+</head>
+<body>
+
+<header class="navbar">
+  <div class="nav-left">
+    <img id="siteLogo" class="logo-img" alt="Logo" />
+    <nav class="navLinks">
+      <a href="index.html">Home</a>
+      <a href="clubs.html">Clubs</a>
+      <a href="clubs2.html" class="active">Clubs 2.0</a>
+      <a href="shopping.html">Shopping</a>
+      <a href="capdagde.html">Cap D'Agde</a>
+      <a href="outras.html">Others</a>
+    </nav>
+  </div>
+</header>
+
+<section class="filtersBar">
+  <div class="filtersInner">
+    <input id="searchInput" class="searchInput" type="text" placeholder="Search by name..." autocomplete="off" />
+
+    <select id="countryFilter" class="select">
+      <option value="">Country</option>
+    </select>
+
+    <select id="cityFilter" class="select" disabled>
+      <option value="">City</option>
+    </select>
+
+    <div class="viewToggle" role="group" aria-label="View mode">
+      <button id="viewGrid" class="vtBtn active" type="button">Grid</button>
+      <button id="viewList" class="vtBtn" type="button">List</button>
+      <button id="viewMap" class="vtBtn" type="button" disabled>Map</button>
+    </div>
+
+    <button id="clearFilters" class="btn">Clear</button>
+    <div class="count" id="resultsCount">0 / 0</div>
+  </div>
+</section>
+
+<main class="content">
+  <section id="cardsContainer" class="grid"></section>
+  <div class="paginationWrap" id="paginationWrap">
+    <div class="pagination" id="pagination"></div>
+  </div>
+
+  <!-- Sidebar -->
+  <aside class="sidebar hidden" id="sidebar">
+    <div class="sidebarHead">
+      <button class="sidebarClose" id="closeSidebar" type="button">×</button>
+      <div class="sidebarTitle" id="sidebarTitle"></div>
+      <div class="sidebarSub" id="sidebarSub"></div>
+    </div>
+    <div class="sidebarBody" id="sidebarBody"></div>
+  </aside>
+
+  <div class="backdrop hidden" id="backdrop"></div>
+</main>
+
+<script src="./config.js"></script>
+<script type="module" src="./clubs2-app.js"></script>
+</body>
+</html>

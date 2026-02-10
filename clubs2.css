@@ -1,0 +1,136 @@
+.viewToggle{
+  display:flex;
+  gap:8px;
+  align-items:center;
+}
+
+.vtBtn{
+  height: 42px;
+  padding: 0 14px;
+  border-radius: 12px;
+  border: 1px solid #2a2a2a;
+  background: #151515;
+  color: #fff;
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.vtBtn.active{
+  border-color: var(--menu-hover);
+  color: var(--menu-hover);
+}
+
+.vtBtn:disabled{
+  opacity:.45;
+  cursor:not-allowed;
+}
+
+/* LIST MODE */
+.grid.listMode{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.card.compact{
+  min-height: unset;
+  padding: 14px 16px;
+}
+
+.cardRow{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:14px;
+  width:100%;
+}
+
+.cardLeft .name{ margin:0 0 6px 0; font-size:18px; }
+.cardLeft .meta{ margin:0; }
+
+.badges{
+  display:flex;
+  gap:8px;
+  align-items:center;
+}
+
+.badge{
+  border:1px solid #2a2a2a;
+  border-radius:999px;
+  padding:6px 10px;
+  font-weight:800;
+  font-size:12px;
+  color:#ddd;
+  background:#101010;
+}
+
+.badge.visited{
+  border-color: rgba(198,167,94,.6);
+  color: var(--menu-hover);
+}
+
+/* SIDEBAR */
+.backdrop{
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.55);
+  z-index: 150;
+}
+
+.sidebar{
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: min(520px, 92vw);
+  background: #111;
+  border-left: 1px solid #2b2b2b;
+  box-shadow: -18px 0 50px rgba(0,0,0,.65);
+  z-index: 160;
+  display:flex;
+  flex-direction:column;
+}
+
+.sidebar.hidden,
+.backdrop.hidden{
+  display:none;
+}
+
+.sidebarHead{
+  padding: 16px 16px 10px;
+  border-bottom: 1px solid #1f1f1f;
+  position: relative;
+}
+
+.sidebarClose{
+  position:absolute;
+  top:12px;
+  right:12px;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  border: 1px solid #2b2b2b;
+  background: #151515;
+  color:#fff;
+  font-size:22px;
+  cursor:pointer;
+}
+
+.sidebarTitle{
+  font-size: 20px;
+  font-weight: 900;
+  margin-right: 52px;
+}
+
+.sidebarSub{
+  color:#bdbdbd;
+  margin-top:6px;
+  font-weight:700;
+}
+
+.sidebarBody{
+  padding: 14px 16px 18px;
+  overflow:auto;
+  line-height: 1.6;
+  color:#d6d6d6;
+}
