@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Clubs</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+
+<header class="navbar">
+  <div class="nav-left">
+    <img id="siteLogo" class="logo-img" alt="Logo" />
+    <nav class="navLinks">
+      <a href="index.html">Home</a>
+      <a href="clubs.html" class="active">Clubs</a>
+      <a href="shopping.html">Shopping</a>
+      <a href="capdagde.html">Cap D'Agde</a>
+      <a href="outras.html">Others</a>
+    </nav>
+  </div>
+</header>
+
+<!-- =========================
+     FILTERS
+========================= -->
+<section class="filtersBar">
+  <div class="filtersInner">
+    <input
+      id="searchInput"
+      class="searchInput"
+      type="text"
+      placeholder="Search by name..."
+      autocomplete="off"
+    />
+
+    <select id="countryFilter" class="select">
+      <option value="">Country</option>
+    </select>
+
+    <select id="cityFilter" class="select" disabled>
+      <option value="">City</option>
+    </select>
+
+    <button id="clearFilters" class="btn">Clear</button>
+
+    <div class="count" id="resultsCount">0 results</div>
+  </div>
+</section>
+
+<!-- =========================
+     CONTENT
+========================= -->
+<main class="content">
+
+  <section class="grid" id="cardsContainer"></section>
+
+  <div class="paginationWrap">
+    <div class="pagination" id="pagination"></div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal hidden" id="modal">
+    <div class="modalContent">
+      <button class="modalClose" id="closeModal">×</button>
+      <div id="modalBody"></div>
+    </div>
+  </div>
+
+</main>
+
+<!-- =========================
+     SCRIPTS
+========================= -->
+<script src="./config.js"></script>
+
+<script type="module">
+  import { initLogo } from "./ui-common.js";
+  initLogo();
+</script>
+
+<script type="module" src="./clubs-cards.js"></script>
+<script type="module" src="./clubs-app.js"></script>
+
+</body>
+</html>
