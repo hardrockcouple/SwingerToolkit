@@ -5,9 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Clubs 2.0</title>
 
-  <!-- base -->
   <link rel="stylesheet" href="./styles.css" />
-  <!-- page-specific -->
   <link rel="stylesheet" href="./clubs2.css" />
 </head>
 <body>
@@ -27,61 +25,56 @@
   </div>
 </header>
 
-<!-- Filters / Controls -->
-<section class="filtersBar">
-  <div class="filtersInner">
-    <input id="searchInput" class="searchInput" type="text" placeholder="Search by name..." />
+<main class="content">
 
-    <select id="countryFilter" class="select">
+  <!-- Filters / Controls -->
+  <div class="filters">
+    <input id="searchInput" type="text" placeholder="Search by name..." />
+
+    <select id="countryFilter">
       <option value="">Country</option>
     </select>
 
-    <select id="cityFilter" class="select" disabled>
+    <select id="cityFilter" disabled>
       <option value="">City</option>
     </select>
 
-    <div class="viewToggle">
-      <button id="viewGrid" class="btn active" type="button">Grid</button>
-      <button id="viewList" class="btn" type="button">List</button>
-      <button id="viewMap" class="btn" type="button">Map</button>
+    <div class="view-buttons">
+      <button id="viewGrid" class="active" type="button">Grid</button>
+      <button id="viewList" type="button">List</button>
+      <button id="viewMap" type="button">Map</button>
+      <button id="clearFilters" type="button">Clear</button>
     </div>
-
-    <button id="clearFilters" class="btn" type="button">Clear</button>
 
     <div id="resultsCount" class="count">0 results</div>
   </div>
-</section>
 
-<main class="content">
-
-  <!-- Error box -->
-  <div id="errorBox" class="errorBox hidden"></div>
+  <!-- Error -->
+  <div id="errorBox" class="hidden"></div>
 
   <!-- Views -->
-  <div id="gridView" class="grid"></div>
+  <section id="gridView"></section>
 
-  <div id="listView" class="list hidden"></div>
+  <section id="listView" class="hidden"></section>
 
-  <div id="mapView" class="mapWrap hidden">
-    <div class="mapHint">
-      Map view (simple): clicking a row opens Google Maps.
+  <section id="mapView" class="hidden">
+    <div style="color:#bbb;margin:6px 0 12px;">
+      (Simple mode) Click a club to open Google Maps.
     </div>
-    <div id="mapList" class="list"></div>
-  </div>
+    <div id="mapList"></div>
+  </section>
+
 </main>
 
 <!-- Modal -->
 <div id="modal" class="modal hidden" aria-hidden="true">
   <div class="modalContent">
-    <button id="closeModal" class="modalClose" aria-label="Close">×</button>
+    <button id="closeModal" class="modalClose" aria-label="Close">&times;</button>
     <div id="modalBody"></div>
   </div>
 </div>
 
-<!-- IMPORTANT: config first (must define window.CONFIG) -->
 <script src="./config.js"></script>
-
-<!-- App -->
 <script type="module">
   import { initLogo, setActiveNav } from "./ui-common.js";
   import { initClubs2 } from "./clubs2-app.js";
