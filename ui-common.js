@@ -3,33 +3,20 @@ export function initLogo() {
   if (!img) return;
 
   const cfg = window.CONFIG || {};
-  const url = (cfg.LOGO_PATH || "").trim();
-
-  if (!url) {
-    console.warn("[Logo] CONFIG.LOGO_PATH vazio.");
-    img.style.display = "none";
-    return;
-  }
-
-  img.src = url;
-
-  img.addEventListener("load", () => {
-    // ok
-  });
+  if (cfg.LOGO_PATH) img.src = cfg.LOGO_PATH;
 
   img.addEventListener("error", () => {
-    console.warn("[Logo] Falhou a carregar:", url);
+    img.style.visibility = "hidden";
+  });
+}
 
-    // fallback simples para confirmar se é problema de URL/hotlink
-    img.src =
-      "data:image/svg+xml;charset=utf-8," +
-      encodeURIComponent(`
-        <svg xmlns="http://www.w3.org/2000/svg" width="240" height="80">
-          <rect width="100%" height="100%" fill="#000"/>
-          <text x="12" y="50" fill="#c6a75e" font-family="Arial" font-size="26" font-weight="700">
-            SW TOOLKIT
-          </text>
-        </svg>
-      `);
+export function setActiveNav() {
+  const path = (location.pathname.split("/").pop() || "").toLowerCase();
+  document.querySelectorAll(".navLinks a").forEach((a) => {
+    const href = (a.getAttribute("href") || "").toLowerCase();
+    a.classList.toggle(
+      "active",
+      href === path || (path === "" && href === "index.html")
+    );
   });
 }

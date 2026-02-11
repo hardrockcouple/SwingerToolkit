@@ -4,6 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Clubs 2.0</title>
+
   <link rel="stylesheet" href="./styles.css" />
   <link rel="stylesheet" href="./clubs2.css" />
 </head>
@@ -23,9 +24,9 @@
   </div>
 </header>
 
-<section class="filtersBar">
-  <div class="filtersInner">
-    <input id="searchInput" class="searchInput" type="text" placeholder="Search by name..." autocomplete="off" />
+<section class="filtersBar clubs2FiltersBar">
+  <div class="filtersInner clubs2FiltersInner">
+    <input id="searchInput" class="searchInput" placeholder="Search by name..." />
 
     <select id="countryFilter" class="select">
       <option value="">Country</option>
@@ -35,35 +36,33 @@
       <option value="">City</option>
     </select>
 
-    <div class="viewToggle" role="group" aria-label="View mode">
-      <button id="viewGrid" class="vtBtn active" type="button">Grid</button>
-      <button id="viewList" class="vtBtn" type="button">List</button>
-      <button id="viewMap" class="vtBtn" type="button" disabled>Map</button>
+    <div class="viewToggle">
+      <button id="viewGrid" class="toggleBtn active" type="button">Grid</button>
+      <button id="viewList" class="toggleBtn" type="button">List</button>
+      <button id="viewMap" class="toggleBtn" type="button" disabled title="Soon">Map</button>
     </div>
 
-    <button id="clearFilters" class="btn">Clear</button>
-    <div class="count" id="resultsCount">0 / 0</div>
+    <button id="clearFilters" class="btn" type="button">Clear</button>
+    <div id="resultsCount" class="count"></div>
   </div>
 </section>
 
 <main class="content">
-  <section id="cardsContainer" class="grid"></section>
-  <div class="paginationWrap" id="paginationWrap">
-    <div class="pagination" id="pagination"></div>
+  <div id="cardsContainer" class="grid"></div>
+  <div class="paginationWrap">
+    <div class="pagination"></div>
   </div>
 
-  <!-- Sidebar -->
-  <aside class="sidebar hidden" id="sidebar">
-    <div class="sidebarHead">
-      <button class="sidebarClose" id="closeSidebar" type="button">×</button>
-      <div class="sidebarTitle" id="sidebarTitle"></div>
-      <div class="sidebarSub" id="sidebarSub"></div>
-    </div>
-    <div class="sidebarBody" id="sidebarBody"></div>
-  </aside>
-
-  <div class="backdrop hidden" id="backdrop"></div>
+  <div id="errorBox" class="errorBox hidden"></div>
 </main>
+
+<!-- Modal -->
+<div id="modal" class="modal hidden">
+  <div class="modalContent">
+    <button id="closeModal" class="modalClose" aria-label="Close">×</button>
+    <div id="modalBody"></div>
+  </div>
+</div>
 
 <script src="./config.js"></script>
 <script type="module" src="./clubs2-app.js"></script>

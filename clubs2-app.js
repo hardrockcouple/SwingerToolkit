@@ -1,250 +1,193 @@
-// clubs2-app.js
-import { initLogo } from "./ui-common.js";
-import { loadClubsJson } from "./clubs2-data.js";
-import { renderCards, renderSidebar } from "./clubs2-render.js";
+import { initLogo, setActiveNav } from "./ui-common.js";
+import { loadClubsJson, uniqueSorted } from "./clubs2-data.js";
+import { buildCard, renderModal } from "./clubs2-render.js";
 
-function $(id) {
-  return document.getElementById(id);
+function $(id) { return document.getElementById(id); }
+function safeText(v) { return String(v ?? "").trim(); }
+
+let ALL = [];
+let FILTERED = [];
+let PAGE = 1;
+let VIEW = "grid"; // grid | list | map (map disabled)
+
+const cardsContainer = $("cardsContainer");
+const searchInput = $("searchInput");
+const countryFilter = $("countryFilter");
+const cityFilter = $("cityFilter");
+const clearBtn = $("clearFilters");
+const resultsCount = $("resultsCount");
+const errorBox = $("errorBox");
+
+// view buttons
+const viewGrid = $("viewGrid");
+const viewList = $("viewList");
+const viewMap = $("viewMap");
+
+// modal
+const modal = $("modal");
+const closeModal = $("closeModal");
+const modalBody = $("modalBody");
+
+function setError(msg) {
+  if (!errorBox) return;
+  errorBox.textContent = msg;
+  errorBox.classList.remove("hidden");
 }
 
-function norm(s) {
-  return String(s ?? "").trim();
+function clearError() {
+  if (!errorBox) return;
+  errorBox.textContent = "";
+  errorBox.classList.add("hidden");
 }
 
-function uniqSorted(arr) {
-  return Array.from(new Set(arr.filter(Boolean))).sort((a, b) =>
-    String(a).localeCompare(String(b), undefined, { sensitivity: "base" })
-  );
+function rebuildCountryOptions() {
+  const countries = uniqueSorted(ALL.map((x) => x.country).filter(Boolean));
+  countryFilter.innerHTML =
+    `<option value="">Country</option>` +
+    countries.map((c) => `<option value="${c}">${c}</option>`).join("");
 }
 
-function buildPageList(totalPages, currentPage) {
-  const pages = [];
-  const add = (p) => pages.push(p);
+function rebuildCityOptions(countryValue) {
+  const subset = countryValue ? ALL.filter((x) => x.country === countryValue) : ALL;
+  const cities = uniqueSorted(subset.map((x) => x.city).filter(Boolean));
+  cityFilter.innerHTML =
+    `<option value="">City</option>` +
+    cities.map((c) => `<option value="${c}">${c}</option>`).join("");
 
-  if (totalPages <= 7) {
-    for (let i = 1; i <= totalPages; i++) add(i);
-    return pages;
+  cityFilter.disabled = !countryValue;
+  if (!countryValue) cityFilter.value = "";
+}
+
+function applyFilters(resetPage = true) {
+  const q = safeText(searchInput.value).toLowerCase();
+  const ctry = safeText(countryFilter.value);
+  const city = safeText(cityFilter.value);
+
+  FILTERED = ALL.filter((x) => {
+    const okName = !q || safeText(x.name).toLowerCase().includes(q);
+    const okCountry = !ctry || x.country === ctry;
+    const okCity = !city || x.city === city;
+    return okName && okCountry && okCity;
+  });
+
+  if (resetPage) PAGE = 1;
+  render();
+}
+
+function setView(v) {
+  VIEW = v;
+  viewGrid.classList.toggle("active", v === "grid");
+  viewList.classList.toggle("active", v === "list");
+  viewMap.classList.toggle("active", v === "map");
+
+  cardsContainer.classList.toggle("is-list", v === "list");
+  applyFilters(false);
+}
+
+function renderPagination(totalPages) {
+  const p = document.querySelector(".pagination");
+  if (!p) return;
+  p.innerHTML = "";
+  if (totalPages <= 1) return;
+
+  const makeBtn = (label, page, opts = {}) => {
+    const b = document.createElement("button");
+    b.className = "pageBtn";
+    b.textContent = label;
+    if (opts.disabled) b.disabled = true;
+    if (opts.active) b.classList.add("active");
+    b.addEventListener("click", () => {
+      PAGE = page;
+      render();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+    return b;
+  };
+
+  p.appendChild(makeBtn("‹", Math.max(1, PAGE - 1), { disabled: PAGE === 1 }));
+
+  for (let i = 1; i <= totalPages; i++) {
+    p.appendChild(makeBtn(String(i), i, { active: i === PAGE }));
   }
 
-  add(1);
-
-  const left = Math.max(2, currentPage - 1);
-  const right = Math.min(totalPages - 1, currentPage + 1);
-
-  if (left > 2) pages.push("dots");
-  for (let p = left; p <= right; p++) add(p);
-  if (right < totalPages - 1) pages.push("dots");
-
-  add(totalPages);
-  return pages;
+  p.appendChild(makeBtn("›", Math.min(totalPages, PAGE + 1), { disabled: PAGE === totalPages }));
 }
 
-function makeBtn(label, { disabled = false, active = false } = {}) {
-  const btn = document.createElement("button");
-  btn.className = "pageBtn" + (active ? " active" : "");
-  btn.type = "button";
-  btn.textContent = label;
-  btn.disabled = disabled;
-  return btn;
+function openModal(item) {
+  renderModal(modalBody, item);
+  modal.classList.remove("hidden");
 }
 
-function makeDots() {
-  const span = document.createElement("span");
-  span.className = "pageDots";
-  span.textContent = "…";
-  return span;
+function closeModalFn() {
+  modal.classList.add("hidden");
 }
 
-document.addEventListener("DOMContentLoaded", async () => {
+function render() {
+  clearError();
+
+  // Map view (disabled for now)
+  if (VIEW === "map") {
+    cardsContainer.innerHTML = `<div style="padding:18px;color:#cfcfcf;">Map view (soon).</div>`;
+    resultsCount.textContent = `${FILTERED.length} results`;
+    renderPagination(1);
+    return;
+  }
+
+  const pageSize = Number(CONFIG?.PAGE_SIZE || 12);
+  const total = FILTERED.length;
+  const totalPages = Math.max(1, Math.ceil(total / pageSize));
+  PAGE = Math.min(PAGE, totalPages);
+
+  const start = (PAGE - 1) * pageSize;
+  const slice = FILTERED.slice(start, start + pageSize);
+
+  cardsContainer.innerHTML = "";
+  slice.forEach((item) => cardsContainer.appendChild(buildCard(item, openModal)));
+
+  resultsCount.textContent = `${total} results`;
+  renderPagination(totalPages);
+}
+
+async function init() {
+  setActiveNav();
   initLogo();
 
-  const cardsContainer = $("cardsContainer");
-  const searchEl = $("searchInput");
-  const countryEl = $("countryFilter");
-  const cityEl = $("cityFilter");
-  const clearEl = $("clearFilters");
-  const countEl = $("resultsCount");
-
-  const viewGridBtn = $("viewGrid");
-  const viewListBtn = $("viewList");
-  const viewMapBtn = $("viewMap"); // disabled por agora
-
-  const paginationEl = $("pagination");
-
-  const sidebar = $("sidebar");
-  const backdrop = $("backdrop");
-  const closeSidebar = $("closeSidebar");
-  const sidebarTitleEl = $("sidebarTitle");
-  const sidebarSubEl = $("sidebarSub");
-  const sidebarBodyEl = $("sidebarBody");
-
-  if (!cardsContainer) return;
-
-  const DATA_URL = (window.CONFIG && window.CONFIG.DATA_SOURCE) ? window.CONFIG.DATA_SOURCE : "./clubs.json";
-  const PAGE_SIZE = Number(window.CONFIG?.PAGE_SIZE || 12);
-
-  let ALL = [];
-  let FILTERED = [];
-  let VIEW_MODE = "grid";
-  let PAGE = 1;
-
-  function setViewMode(mode) {
-    VIEW_MODE = mode;
-    viewGridBtn?.classList.toggle("active", mode === "grid");
-    viewListBtn?.classList.toggle("active", mode === "list");
-    // map fica futuro
-
-    render();
-  }
-
-  function openSidebar(club) {
-    renderSidebar(club, { sidebarTitleEl, sidebarSubEl, sidebarBodyEl });
-    sidebar?.classList.remove("hidden");
-    backdrop?.classList.remove("hidden");
-  }
-
-  function closeSidebarFn() {
-    sidebar?.classList.add("hidden");
-    backdrop?.classList.add("hidden");
-  }
-
-  closeSidebar?.addEventListener("click", closeSidebarFn);
-  backdrop?.addEventListener("click", closeSidebarFn);
-
-  viewGridBtn?.addEventListener("click", () => setViewMode("grid"));
-  viewListBtn?.addEventListener("click", () => setViewMode("list"));
-  viewMapBtn?.addEventListener("click", () => setViewMode("map"));
-
-  function updateCountries() {
-    const countries = uniqSorted(ALL.map((c) => norm(c.country)));
-    countryEl.innerHTML =
-      `<option value="">Country</option>` +
-      countries.map((c) => `<option value="${c}">${c}</option>`).join("");
-  }
-
-  function updateCitiesForCountry(selectedCountry) {
-    const cities = uniqSorted(
-      ALL.filter((c) => norm(c.country) === selectedCountry).map((c) => norm(c.city))
-    );
-
-    cityEl.innerHTML =
-      `<option value="">City</option>` +
-      cities.map((c) => `<option value="${c}">${c}</option>`).join("");
-
-    if (!selectedCountry) {
-      cityEl.disabled = true;
-      cityEl.value = "";
-    } else {
-      cityEl.disabled = false;
-      if (!cities.includes(cityEl.value)) cityEl.value = "";
-    }
-  }
-
-  function applyFilters(resetPage = true) {
-    const q = norm(searchEl.value).toLowerCase();
-    const country = norm(countryEl.value);
-    const city = norm(cityEl.value);
-
-    FILTERED = ALL.filter((c) => {
-      if (country && norm(c.country) !== country) return false;
-      if (city && norm(c.city) !== city) return false;
-      if (q && !norm(c.name).toLowerCase().includes(q)) return false;
-      return true;
-    });
-
-    if (resetPage) PAGE = 1;
-    render();
-  }
-
-  function totalPages() {
-    return Math.max(1, Math.ceil(FILTERED.length / PAGE_SIZE));
-  }
-
-  function getPageSlice() {
-    const start = (PAGE - 1) * PAGE_SIZE;
-    return FILTERED.slice(start, start + PAGE_SIZE);
-  }
-
-  function renderPagination() {
-    if (!paginationEl) return;
-    paginationEl.innerHTML = "";
-
-    const tp = totalPages();
-    if (tp <= 1) return;
-
-    const prev = makeBtn("Prev", { disabled: PAGE === 1 });
-    prev.addEventListener("click", () => {
-      PAGE = Math.max(1, PAGE - 1);
-      render();
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    });
-    paginationEl.appendChild(prev);
-
-    const pageList = buildPageList(tp, PAGE);
-    pageList.forEach((p) => {
-      if (p === "dots") return paginationEl.appendChild(makeDots());
-      const btn = makeBtn(String(p), { active: p === PAGE });
-      btn.addEventListener("click", () => {
-        PAGE = p;
-        render();
-        window.scrollTo({ top: 0, behavior: "smooth" });
-      });
-      paginationEl.appendChild(btn);
-    });
-
-    const next = makeBtn("Next", { disabled: PAGE === tp });
-    next.addEventListener("click", () => {
-      PAGE = Math.min(tp, PAGE + 1);
-      render();
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    });
-    paginationEl.appendChild(next);
-  }
-
-  function render() {
-    const tp = totalPages();
-    if (PAGE > tp) PAGE = tp;
-
-    const slice = getPageSlice();
-    renderCards(cardsContainer, slice, {
-      mode: VIEW_MODE === "list" ? "list" : "grid",
-      onOpen: openSidebar
-    });
-
-    if (countEl) countEl.textContent = `${FILTERED.length} / ${ALL.length}`;
-    renderPagination();
-  }
-
-  // Events
-  searchEl?.addEventListener("input", () => applyFilters(true));
-  countryEl?.addEventListener("change", () => {
-    updateCitiesForCountry(norm(countryEl.value));
+  // listeners
+  searchInput.addEventListener("input", () => applyFilters(true));
+  countryFilter.addEventListener("change", () => {
+    rebuildCityOptions(safeText(countryFilter.value));
     applyFilters(true);
   });
-  cityEl?.addEventListener("change", () => applyFilters(true));
-  clearEl?.addEventListener("click", () => {
-    searchEl.value = "";
-    countryEl.value = "";
-    cityEl.value = "";
-    cityEl.disabled = true;
+  cityFilter.addEventListener("change", () => applyFilters(true));
+
+  clearBtn.addEventListener("click", () => {
+    searchInput.value = "";
+    countryFilter.value = "";
+    cityFilter.value = "";
+    rebuildCityOptions("");
     applyFilters(true);
   });
 
-  // Load
+  viewGrid.addEventListener("click", () => setView("grid"));
+  viewList.addEventListener("click", () => setView("list"));
+  viewMap.addEventListener("click", () => setView("map"));
+
+  closeModal.addEventListener("click", closeModalFn);
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) closeModalFn();
+  });
+
+  // load
   try {
-    ALL = await loadClubsJson(DATA_URL);
+    ALL = await loadClubsJson();
     FILTERED = [...ALL];
-
-    updateCountries();
-    updateCitiesForCountry(norm(countryEl.value));
-    applyFilters(false);
-  } catch (e) {
-    console.error(e);
-    cardsContainer.innerHTML = `
-      <div style="padding:18px;color:#fff;">
-        <div style="font-weight:800;margin-bottom:6px;">Error loading data</div>
-        <div style="color:#cfcfcf;">${String(e?.message || e)}</div>
-      </div>
-    `;
+    rebuildCountryOptions();
+    rebuildCityOptions("");
+    setView("grid");
+  } catch (err) {
+    console.error(err);
+    setError(err?.message || "Error loading data");
   }
-});
+}
+
+document.addEventListener("DOMContentLoaded", init);
