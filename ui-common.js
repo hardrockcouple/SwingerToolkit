@@ -1,3 +1,4 @@
+// ui-common.js
 export function initLogo() {
   const img = document.getElementById("siteLogo");
   if (!img) return;
@@ -11,12 +12,9 @@ export function initLogo() {
 }
 
 export function setActiveNav() {
-  const path = (location.pathname.split("/").pop() || "").toLowerCase();
+  const path = (location.pathname.split("/").pop() || "index.html").toLowerCase();
   document.querySelectorAll(".navLinks a").forEach((a) => {
     const href = (a.getAttribute("href") || "").toLowerCase();
-    a.classList.toggle(
-      "active",
-      href === path || (path === "" && href === "index.html")
-    );
+    a.classList.toggle("active", href === path);
   });
 }

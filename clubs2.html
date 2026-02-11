@@ -4,7 +4,6 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Clubs 2.0</title>
-
   <link rel="stylesheet" href="./styles.css" />
   <link rel="stylesheet" href="./clubs2.css" />
 </head>
@@ -24,8 +23,8 @@
   </div>
 </header>
 
-<section class="filtersBar clubs2FiltersBar">
-  <div class="filtersInner clubs2FiltersInner">
+<section class="filtersBar">
+  <div class="filtersInner clubs2Filters">
     <input id="searchInput" class="searchInput" placeholder="Search by name..." />
 
     <select id="countryFilter" class="select">
@@ -36,28 +35,35 @@
       <option value="">City</option>
     </select>
 
-    <div class="viewToggle">
-      <button id="viewGrid" class="toggleBtn active" type="button">Grid</button>
-      <button id="viewList" class="toggleBtn" type="button">List</button>
-      <button id="viewMap" class="toggleBtn" type="button" disabled title="Soon">Map</button>
+    <div class="viewBtns">
+      <button id="viewGrid" class="btn btnToggle active" type="button">Grid</button>
+      <button id="viewList" class="btn btnToggle" type="button">List</button>
+      <button id="viewMap" class="btn btnToggle" type="button">Map</button>
     </div>
 
     <button id="clearFilters" class="btn" type="button">Clear</button>
+
     <div id="resultsCount" class="count"></div>
   </div>
 </section>
 
 <main class="content">
-  <div id="cardsContainer" class="grid"></div>
-  <div class="paginationWrap">
-    <div class="pagination"></div>
-  </div>
-
   <div id="errorBox" class="errorBox hidden"></div>
+
+  <section id="gridView" class="grid"></section>
+
+  <section id="listView" class="list hidden"></section>
+
+  <section id="mapView" class="mapWrap hidden">
+    <div class="mapHint">
+      (Simple mode) Click a club to open Google Maps.
+    </div>
+    <div id="mapList" class="list"></div>
+  </section>
 </main>
 
 <!-- Modal -->
-<div id="modal" class="modal hidden">
+<div id="modal" class="modal hidden" aria-hidden="true">
   <div class="modalContent">
     <button id="closeModal" class="modalClose" aria-label="Close">×</button>
     <div id="modalBody"></div>
@@ -65,6 +71,15 @@
 </div>
 
 <script src="./config.js"></script>
-<script type="module" src="./clubs2-app.js"></script>
+
+<script type="module">
+  import { initLogo, setActiveNav } from "./ui-common.js";
+  import { initClubs2 } from "./clubs2-app.js";
+
+  initLogo();
+  setActiveNav();
+  initClubs2();
+</script>
+
 </body>
 </html>

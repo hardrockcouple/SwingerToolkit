@@ -1,176 +1,167 @@
-import { initLogo, setActiveNav } from "./ui-common.js";
-import { loadClubsJson, uniqueSorted } from "./clubs2-data.js";
-import { buildCard, renderModal } from "./clubs2-render.js";
+// clubs2-app.js
+import { loadClubs } from "./clubs2-data.js";
+import { buildCard, buildRow, renderModal } from "./clubs2-render.js";
 
-function $(id) { return document.getElementById(id); }
-function safeText(v) { return String(v ?? "").trim(); }
-
-let ALL = [];
-let FILTERED = [];
-let PAGE = 1;
-let VIEW = "grid"; // grid | list | map (map disabled)
-
-const cardsContainer = $("cardsContainer");
-const searchInput = $("searchInput");
-const countryFilter = $("countryFilter");
-const cityFilter = $("cityFilter");
-const clearBtn = $("clearFilters");
-const resultsCount = $("resultsCount");
-const errorBox = $("errorBox");
-
-// view buttons
-const viewGrid = $("viewGrid");
-const viewList = $("viewList");
-const viewMap = $("viewMap");
-
-// modal
-const modal = $("modal");
-const closeModal = $("closeModal");
-const modalBody = $("modalBody");
-
-function setError(msg) {
-  if (!errorBox) return;
-  errorBox.textContent = msg;
-  errorBox.classList.remove("hidden");
+function $(id) {
+  return document.getElementById(id);
 }
 
-function clearError() {
-  if (!errorBox) return;
-  errorBox.textContent = "";
-  errorBox.classList.add("hidden");
+function safeText(v) {
+  return String(v ?? "").trim();
 }
 
-function rebuildCountryOptions() {
-  const countries = uniqueSorted(ALL.map((x) => x.country).filter(Boolean));
-  countryFilter.innerHTML =
-    `<option value="">Country</option>` +
-    countries.map((c) => `<option value="${c}">${c}</option>`).join("");
+function uniq(list) {
+  return Array.from(new Set(list.filter(Boolean))).sort((a, b) => a.localeCompare(b));
 }
 
-function rebuildCityOptions(countryValue) {
-  const subset = countryValue ? ALL.filter((x) => x.country === countryValue) : ALL;
-  const cities = uniqueSorted(subset.map((x) => x.city).filter(Boolean));
-  cityFilter.innerHTML =
-    `<option value="">City</option>` +
-    cities.map((c) => `<option value="${c}">${c}</option>`).join("");
+export async function initClubs2() {
+  const searchInput = $("searchInput");
+  const countryFilter = $("countryFilter");
+  const cityFilter = $("cityFilter");
+  const clearBtn = $("clearFilters");
+  const resultsCount = $("resultsCount");
 
-  cityFilter.disabled = !countryValue;
-  if (!countryValue) cityFilter.value = "";
-}
+  const gridView = $("gridView");
+  const listView = $("listView");
+  const mapView = $("mapView");
+  const mapList = $("mapList");
 
-function applyFilters(resetPage = true) {
-  const q = safeText(searchInput.value).toLowerCase();
-  const ctry = safeText(countryFilter.value);
-  const city = safeText(cityFilter.value);
+  const viewGrid = $("viewGrid");
+  const viewList = $("viewList");
+  const viewMap = $("viewMap");
 
-  FILTERED = ALL.filter((x) => {
-    const okName = !q || safeText(x.name).toLowerCase().includes(q);
-    const okCountry = !ctry || x.country === ctry;
-    const okCity = !city || x.city === city;
-    return okName && okCountry && okCity;
-  });
+  const errorBox = $("errorBox");
 
-  if (resetPage) PAGE = 1;
-  render();
-}
+  const modal = $("modal");
+  const closeModal = $("closeModal");
+  const modalBody = $("modalBody");
 
-function setView(v) {
-  VIEW = v;
-  viewGrid.classList.toggle("active", v === "grid");
-  viewList.classList.toggle("active", v === "list");
-  viewMap.classList.toggle("active", v === "map");
+  let ALL = [];
+  let FILTERED = [];
+  let MODE = "grid";
 
-  cardsContainer.classList.toggle("is-list", v === "list");
-  applyFilters(false);
-}
+  function showError(msg) {
+    errorBox.textContent = msg;
+    errorBox.classList.remove("hidden");
+  }
 
-function renderPagination(totalPages) {
-  const p = document.querySelector(".pagination");
-  if (!p) return;
-  p.innerHTML = "";
-  if (totalPages <= 1) return;
+  function hideError() {
+    errorBox.classList.add("hidden");
+    errorBox.textContent = "";
+  }
 
-  const makeBtn = (label, page, opts = {}) => {
-    const b = document.createElement("button");
-    b.className = "pageBtn";
-    b.textContent = label;
-    if (opts.disabled) b.disabled = true;
-    if (opts.active) b.classList.add("active");
-    b.addEventListener("click", () => {
-      PAGE = page;
-      render();
-      window.scrollTo({ top: 0, behavior: "smooth" });
+  function setMode(mode) {
+    MODE = mode;
+
+    viewGrid.classList.toggle("active", mode === "grid");
+    viewList.classList.toggle("active", mode === "list");
+    viewMap.classList.toggle("active", mode === "map");
+
+    gridView.classList.toggle("hidden", mode !== "grid");
+    listView.classList.toggle("hidden", mode !== "list");
+    mapView.classList.toggle("hidden", mode !== "map");
+
+    render();
+  }
+
+  function openModal(item) {
+    renderModal(modalBody, item);
+    modal.classList.remove("hidden");
+  }
+
+  function closeModalFn() {
+    modal.classList.add("hidden");
+  }
+
+  function rebuildFilters() {
+    const countries = uniq(ALL.map((x) => x.country));
+    countryFilter.innerHTML =
+      `<option value="">Country</option>` +
+      countries.map((c) => `<option value="${c}">${c}</option>`).join("");
+
+    rebuildCities("");
+  }
+
+  function rebuildCities(country) {
+    const subset = country ? ALL.filter((x) => x.country === country) : ALL;
+    const cities = uniq(subset.map((x) => x.city));
+    cityFilter.innerHTML =
+      `<option value="">City</option>` +
+      cities.map((c) => `<option value="${c}">${c}</option>`).join("");
+
+    cityFilter.disabled = !country;
+    if (!country) cityFilter.value = "";
+  }
+
+  function applyFilters() {
+    const q = safeText(searchInput.value).toLowerCase();
+    const ctry = safeText(countryFilter.value);
+    const city = safeText(cityFilter.value);
+
+    FILTERED = ALL.filter((x) => {
+      const okName = !q || safeText(x.name).toLowerCase().includes(q);
+      const okCountry = !ctry || x.country === ctry;
+      const okCity = !city || x.city === city;
+      return okName && okCountry && okCity;
     });
-    return b;
-  };
 
-  p.appendChild(makeBtn("‹", Math.max(1, PAGE - 1), { disabled: PAGE === 1 }));
-
-  for (let i = 1; i <= totalPages; i++) {
-    p.appendChild(makeBtn(String(i), i, { active: i === PAGE }));
+    if (resultsCount) resultsCount.textContent = `${FILTERED.length} results`;
+    render();
   }
 
-  p.appendChild(makeBtn("›", Math.min(totalPages, PAGE + 1), { disabled: PAGE === totalPages }));
-}
+  function render() {
+    // grid
+    if (MODE === "grid") {
+      const pageSize = Number(window.CONFIG?.PAGE_SIZE || 12);
+      const slice = FILTERED.slice(0, pageSize);
 
-function openModal(item) {
-  renderModal(modalBody, item);
-  modal.classList.remove("hidden");
-}
+      gridView.innerHTML = "";
+      slice.forEach((item) => gridView.appendChild(buildCard(item, openModal)));
+      return;
+    }
 
-function closeModalFn() {
-  modal.classList.add("hidden");
-}
+    // list
+    if (MODE === "list") {
+      listView.innerHTML = "";
+      FILTERED.forEach((item) => listView.appendChild(buildRow(item, openModal)));
+      return;
+    }
 
-function render() {
-  clearError();
-
-  // Map view (disabled for now)
-  if (VIEW === "map") {
-    cardsContainer.innerHTML = `<div style="padding:18px;color:#cfcfcf;">Map view (soon).</div>`;
-    resultsCount.textContent = `${FILTERED.length} results`;
-    renderPagination(1);
-    return;
+    // map (simple)
+    if (MODE === "map") {
+      mapList.innerHTML = "";
+      FILTERED.forEach((item) => {
+        const row = buildRow(item, (it) => window.open(
+          (it.lat && it.lng)
+            ? `https://www.google.com/maps?q=${encodeURIComponent(it.lat + "," + it.lng)}`
+            : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent([it.name, it.city, it.country].filter(Boolean).join(" "))}`,
+          "_blank",
+          "noreferrer"
+        ));
+        mapList.appendChild(row);
+      });
+    }
   }
-
-  const pageSize = Number(CONFIG?.PAGE_SIZE || 12);
-  const total = FILTERED.length;
-  const totalPages = Math.max(1, Math.ceil(total / pageSize));
-  PAGE = Math.min(PAGE, totalPages);
-
-  const start = (PAGE - 1) * pageSize;
-  const slice = FILTERED.slice(start, start + pageSize);
-
-  cardsContainer.innerHTML = "";
-  slice.forEach((item) => cardsContainer.appendChild(buildCard(item, openModal)));
-
-  resultsCount.textContent = `${total} results`;
-  renderPagination(totalPages);
-}
-
-async function init() {
-  setActiveNav();
-  initLogo();
 
   // listeners
-  searchInput.addEventListener("input", () => applyFilters(true));
+  searchInput.addEventListener("input", applyFilters);
   countryFilter.addEventListener("change", () => {
-    rebuildCityOptions(safeText(countryFilter.value));
-    applyFilters(true);
+    rebuildCities(safeText(countryFilter.value));
+    applyFilters();
   });
-  cityFilter.addEventListener("change", () => applyFilters(true));
+  cityFilter.addEventListener("change", applyFilters);
 
   clearBtn.addEventListener("click", () => {
     searchInput.value = "";
     countryFilter.value = "";
     cityFilter.value = "";
-    rebuildCityOptions("");
-    applyFilters(true);
+    rebuildCities("");
+    applyFilters();
   });
 
-  viewGrid.addEventListener("click", () => setView("grid"));
-  viewList.addEventListener("click", () => setView("list"));
-  viewMap.addEventListener("click", () => setView("map"));
+  viewGrid.addEventListener("click", () => setMode("grid"));
+  viewList.addEventListener("click", () => setMode("list"));
+  viewMap.addEventListener("click", () => setMode("map"));
 
   closeModal.addEventListener("click", closeModalFn);
   modal.addEventListener("click", (e) => {
@@ -179,15 +170,12 @@ async function init() {
 
   // load
   try {
-    ALL = await loadClubsJson();
+    hideError();
+    ALL = await loadClubs();
     FILTERED = [...ALL];
-    rebuildCountryOptions();
-    rebuildCityOptions("");
-    setView("grid");
-  } catch (err) {
-    console.error(err);
-    setError(err?.message || "Error loading data");
+    rebuildFilters();
+    applyFilters();
+  } catch (e) {
+    showError(safeText(e.message || e));
   }
 }
-
-document.addEventListener("DOMContentLoaded", init);

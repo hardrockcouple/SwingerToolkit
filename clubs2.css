@@ -1,107 +1,150 @@
-/* Clubs 2.0 small tweaks on top of styles.css */
+/* clubs2.css */
 
-.clubs2FiltersBar {
-  top: 0;
+/* pequeno ajuste para caber melhor os botões */
+.clubs2Filters{
+  gap: 12px;
+  flex-wrap: wrap;
 }
 
-.viewToggle{
+.viewBtns{
   display: flex;
   gap: 10px;
   align-items: center;
 }
 
-.toggleBtn{
-  min-width: 72px;
-  padding: 12px 14px;
-  border-radius: 12px;
-  border: 1px solid #2a2a2a;
-  background: #151515;
-  color: #fff;
-  cursor: pointer;
-  font-weight: 800;
-  transition: transform .12s ease, border-color .15s ease, background .15s ease, color .15s ease;
+.btnToggle{
+  border-radius: 14px;
+  padding: 12px 16px;
 }
 
-.toggleBtn:hover{
-  transform: translateY(-1px);
-  border-color: #3a3a3a;
-  background: #1a1a1a;
-}
-
-.toggleBtn.active{
+.btnToggle.active{
   border-color: var(--menu-hover);
   color: var(--menu-hover);
+  box-shadow: 0 0 0 1px rgba(198,167,94,.18) inset;
 }
 
-.toggleBtn:disabled{
-  opacity: .45;
-  cursor: not-allowed;
-  transform: none;
+/* list view */
+.list{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
-/* Grid/List layouts */
-.grid.is-list{
-  grid-template-columns: 1fr;
-}
-
-.grid.is-list .card{
-  min-height: unset;
-  padding: 16px 18px;
-}
-
-/* Error box */
-.errorBox{
-  margin-top: 18px;
+.listRow{
+  position: relative;
+  background: linear-gradient(180deg, var(--card), var(--card-2));
+  border: 1px solid #262626;
+  border-radius: var(--radius);
   padding: 14px 16px;
-  border: 1px solid #3a2a2a;
-  background: rgba(90, 20, 20, .25);
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  display: grid;
+  grid-template-columns: 1.6fr 1fr 1fr auto;
+  gap: 12px;
+  align-items: center;
+}
+
+@media (max-width: 820px){
+  .listRow{ grid-template-columns: 1fr; }
+}
+
+.listRow:hover{
+  border-color: var(--menu-hover);
+  transform: translateY(-1px);
+}
+
+.rowName{
+  font-weight: 900;
+  font-size: 18px;
+}
+
+.rowMeta{
+  color: #cfcfcf;
+}
+
+.rowLink a{
+  color: var(--menu-hover);
+  text-decoration: none;
+  font-weight: 800;
+}
+
+.rowLink a:hover{
+  text-decoration: underline;
+}
+
+/* error box */
+.errorBox{
+  background: rgba(120, 20, 20, 0.22);
+  border: 1px solid rgba(255, 110, 110, 0.28);
+  color: #ffd7d7;
+  padding: 14px 16px;
   border-radius: 14px;
-  color: #ffd2d2;
-}
-.hidden{ display:none; }
-
-/* ------------------------------------------------
-   VISITED stamp — ultra glam, round, stamp vibe
-------------------------------------------------- */
-.card{
-  position: relative; /* needed for stamp */
+  margin-bottom: 16px;
 }
 
+.errorBox.hidden{ display:none; }
+
+/* ultra-glam round stamp */
 .visited-stamp{
   position: absolute;
-  top: 14px;
-  right: 14px;
+  top: 12px;
+  right: 12px;
+  width: 78px;
+  height: 78px;
 
-  width: 96px;
-  height: 96px;
-
-  border-radius: 50%;
-  border: 3px solid var(--menu-hover);
+  border-radius: 999px;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  color: var(--menu-hover);
   background:
-    radial-gradient(circle at 35% 30%, rgba(198,167,94,.22), rgba(0,0,0,.55) 62%, rgba(0,0,0,.78) 100%);
+    radial-gradient(circle at 30% 30%, rgba(255,255,255,.22), rgba(255,255,255,0) 55%),
+    radial-gradient(circle at 70% 70%, rgba(255,255,255,.12), rgba(255,255,255,0) 55%),
+    linear-gradient(180deg, rgba(0,0,0,.68), rgba(0,0,0,.52));
 
-  transform: rotate(-16deg);
+  border: 2px solid rgba(198,167,94,.95);
   box-shadow:
-    0 0 14px rgba(198,167,94,.45),
-    0 0 30px rgba(198,167,94,.22),
+    0 0 22px rgba(198,167,94,.22),
     0 0 0 1px rgba(198,167,94,.18) inset;
 
+  transform: rotate(10deg);
   pointer-events: none;
-  user-select: none;
+}
+
+.visited-stamp::after{
+  content:"";
+  position:absolute;
+  inset:-6px;
+  border-radius:999px;
+  background:
+    conic-gradient(from 30deg,
+      rgba(198,167,94,.0),
+      rgba(198,167,94,.25),
+      rgba(255,255,255,.18),
+      rgba(198,167,94,.0),
+      rgba(198,167,94,.18),
+      rgba(198,167,94,.0));
+  filter: blur(6px);
+  opacity: .55;
+  z-index: 0;
 }
 
 .visited-stamp span{
-  display: block;
-  text-align: center;
-  line-height: 1.05;
-  font-weight: 900;
+  position: relative;
+  z-index: 1;
+  display:block;
+  text-align:center;
+  line-height:1.05;
+  font-weight: 950;
   letter-spacing: 1.2px;
-  font-size: 12px;
-  text-transform: uppercase;
+  font-size: 11px;
+  color: rgba(255, 220, 140, .98);
+  text-shadow: 0 1px 0 rgba(0,0,0,.65);
+}
+
+/* map section hint */
+.mapWrap .mapHint{
+  color: #bdbdbd;
+  margin: 0 0 12px 2px;
 }
