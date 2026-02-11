@@ -9,8 +9,13 @@ function toBool(v) {
 }
 
 export async function loadClubs() {
-  const cfg = window.CONFIG || {};
-  if (!cfg.DATA_SOURCE) throw new Error("CONFIG.DATA_SOURCE missing");
+  // suporta window.CONFIG (recomendado) e fallback para CONFIG global (se existir)
+  const cfg = window.CONFIG || (typeof CONFIG !== "undefined" ? CONFIG : {});
+  if (!cfg.DATA_SOURCE) {
+    throw new Error(
+      "CONFIG.DATA_SOURCE missing (confirma que config.js define window.CONFIG e que é carregado antes do módulo)"
+    );
+  }
 
   const res = await fetch(cfg.DATA_SOURCE, { cache: "no-store" });
   if (!res.ok) throw new Error(`JSON fetch failed: ${res.status}`);
@@ -21,7 +26,6 @@ export async function loadClubs() {
     throw new Error("clubs.json must be an array");
   }
 
-  // normalizar campos “mínimos”
   return data
     .map((x) => ({
       id: safeText(x.id),
@@ -37,5 +41,5 @@ export async function loadClubs() {
       notes: safeText(x.notes),
       raw: x
     }))
-    .filter((x) => x.name); // ignora linhas “vazias”
+    .filter((x) => x.name);
 }

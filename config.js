@@ -1,14 +1,14 @@
-// config.js  (GLOBAL + compatível com scripts module)
+// config.js
 window.CONFIG = {
-  // caminho para o teu JSON (no GitHub Pages)
-  // exemplo: se o ficheiro estiver na raiz: "./clubs.json"
-  // se estiver em /data: "./data/clubs.json"
+  // Fonte de dados (GitHub Pages: caminho relativo ao root do repo publicado)
   DATA_SOURCE: "./clubs.json",
 
-  LOGO_PATH:
-    "https://raw.githubusercontent.com/hardrockcouple/swtk/main/logo_txt_full_140px.jpg",
+  // Logo
+  LOGO_PATH: "https://raw.githubusercontent.com/hardrockcouple/swtk/main/logo_txt_full_140px.jpg",
 
+  // Nome do site
   SITE_NAME: "SW Clubs Directory",
 
+  // Paginação (se quiseres usar mais tarde)
   PAGE_SIZE: 12
 };

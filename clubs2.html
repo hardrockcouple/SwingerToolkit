@@ -4,7 +4,10 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Clubs 2.0</title>
+
+  <!-- base -->
   <link rel="stylesheet" href="./styles.css" />
+  <!-- page-specific -->
   <link rel="stylesheet" href="./clubs2.css" />
 </head>
 <body>
@@ -12,6 +15,7 @@
 <header class="navbar">
   <div class="nav-left">
     <img id="siteLogo" class="logo-img" alt="Logo" />
+
     <nav class="navLinks">
       <a href="index.html">Home</a>
       <a href="clubs.html">Clubs</a>
@@ -23,9 +27,10 @@
   </div>
 </header>
 
+<!-- Filters / Controls -->
 <section class="filtersBar">
-  <div class="filtersInner clubs2Filters">
-    <input id="searchInput" class="searchInput" placeholder="Search by name..." />
+  <div class="filtersInner">
+    <input id="searchInput" class="searchInput" type="text" placeholder="Search by name..." />
 
     <select id="countryFilter" class="select">
       <option value="">Country</option>
@@ -35,31 +40,34 @@
       <option value="">City</option>
     </select>
 
-    <div class="viewBtns">
-      <button id="viewGrid" class="btn btnToggle active" type="button">Grid</button>
-      <button id="viewList" class="btn btnToggle" type="button">List</button>
-      <button id="viewMap" class="btn btnToggle" type="button">Map</button>
+    <div class="viewToggle">
+      <button id="viewGrid" class="btn active" type="button">Grid</button>
+      <button id="viewList" class="btn" type="button">List</button>
+      <button id="viewMap" class="btn" type="button">Map</button>
     </div>
 
     <button id="clearFilters" class="btn" type="button">Clear</button>
 
-    <div id="resultsCount" class="count"></div>
+    <div id="resultsCount" class="count">0 results</div>
   </div>
 </section>
 
 <main class="content">
+
+  <!-- Error box -->
   <div id="errorBox" class="errorBox hidden"></div>
 
-  <section id="gridView" class="grid"></section>
+  <!-- Views -->
+  <div id="gridView" class="grid"></div>
 
-  <section id="listView" class="list hidden"></section>
+  <div id="listView" class="list hidden"></div>
 
-  <section id="mapView" class="mapWrap hidden">
+  <div id="mapView" class="mapWrap hidden">
     <div class="mapHint">
-      (Simple mode) Click a club to open Google Maps.
+      Map view (simple): clicking a row opens Google Maps.
     </div>
     <div id="mapList" class="list"></div>
-  </section>
+  </div>
 </main>
 
 <!-- Modal -->
@@ -70,8 +78,10 @@
   </div>
 </div>
 
+<!-- IMPORTANT: config first (must define window.CONFIG) -->
 <script src="./config.js"></script>
 
+<!-- App -->
 <script type="module">
   import { initLogo, setActiveNav } from "./ui-common.js";
   import { initClubs2 } from "./clubs2-app.js";
