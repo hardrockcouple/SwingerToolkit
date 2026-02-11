@@ -41,22 +41,26 @@
   </p>
 
   <div class="toolRow">
-    <button id="btnGenerate" class="toolBtn primary">Gerar JSON</button>
-    <button id="btnCopy" class="toolBtn">Copiar</button>
-    <button id="btnDownload" class="toolBtn">Download clubs.json</button>
+    <button id="btnGenerate" class="toolBtn primary" type="button">Gerar JSON</button>
+    <button id="btnCopy" class="toolBtn" type="button">Copiar</button>
+    <button id="btnDownload" class="toolBtn" type="button">Download clubs.json</button>
   </div>
 
   <textarea id="out" spellcheck="false">[]</textarea>
   <div id="status" class="status"></div>
 </main>
 
-<script src="../config.js"></script>
-<script src="../ui-common.js"></script>
-<script>
-  // init logo (não é module)
-  if (window.initLogo) window.initLogo();
+<script src="../config.js" defer></script>
+
+<!-- logo sem ui-common.js -->
+<script defer>
+  window.addEventListener("DOMContentLoaded", () => {
+    const img = document.getElementById("siteLogo");
+    if (img && window.CONFIG?.LOGO_PATH) img.src = CONFIG.LOGO_PATH;
+  });
 </script>
-<script src="./csv-to-json.js"></script>
+
+<script src="./csv-to-json.js" defer></script>
 
 </body>
 </html>
