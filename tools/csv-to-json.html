@@ -1,73 +1,62 @@
 <!doctype html>
-<html>
+<html lang="pt">
 <head>
   <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>CSV → JSON</title>
+  <link rel="stylesheet" href="../styles.css" />
+  <style>
+    .toolWrap{max-width:1200px;margin:0 auto;padding:24px 22px 40px;}
+    .toolTitle{font-size:42px;margin:0 0 16px;}
+    .toolRow{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0 12px;}
+    .toolBtn{padding:10px 14px;border-radius:10px;border:1px solid #2a2a2a;background:#151515;color:#fff;cursor:pointer;font-weight:800;}
+    .toolBtn:hover{background:#1a1a1a;border-color:#3a3a3a;}
+    .toolBtn.primary{border-color:rgba(198,167,94,.6);color:#c6a75e;}
+    .toolMeta{color:#bdbdbd;margin:0 0 10px;line-height:1.5}
+    textarea{width:100%;min-height:420px;background:#0f0f0f;color:#eee;border:1px solid #2a2a2a;border-radius:12px;padding:14px;outline:none;font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;}
+    .status{margin-top:10px;color:#bdbdbd}
+    .err{color:#ffb4b4}
+    .ok{color:#b8f1c8}
+  </style>
 </head>
 <body>
-  <h1>CSV → JSON</h1>
-  <button id="run">Gerar JSON</button>
-  <pre id="out" style="white-space:pre-wrap;"></pre>
 
-  <script src="../config.js"></script>
-  <script>
-    // CSV parser simples (aguenta aspas)
-    function parseCsv(text) {
-      const rows = [];
-      let row = [];
-      let cur = "";
-      let inQuotes = false;
+<header class="navbar">
+  <div class="nav-left">
+    <img id="siteLogo" class="logo-img" alt="Logo" />
+    <nav class="navLinks">
+      <a href="../index.html">Home</a>
+      <a href="../clubs.html">Clubs</a>
+      <a href="../clubs2.html">Clubs 2.0</a>
+    </nav>
+  </div>
+</header>
 
-      for (let i = 0; i < text.length; i++) {
-        const c = text[i];
-        const next = text[i + 1];
+<main class="toolWrap">
+  <h1 class="toolTitle">CSV → JSON</h1>
 
-        if (c === '"' && inQuotes && next === '"') { cur += '"'; i++; continue; }
-        if (c === '"') { inQuotes = !inQuotes; continue; }
+  <p class="toolMeta">
+    Esta ferramenta vai buscar o CSV publicado do Google Sheets (via <code>CONFIG.DATA_SOURCE</code>),
+    converte para JSON e permite copiar/guardar.
+  </p>
 
-        if (c === "," && !inQuotes) { row.push(cur); cur = ""; continue; }
+  <div class="toolRow">
+    <button id="btnGenerate" class="toolBtn primary">Gerar JSON</button>
+    <button id="btnCopy" class="toolBtn">Copiar</button>
+    <button id="btnDownload" class="toolBtn">Download clubs.json</button>
+  </div>
 
-        if ((c === "\n" || c === "\r") && !inQuotes) {
-          if (c === "\r" && next === "\n") i++;
-          row.push(cur);
-          if (row.some(v => (v || "").trim() !== "")) rows.push(row);
-          row = [];
-          cur = "";
-          continue;
-        }
-        cur += c;
-      }
-      row.push(cur);
-      if (row.some(v => (v || "").trim() !== "")) rows.push(row);
-      return rows;
-    }
+  <textarea id="out" spellcheck="false">[]</textarea>
+  <div id="status" class="status"></div>
+</main>
 
-    function toObj(headers, values) {
-      const o = {};
-      headers.forEach((h, i) => o[h.trim()] = (values[i] ?? "").trim());
-      return o;
-    }
+<script src="../config.js"></script>
+<script src="../ui-common.js"></script>
+<script>
+  // init logo (não é module)
+  if (window.initLogo) window.initLogo();
+</script>
+<script src="./csv-to-json.js"></script>
 
-    document.getElementById("run").addEventListener("click", async () => {
-      const url = CONFIG.DATA_SOURCE; // o teu CSV publicado
-      const res = await fetch(url, { cache: "no-store" });
-      const text = await res.text();
-
-      const table = parseCsv(text);
-      const headers = table[0] || [];
-      const dataRows = table.slice(1);
-
-      const json = dataRows
-        .filter(r => r.some(v => (v||"").trim() !== ""))
-        .map(r => toObj(headers, r))
-        .filter(o => (o.name || o.Name || o.Nome || "").trim());
-
-      const out = JSON.stringify(json, null, 2);
-      document.getElementById("out").textContent = out;
-
-      // também copia automaticamente para o clipboard (se o browser permitir)
-      try { await navigator.clipboard.writeText(out); } catch(e){}
-    });
-  </script>
 </body>
 </html>
