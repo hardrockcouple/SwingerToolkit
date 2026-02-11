@@ -27,7 +27,12 @@ export async function loadClubs() {
   }
 
   return data
-    .map((x) => ({
+    .map((x) => {
+      const lat = safeText(x.lat);
+      const lng = safeText(x.lng ?? x.lon);
+      const latNum = lat ? Number(lat.replace(",", ".")) : null;
+      const lngNum = lng ? Number(lng.replace(",", ".")) : null;
+      return {
       id: safeText(x.id),
       name: safeText(x.name),
       country: safeText(x.country),
@@ -35,11 +40,14 @@ export async function loadClubs() {
       type: safeText(x.type),
       website: safeText(x.website),
       address: safeText(x.address),
-      lat: safeText(x.lat),
-      lng: safeText(x.lng ?? x.lon),
+      lat,
+      lng,
+      latNum,
+      lngNum,
       visited: toBool(x.visited),
       notes: safeText(x.notes),
       raw: x
-    }))
+    };
+    })
     .filter((x) => x.name);
 }

@@ -1,71 +1,96 @@
-<!DOCTYPE html>
-<html lang="pt">
+<!doctype html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Clubs 2.0</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Clubs</title>
+  <link rel="stylesheet" href="./styles.css" />
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""
+  />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" crossorigin="" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" crossorigin="" />
 
-  <link rel="stylesheet" href="styles.css" />
-  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""
+  ></script>
+  <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js" crossorigin=""></script>
+
 </head>
-
 <body>
-  <header class="topbar">
-    <div class="logoWrap">
-      <img id="siteLogo" alt="Logo" />
-    </div>
+
+<header class="navbar">
+  <div class="nav-left">
+    <img id="siteLogo" class="logo-img" alt="Logo" />
     <nav class="navLinks">
       <a href="index.html">Home</a>
-      <a href="clubs.html">Clubs</a>
-      <a href="clubs2.html">Clubs 2.0</a>
+      <a href="clubs2.html" class="active">Clubs</a>
       <a href="shopping.html">Shopping</a>
+      <a href="capdagde.html">Cap D'Agde</a>
+      <a href="outras.html">Others</a>
     </nav>
-  </header>
-
-  <main class="container">
-
-    <div class="filters">
-      <input id="searchInput" placeholder="Search..." />
-      <select id="countryFilter"></select>
-      <select id="cityFilter"></select>
-      <button id="clearFilters">Clear</button>
-
-      <div class="viewBtns">
-        <button id="viewGrid" class="active">Grid</button>
-        <button id="viewList">List</button>
-        <button id="viewMap">Map</button>
-      </div>
-
-      <div id="resultsCount"></div>
-    </div>
-
-    <div id="errorBox" class="error hidden"></div>
-
-    <div id="gridView" class="gridView"></div>
-    <div id="listView" class="listView hidden"></div>
-    <div id="mapView" class="mapView hidden">
-      <div id="map" style="height:600px;"></div>
-    </div>
-
-  </main>
-
-  <!-- Drawer -->
-  <div id="drawer" class="drawer hidden">
-    <div class="drawerContent">
-      <button id="closeDrawer" class="drawerClose">×</button>
-      <div id="drawerBody"></div>
-    </div>
   </div>
+</header>
 
-  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-  <script src="config.js"></script>
-  <script type="module">
-    import { initLogo, setActiveNav } from "./ui-common.js";
-    import { initClubs2 } from "./clubs2-app.js";
+<section class="filtersBar">
+  <div class="filtersInner">
 
+    <input id="searchInput" class="searchInput" placeholder="Search..." />
+
+    <select id="countryFilter" class="select">
+      <option value="">Country</option>
+    </select>
+
+    <select id="cityFilter" class="select" disabled>
+      <option value="">City</option>
+    </select>
+
+    <button id="clearFilters" class="btn">Clear</button>
+
+    <div class="viewToggle">
+      <button id="viewGrid" class="viewBtn active">Grid</button>
+      <button id="viewList" class="viewBtn">List</button>
+    </div>
+
+    <div class="count" id="resultsCount">0 results</div>
+
+  </div>
+</section>
+
+<main class="content">
+
+  <!-- GRID -->
+  <section id="gridView" class="grid"></section>
+
+  <!-- LIST -->
+  <section id="listView" class="list hidden"></section>
+
+</main>
+
+<!-- SIDE PANEL -->
+<aside id="drawer" class="drawer hidden">
+  <div class="drawerContent">
+    <button id="closeDrawer" class="drawerClose">×</button>
+    <div id="drawerBody"></div>
+  </div>
+</aside>
+
+<script src="./config.js"></script>
+<script type="module">
+  import { initLogo, setActiveNav } from "./ui-common.js";
+  import { initClubs2 } from "./clubs2-app.js";
+
+  document.addEventListener("DOMContentLoaded", () => {
     initLogo();
     setActiveNav();
     initClubs2();
-  </script>
+  });
+</script>
+
 </body>
 </html>
