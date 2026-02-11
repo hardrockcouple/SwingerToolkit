@@ -5,16 +5,19 @@ function $(id){ return document.getElementById(id); }
 
 export async function initClubs2(){
 
-  const search = $("searchInput");
-  const country = $("countryFilter");
-  const city = $("cityFilter");
-  const clear = $("clearFilters");
+  const searchInput = $("searchInput");
+  const countryFilter = $("countryFilter");
+  const cityFilter = $("cityFilter");
+  const clearBtn = $("clearFilters");
+  const resultsCount = $("resultsCount");
 
   const gridView = $("gridView");
   const listView = $("listView");
+  const mapView = $("mapView");
 
   const viewGrid = $("viewGrid");
   const viewList = $("viewList");
+  const viewMap = $("viewMap");
 
   const drawer = $("drawer");
   const drawerBody = $("drawerBody");
@@ -23,9 +26,25 @@ export async function initClubs2(){
   let ALL = [];
   let FILTERED = [];
   let MODE = "grid";
+  let MAP;
+  let MARKERS = [];
+
+  function setMode(mode){
+    MODE = mode;
+
+    viewGrid.classList.toggle("active", mode==="grid");
+    viewList.classList.toggle("active", mode==="list");
+    viewMap.classList.toggle("active", mode==="map");
+
+    gridView.classList.toggle("hidden", mode!=="grid");
+    listView.classList.toggle("hidden", mode!=="list");
+    mapView.classList.toggle("hidden", mode!=="map");
+
+    render();
+  }
 
   function openDrawer(item){
-    renderDrawer(drawerBody, item);
+    renderDrawer(drawerBody,item);
     drawer.classList.remove("hidden");
   }
 
@@ -33,74 +52,78 @@ export async function initClubs2(){
     drawer.classList.add("hidden");
   }
 
-  function render(){
-
-    gridView.classList.toggle("hidden", MODE !== "grid");
-    listView.classList.toggle("hidden", MODE !== "list");
-
-    if(MODE === "grid"){
-      gridView.innerHTML = "";
-      FILTERED.slice(0, 12).forEach(x => gridView.appendChild(buildCard(x, openDrawer)));
-    }
-
-    if(MODE === "list"){
-      listView.innerHTML = "";
-      FILTERED.forEach(x => listView.appendChild(buildRow(x, openDrawer)));
-    }
-
-    $("resultsCount").textContent = `${FILTERED.length} results`;
-  }
-
   function applyFilters(){
-    const q = search.value.toLowerCase();
-    const c = country.value;
-    const ci = city.value;
+    const q = searchInput.value.toLowerCase();
+    const c = countryFilter.value;
+    const city = cityFilter.value;
 
-    FILTERED = ALL.filter(x =>
-      (!q || x.name.toLowerCase().includes(q)) &&
-      (!c || x.country === c) &&
-      (!ci || x.city === ci)
-    );
+    FILTERED = ALL.filter(x=>{
+      return (!q || x.name.toLowerCase().includes(q))
+        && (!c || x.country===c)
+        && (!city || x.city===city);
+    });
 
+    resultsCount.textContent = `${FILTERED.length} results`;
     render();
   }
 
-  function rebuildFilters(){
-    const countries = [...new Set(ALL.map(x=>x.country).filter(Boolean))].sort();
-    country.innerHTML = `<option value="">Country</option>` + countries.map(c=>`<option>${c}</option>`).join("");
+  function render(){
+
+    if(MODE==="grid"){
+      gridView.innerHTML="";
+      FILTERED.forEach(item=>gridView.appendChild(buildCard(item,openDrawer)));
+    }
+
+    if(MODE==="list"){
+      listView.innerHTML="";
+      FILTERED.forEach(item=>listView.appendChild(buildRow(item,openDrawer)));
+    }
+
+    if(MODE==="map"){
+      if(!MAP){
+        MAP = L.map('map').setView([40,0],5);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+          attribution:'© OpenStreetMap'
+        }).addTo(MAP);
+      }
+
+      MARKERS.forEach(m=>MAP.removeLayer(m));
+      MARKERS=[];
+
+      FILTERED.forEach(item=>{
+        if(item.lat && item.lng){
+          const m=L.marker([item.lat,item.lng]).addTo(MAP);
+          m.bindPopup(`<b>${item.name}</b><br>${item.city || ""}`);
+          MARKERS.push(m);
+        }
+      });
+    }
   }
 
-  search.addEventListener("input", applyFilters);
-  country.addEventListener("change", applyFilters);
-  city.addEventListener("change", applyFilters);
-  clear.addEventListener("click", ()=>{
-    search.value="";
-    country.value="";
-    city.value="";
+  searchInput.addEventListener("input",applyFilters);
+  countryFilter.addEventListener("change",applyFilters);
+  cityFilter.addEventListener("change",applyFilters);
+  clearBtn.addEventListener("click",()=>{
+    searchInput.value="";
+    countryFilter.value="";
+    cityFilter.value="";
     applyFilters();
   });
 
-  viewGrid.addEventListener("click", ()=>{
-    MODE="grid";
-    viewGrid.classList.add("active");
-    viewList.classList.remove("active");
-    render();
-  });
+  viewGrid.addEventListener("click",()=>setMode("grid"));
+  viewList.addEventListener("click",()=>setMode("list"));
+  viewMap.addEventListener("click",()=>setMode("map"));
 
-  viewList.addEventListener("click", ()=>{
-    MODE="list";
-    viewList.classList.add("active");
-    viewGrid.classList.remove("active");
-    render();
-  });
-
-  closeDrawer.addEventListener("click", closeDrawerFn);
-  drawer.addEventListener("click", e=>{
-    if(e.target === drawer) closeDrawerFn();
+  closeDrawer.addEventListener("click",closeDrawerFn);
+  drawer.addEventListener("click",(e)=>{
+    if(e.target===drawer) closeDrawerFn();
   });
 
   ALL = await loadClubs();
   FILTERED = [...ALL];
-  rebuildFilters();
-  render();
+
+  const countries=[...new Set(ALL.map(x=>x.country))].filter(Boolean);
+  countryFilter.innerHTML="<option value=''>Country</option>"+countries.map(c=>`<option>${c}</option>`).join("");
+
+  applyFilters();
 }

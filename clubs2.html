@@ -1,80 +1,71 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="pt">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Clubs</title>
-  <link rel="stylesheet" href="./styles.css" />
-</head>
-<body>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Clubs 2.0</title>
 
-<header class="navbar">
-  <div class="nav-left">
-    <img id="siteLogo" class="logo-img" alt="Logo" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="logoWrap">
+      <img id="siteLogo" alt="Logo" />
+    </div>
     <nav class="navLinks">
       <a href="index.html">Home</a>
-      <a href="clubs2.html" class="active">Clubs</a>
+      <a href="clubs.html">Clubs</a>
+      <a href="clubs2.html">Clubs 2.0</a>
       <a href="shopping.html">Shopping</a>
-      <a href="capdagde.html">Cap D'Agde</a>
-      <a href="outras.html">Others</a>
     </nav>
-  </div>
-</header>
+  </header>
 
-<section class="filtersBar">
-  <div class="filtersInner">
+  <main class="container">
 
-    <input id="searchInput" class="searchInput" placeholder="Search..." />
+    <div class="filters">
+      <input id="searchInput" placeholder="Search..." />
+      <select id="countryFilter"></select>
+      <select id="cityFilter"></select>
+      <button id="clearFilters">Clear</button>
 
-    <select id="countryFilter" class="select">
-      <option value="">Country</option>
-    </select>
+      <div class="viewBtns">
+        <button id="viewGrid" class="active">Grid</button>
+        <button id="viewList">List</button>
+        <button id="viewMap">Map</button>
+      </div>
 
-    <select id="cityFilter" class="select" disabled>
-      <option value="">City</option>
-    </select>
-
-    <button id="clearFilters" class="btn">Clear</button>
-
-    <div class="viewToggle">
-      <button id="viewGrid" class="viewBtn active">Grid</button>
-      <button id="viewList" class="viewBtn">List</button>
+      <div id="resultsCount"></div>
     </div>
 
-    <div class="count" id="resultsCount">0 results</div>
+    <div id="errorBox" class="error hidden"></div>
 
+    <div id="gridView" class="gridView"></div>
+    <div id="listView" class="listView hidden"></div>
+    <div id="mapView" class="mapView hidden">
+      <div id="map" style="height:600px;"></div>
+    </div>
+
+  </main>
+
+  <!-- Drawer -->
+  <div id="drawer" class="drawer hidden">
+    <div class="drawerContent">
+      <button id="closeDrawer" class="drawerClose">×</button>
+      <div id="drawerBody"></div>
+    </div>
   </div>
-</section>
 
-<main class="content">
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script src="config.js"></script>
+  <script type="module">
+    import { initLogo, setActiveNav } from "./ui-common.js";
+    import { initClubs2 } from "./clubs2-app.js";
 
-  <!-- GRID -->
-  <section id="gridView" class="grid"></section>
-
-  <!-- LIST -->
-  <section id="listView" class="list hidden"></section>
-
-</main>
-
-<!-- SIDE PANEL -->
-<aside id="drawer" class="drawer hidden">
-  <div class="drawerContent">
-    <button id="closeDrawer" class="drawerClose">×</button>
-    <div id="drawerBody"></div>
-  </div>
-</aside>
-
-<script src="./config.js"></script>
-<script type="module">
-  import { initLogo, setActiveNav } from "./ui-common.js";
-  import { initClubs2 } from "./clubs2-app.js";
-
-  document.addEventListener("DOMContentLoaded", () => {
     initLogo();
     setActiveNav();
     initClubs2();
-  });
-</script>
-
+  </script>
 </body>
 </html>

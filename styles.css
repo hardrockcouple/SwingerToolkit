@@ -415,3 +415,35 @@ body{
   color: #ffd700;
   letter-spacing: 1px;
 }
+.drawer{
+  position:fixed;
+  top:0;
+  right:0;
+  width:400px;
+  height:100%;
+  background:#111;
+  box-shadow:-5px 0 20px rgba(0,0,0,0.6);
+  z-index:9999;
+}
+
+.drawerContent{
+  padding:30px;
+  position:relative;
+  height:100%;
+  overflow:auto;
+}
+
+.drawerClose{
+  position:absolute;
+  top:15px;
+  right:15px;
+  background:none;
+  border:none;
+  color:#fff;
+  font-size:22px;
+  cursor:pointer;
+}
+
+.hidden{
+  display:none !important;
+}
