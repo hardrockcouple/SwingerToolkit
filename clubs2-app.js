@@ -1,181 +1,82 @@
-// clubs2-app.js
-import { loadClubs } from "./clubs2-data.js";
-import { buildCard, buildRow, renderModal } from "./clubs2-render.js";
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Clubs 2.0</title>
 
-function $(id) {
-  return document.getElementById(id);
-}
+    <link rel="stylesheet" href="./styles.css" />
+    <link rel="stylesheet" href="./clubs2.css" />
+  </head>
 
-function safeText(v) {
-  return String(v ?? "").trim();
-}
+  <body>
+    <header class="navbar">
+      <div class="nav-left">
+        <img id="siteLogo" class="logo-img" alt="Logo" />
+        <nav class="navLinks">
+          <a href="index.html">Home</a>
+          <a href="clubs.html">Clubs</a>
+          <a href="clubs2.html">Clubs 2.0</a>
+          <a href="shopping.html">Shopping</a>
+          <a href="capdagde.html">Cap D'Agde</a>
+          <a href="outras.html">Others</a>
+        </nav>
+      </div>
+    </header>
 
-function uniq(list) {
-  return Array.from(new Set(list.filter(Boolean))).sort((a, b) => a.localeCompare(b));
-}
+    <div class="filtersBar">
+      <div class="filtersInner">
+        <input id="searchInput" class="searchInput" type="search" placeholder="Search by name..." />
 
-export async function initClubs2() {
-  const searchInput = $("searchInput");
-  const countryFilter = $("countryFilter");
-  const cityFilter = $("cityFilter");
-  const clearBtn = $("clearFilters");
-  const resultsCount = $("resultsCount");
+        <select id="countryFilter" class="select">
+          <option value="">Country</option>
+        </select>
 
-  const gridView = $("gridView");
-  const listView = $("listView");
-  const mapView = $("mapView");
-  const mapList = $("mapList");
+        <select id="cityFilter" class="select" disabled>
+          <option value="">City</option>
+        </select>
 
-  const viewGrid = $("viewGrid");
-  const viewList = $("viewList");
-  const viewMap = $("viewMap");
+        <div class="viewSwitch">
+          <button id="viewGrid" class="segBtn active" type="button">Grid</button>
+          <button id="viewList" class="segBtn" type="button">List</button>
+          <button id="viewMap" class="segBtn" type="button">Map</button>
+        </div>
 
-  const errorBox = $("errorBox");
+        <button id="clearFilters" class="btn" type="button">Clear</button>
 
-  const modal = $("modal");
-  const closeModal = $("closeModal");
-  const modalBody = $("modalBody");
+        <div id="resultsCount" class="count">0 results</div>
+      </div>
+    </div>
 
-  let ALL = [];
-  let FILTERED = [];
-  let MODE = "grid";
+    <main class="content">
+      <div id="errorBox" class="errorBox hidden"></div>
 
-  function showError(msg) {
-    errorBox.textContent = msg;
-    errorBox.classList.remove("hidden");
-  }
+      <div id="gridView" class="grid"></div>
+      <div id="listView" class="list hidden"></div>
 
-  function hideError() {
-    errorBox.classList.add("hidden");
-    errorBox.textContent = "";
-  }
+      <div id="mapView" class="mapWrap hidden">
+        <div class="mapHint">(Simple mode) Click a club to open Google Maps.</div>
+        <div id="mapList" class="list"></div>
+      </div>
+    </main>
 
-  function setMode(mode) {
-    MODE = mode;
+    <!-- Drawer (painel lateral) -->
+    <div id="drawerOverlay" class="drawerOverlay hidden" aria-hidden="true">
+      <aside id="drawer" class="drawer" role="dialog" aria-modal="true" aria-label="Club details">
+        <button id="closeDrawer" class="drawerClose" aria-label="Close">×</button>
+        <div id="drawerBody"></div>
+      </aside>
+    </div>
 
-    viewGrid.classList.toggle("active", mode === "grid");
-    viewList.classList.toggle("active", mode === "list");
-    viewMap.classList.toggle("active", mode === "map");
+    <script src="./config.js"></script>
 
-    gridView.classList.toggle("hidden", mode !== "grid");
-    listView.classList.toggle("hidden", mode !== "list");
-    mapView.classList.toggle("hidden", mode !== "map");
+    <script type="module">
+      import { initLogo, setActiveNav } from "./ui-common.js";
+      import { initClubs2 } from "./clubs2-app.js";
 
-    render();
-  }
-
-  function openModal(item) {
-    renderModal(modalBody, item);
-    modal.classList.remove("hidden");
-  }
-
-  function closeModalFn() {
-    modal.classList.add("hidden");
-  }
-
-  function rebuildFilters() {
-    const countries = uniq(ALL.map((x) => x.country));
-    countryFilter.innerHTML =
-      `<option value="">Country</option>` +
-      countries.map((c) => `<option value="${c}">${c}</option>`).join("");
-
-    rebuildCities("");
-  }
-
-  function rebuildCities(country) {
-    const subset = country ? ALL.filter((x) => x.country === country) : ALL;
-    const cities = uniq(subset.map((x) => x.city));
-    cityFilter.innerHTML =
-      `<option value="">City</option>` +
-      cities.map((c) => `<option value="${c}">${c}</option>`).join("");
-
-    cityFilter.disabled = !country;
-    if (!country) cityFilter.value = "";
-  }
-
-  function applyFilters() {
-    const q = safeText(searchInput.value).toLowerCase();
-    const ctry = safeText(countryFilter.value);
-    const city = safeText(cityFilter.value);
-
-    FILTERED = ALL.filter((x) => {
-      const okName = !q || safeText(x.name).toLowerCase().includes(q);
-      const okCountry = !ctry || x.country === ctry;
-      const okCity = !city || x.city === city;
-      return okName && okCountry && okCity;
-    });
-
-    if (resultsCount) resultsCount.textContent = `${FILTERED.length} results`;
-    render();
-  }
-
-  function render() {
-    // grid
-    if (MODE === "grid") {
-      const pageSize = Number(window.CONFIG?.PAGE_SIZE || 12);
-      const slice = FILTERED.slice(0, pageSize);
-
-      gridView.innerHTML = "";
-      slice.forEach((item) => gridView.appendChild(buildCard(item, openModal)));
-      return;
-    }
-
-    // list
-    if (MODE === "list") {
-      listView.innerHTML = "";
-      FILTERED.forEach((item) => listView.appendChild(buildRow(item, openModal)));
-      return;
-    }
-
-    // map (simple)
-    if (MODE === "map") {
-      mapList.innerHTML = "";
-      FILTERED.forEach((item) => {
-        const row = buildRow(item, (it) => window.open(
-          (it.lat && it.lng)
-            ? `https://www.google.com/maps?q=${encodeURIComponent(it.lat + "," + it.lng)}`
-            : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent([it.name, it.city, it.country].filter(Boolean).join(" "))}`,
-          "_blank",
-          "noreferrer"
-        ));
-        mapList.appendChild(row);
-      });
-    }
-  }
-
-  // listeners
-  searchInput.addEventListener("input", applyFilters);
-  countryFilter.addEventListener("change", () => {
-    rebuildCities(safeText(countryFilter.value));
-    applyFilters();
-  });
-  cityFilter.addEventListener("change", applyFilters);
-
-  clearBtn.addEventListener("click", () => {
-    searchInput.value = "";
-    countryFilter.value = "";
-    cityFilter.value = "";
-    rebuildCities("");
-    applyFilters();
-  });
-
-  viewGrid.addEventListener("click", () => setMode("grid"));
-  viewList.addEventListener("click", () => setMode("list"));
-  viewMap.addEventListener("click", () => setMode("map"));
-
-  closeModal.addEventListener("click", closeModalFn);
-  modal.addEventListener("click", (e) => {
-    if (e.target === modal) closeModalFn();
-  });
-
-  // load
-  try {
-    hideError();
-    ALL = await loadClubs();
-    FILTERED = [...ALL];
-    rebuildFilters();
-    applyFilters();
-  } catch (e) {
-    showError(safeText(e.message || e));
-  }
-}
+      initLogo();
+      setActiveNav();
+      initClubs2();
+    </script>
+  </body>
+</html>
