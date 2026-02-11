@@ -1,4 +1,3 @@
-// clubs2-render.js
 function safeText(v) {
   return String(v ?? "").trim();
 }
@@ -15,7 +14,6 @@ export function buildCard(item, onOpen) {
   const card = document.createElement("article");
   card.className = "card";
 
-  // ✅ Glam stamp só no grid/card
   if (item.visited) {
     const stamp = document.createElement("div");
     stamp.className = "visited-stamp";
@@ -30,9 +28,9 @@ export function buildCard(item, onOpen) {
   const meta = document.createElement("div");
   meta.className = "meta";
   meta.innerHTML = `
-    ${item.country ? `<div>${safeText(item.country)}</div>` : ""}
-    ${item.city ? `<div>${safeText(item.city)}</div>` : ""}
-    ${item.type ? `<div>${safeText(item.type)}</div>` : ""}
+    ${item.country ? `<div>${item.country}</div>` : ""}
+    ${item.city ? `<div>${item.city}</div>` : ""}
+    ${item.type ? `<div>${item.type}</div>` : ""}
   `;
 
   card.appendChild(name);
@@ -46,23 +44,20 @@ export function buildRow(item, onOpen) {
   const row = document.createElement("div");
   row.className = "listRow";
 
-  // Nome + badge pequeno (não absoluto)
-  const nameWrap = document.createElement("div");
-  nameWrap.className = "rowNameWrap";
+  const left = document.createElement("div");
+  left.className = "rowNameWrap";
 
-  const name = document.createElement("div");
-  name.className = "rowName";
-  name.textContent = item.name || "";
-
-  nameWrap.appendChild(name);
-
-  // ✅ Badge discreto na list
   if (item.visited) {
     const badge = document.createElement("span");
     badge.className = "visited-badge";
     badge.textContent = "VISITED";
-    nameWrap.appendChild(badge);
+    left.appendChild(badge);
   }
+
+  const name = document.createElement("div");
+  name.className = "rowName";
+  name.textContent = item.name || "(no name)";
+  left.appendChild(name);
 
   const c1 = document.createElement("div");
   c1.className = "rowMeta";
@@ -74,25 +69,18 @@ export function buildRow(item, onOpen) {
 
   const link = document.createElement("div");
   link.className = "rowLink";
+  if (item.website) {
+    link.innerHTML = `<a href="${item.website}" target="_blank" rel="noreferrer" onclick="event.stopPropagation()">Website</a>`;
+  } else {
+    link.innerHTML = `<a href="${mapsLink(item)}" target="_blank" rel="noreferrer" onclick="event.stopPropagation()">Map</a>`;
+  }
 
-  const href = item.website ? item.website : mapsLink(item);
-  const label = item.website ? "Website" : "Map";
-
-  link.innerHTML = `<a href="${href}" target="_blank" rel="noreferrer">${label}</a>`;
-
-  row.appendChild(nameWrap);
+  row.appendChild(left);
   row.appendChild(c1);
   row.appendChild(c2);
   row.appendChild(link);
 
-  // ✅ Clicar no link NÃO abre modal
-  row.querySelector("a")?.addEventListener("click", (e) => {
-    e.stopPropagation();
-  });
-
-  // ✅ Clicar no resto abre modal
   row.addEventListener("click", () => onOpen(item));
-
   return row;
 }
 

@@ -1,11 +1,5 @@
 /* clubs2.css */
-
-/* fallback visual caso styles.css não carregue */
-.content{
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 22px 22px 40px;
-}
+.hidden{ display:none !important; }
 
 /* erro */
 .errorBox{
@@ -16,26 +10,29 @@
   background: rgba(120,0,0,.18);
   color: #ffd7d7;
 }
-.hidden{ display:none !important; }
 
-/* views */
+/* list containers */
 .list{ display:flex; flex-direction:column; gap:12px; }
 .mapHint{ color:#bdbdbd; margin: 6px 0 14px; }
 
-/* ---------- GRID CARDS ---------- */
-.card{
-  position: relative;
-  overflow: hidden;
+/* garante que o grid é mesmo grid (mesmo se mexerem no styles.css) */
+#gridView.grid{
+  display:grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
 }
+@media (max-width: 1100px){ #gridView.grid{ grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 820px){  #gridView.grid{ grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 520px){  #gridView.grid{ grid-template-columns: 1fr; } }
 
-/* ✅ STAMP MAIS PEQUENO + glam */
+/* ✅ STAMP (mais pequeno) */
 .visited-stamp{
   position: absolute;
   top: 12px;
   right: 12px;
 
-  width: 58px;     /* <= menor */
-  height: 58px;    /* <= menor */
+  width: 56px;
+  height: 56px;
 
   border-radius: 50%;
   border: 2px solid #c6a75e;
@@ -45,6 +42,7 @@
   justify-content: center;
 
   color: #c6a75e;
+
   background:
     radial-gradient(circle at 35% 30%, rgba(255,255,255,.18), rgba(0,0,0,.62) 55%),
     rgba(0,0,0,.45);
@@ -60,13 +58,12 @@
 .visited-stamp span{
   font-weight: 900;
   letter-spacing: 1.6px;
-  font-size: 10px;   /* <= menor */
+  font-size: 10px;
   text-shadow: 0 1px 10px rgba(0,0,0,.65);
 }
 
-/* ---------- LIST ROWS ---------- */
+/* ✅ LIST ROW (sem stamp enorme a tapar “Website”) */
 .listRow{
-  position: relative;
   background: linear-gradient(180deg, #1b1b1b, #202020);
   border: 1px solid #262626;
   border-radius: 14px;
@@ -75,7 +72,7 @@
   cursor: pointer;
 
   display: grid;
-  grid-template-columns: 1.4fr .8fr .8fr .7fr;
+  grid-template-columns: 1.6fr .9fr .9fr .7fr;
   gap: 14px;
   align-items: center;
 }
@@ -109,7 +106,6 @@
 }
 .rowLink a:hover{ text-decoration: underline; }
 
-/* ✅ Badge para LIST (não absolute, não tapa nada) */
 .visited-badge{
   display:inline-flex;
   align-items:center;
