@@ -23,11 +23,14 @@ export async function initClubs2() {
   // barra de filtros (para calcular altura e evitar overlap)
   const filtersBar = $("filtersBar");
 
-  const gridView = $("gridView");  const mapView = $("mapView");
+  const gridView = $("gridView");
+  // nesta versão só há Grid + Map
+  const mapView = $("mapView");
   const mapCanvas = $("mapCanvas");
   const mapHint = $("mapHint") || document.querySelector(".mapHint");
 
-  const viewGrid = $("viewGrid");  const viewMap = $("viewMap");
+  const viewGrid = $("viewGrid");
+  const viewMap = $("viewMap");
 
   const errorBox = $("errorBox");
 
@@ -91,15 +94,10 @@ export async function initClubs2() {
     MODE = mode;
 
     viewGrid.classList.toggle("active", mode === "grid");
-    viewMap.classList.toggle("active", mode === "map");
+    if (viewMap) viewMap.classList.toggle("active", mode === "map");
 
     gridView.classList.toggle("hidden", mode !== "grid");
-    mapView.classList.toggle("hidden", mode !== "map");
-
-    // Leaflet precisa de invalidateSize ao mostrar o mapa
-    if (mode === "map" && map) {
-      setTimeout(() => map.invalidateSize(true), 50);
-    }
+    if (mapView) mapView.classList.toggle("hidden", mode !== "map");
 
     render();
   }
