@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Clubs</title>
+  <link rel="stylesheet" href="./styles.css" />
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""
+  />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" crossorigin="" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" crossorigin="" />
+
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""
+  ></script>
+  <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js" crossorigin=""></script>
+
+</head>
+<body>
+
+<header class="navbar">
+  <div class="nav-left">
+    <img id="siteLogo" class="logo-img" alt="Logo" />
+    <nav class="navLinks">
+      <a href="index.html">Home</a>
+      <a href="clubs.html">Clubs</a>
+      <a href="clubs2.html">Clubs 2.0</a>
+      <a href="shopping.html">Shopping</a>
+      <a href="capdagde.html">Cap D'Agde</a>
+      <a href="outras.html">Others</a>
+    </nav>
+  </div>
+</header>
+
+<section class="filtersBar">
+  <div class="filtersInner">
+
+    <input id="searchInput" class="searchInput" placeholder="Search..." />
+
+    <select id="countryFilter" class="select">
+      <option value="">Country</option>
+    </select>
+
+    <select id="cityFilter" class="select" disabled>
+      <option value="">City</option>
+    </select>
+
+    <button id="clearFilters" class="btn">Clear</button>
+
+    <div class="viewToggle">
+      <button id="viewGrid" class="viewBtn active">Grid</button>
+      <button id="viewMap" class="viewBtn">Map</button>
+    </div>
+
+    <div class="count" id="resultsCount">0 results</div>
+
+  </div>
+</section>
+
+<main class="content">
+
+  <!-- GRID -->
+  <section id="gridView" class="grid"></section>
+
+  <!-- MAP -->
+  <section id="mapView" class="mapWrap hidden">
+    <div id="mapCanvas" class="mapCanvas"></div>
+    <div id="mapLegend" class="mapLegend"></div>
+  </section>
+
+</main>
+
+<!-- SIDE PANEL -->
+<aside id="drawer" class="drawer hidden">
+  <div class="drawerContent">
+    <button id="closeDrawer" class="drawerClose">×</button>
+    <div id="drawerBody"></div>
+  </div>
+</aside>
+
+<script src="./config.js?v=20260212"></script>
+<script type="module">
+  import { initLogo, setActiveNav } from "./ui-common.js";
+  import { initClubs2 } from "./clubs2-app.js";
+
+  document.addEventListener("DOMContentLoaded", () => {
+    initLogo();
+    setActiveNav();
+    initClubs2();
+  });
+</script>
+
+</body>
+</html>
