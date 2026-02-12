@@ -55,6 +55,7 @@
 
     <div class="viewToggle">
       <button id="viewGrid" class="viewBtn active">Grid</button>
+      <button id="viewList" class="viewBtn">List</button>
       <button id="viewMap" class="viewBtn">Map</button>
     </div>
 
@@ -67,6 +68,9 @@
 
   <!-- GRID -->
   <section id="gridView" class="grid"></section>
+
+  <!-- LIST -->
+  <section id="listView" class="list hidden"></section>
 
   <!-- MAP -->
   <section id="mapView" class="mapWrap hidden">
@@ -84,7 +88,7 @@
   </div>
 </aside>
 
-<script src="./config.js?v=20260212"></script>
+<script src="./config.js"></script>
 <script type="module">
   import { initLogo, setActiveNav } from "./ui-common.js";
   import { initClubs2 } from "./clubs2-app.js";
