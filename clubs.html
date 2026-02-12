@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Swinger Toolkit — Clubs</title>
+
+  <link rel="stylesheet" href="./styles.css" />
+  <link rel="stylesheet" href="./clubs.css" />
+
+  <!-- Leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+</head>
+
+<body>
+  <header class="navbar">
+    <div class="nav-left">
+      <a href="./index.html" class="brand">
+        <img id="siteLogo" src="./assets/logo.png" alt="Swinger Toolkit" />
+      </a>
+    </div>
+    <nav class="nav-links">
+      <a href="./index.html">Home</a>
+      <a href="./clubs.html" class="active">Clubs</a>
+      <a href="./shopping.html">Shopping</a>
+      <a href="./capdagde.html">Cap D'Agde</a>
+      <a href="./outras.html">Others</a>
+    </nav>
+  </header>
+
+  <main class="pageContent" style="max-width:1320px;margin:0 auto;padding:22px 22px 60px;">
+    <section class="clubsToolbar" id="clubsToolbar">
+      <div class="clubsToolbarInner">
+        <input id="q" class="field" type="search" placeholder="Search by name..." autocomplete="off" />
+
+        <select id="country" class="field">
+          <option value="">Country</option>
+        </select>
+
+        <select id="city" class="field" disabled>
+          <option value="">City</option>
+        </select>
+
+        <button id="btnGrid" class="btn active" type="button">Grid</button>
+        <button id="btnMap" class="btn" type="button">Map</button>
+        <button id="btnClear" class="btn" type="button">Clear</button>
+
+        <div class="meta" id="count">0 results</div>
+      </div>
+    </section>
+
+    <section class="gridWrap" id="gridWrap">
+      <div class="grid" id="grid"></div>
+    </section>
+
+    <section class="mapWrap" id="mapWrap" hidden>
+      <div id="clubsMap" aria-label="Map with all clubs"></div>
+    </section>
+  </main>
+
+  <!-- Drawer -->
+  <div class="drawerBackdrop" id="drawerBackdrop"></div>
+  <aside class="drawer" id="drawer" aria-label="Club details">
+    <div class="drawerHeader">
+      <h2 id="drawerTitle">Club</h2>
+      <button class="drawerClose" id="drawerClose" type="button" aria-label="Close">✕</button>
+    </div>
+    <div class="drawerBody" id="drawerBody"></div>
+  </aside>
+
+  <script src="./config.js"></script>
+
+  <!-- Leaflet -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+          integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+  <script type="module" src="./clubs-app.js"></script>
+</body>
+</html>
