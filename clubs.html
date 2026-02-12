@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="./styles.css" />
   <!-- CSS específico do Clubs 2.0 (tem de existir!) -->
   <link rel="stylesheet" href="./clubs2.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 </head>
 
 <body>
@@ -18,7 +19,7 @@
       <nav class="navLinks">
         <a href="index.html">Home</a>
         <a href="clubs.html">Clubs</a>
-        <a href="clubs2.html" class="active">Clubs 2.0</a>
+        <a href="clubs2.html">Clubs 2.0</a>
         <a href="shopping.html">Shopping</a>
         <a href="capdagde.html">Cap D'Agde</a>
         <a href="outras.html">Others</a>
@@ -48,21 +49,21 @@
     <div id="listView" class="list hidden"></div>
 
     <div id="mapView" class="map hidden">
-      <div class="mapHint">(Simple mode) Click a club to open Google Maps.</div>
-      <div id="mapList" class="list"></div>
+      <div id="mapCanvas" class="mapCanvas"></div>
+      <div class="mapHint">Dica: só aparecem marcadores para clubes com latitude/longitude.</div>
     </div>
   </main>
 
-  <!-- Modal -->
-  <div id="modal" class="modal hidden" aria-hidden="true">
-    <div class="modalContent">
-      <button id="closeModal" class="modalClose" aria-label="Close">×</button>
-      <div id="modalBody"></div>
-    </div>
-  </div>
+  <!-- Side panel -->
+  <div id="panelOverlay" class="panelOverlay hidden" aria-hidden="true"></div>
+  <aside id="panel" class="panel hidden" aria-hidden="true">
+    <button id="closePanel" class="panelClose" aria-label="Close">×</button>
+    <div id="panelBody" class="panelBody"></div>
+  </aside>
 
   <!-- config FIRST (define window.CONFIG) -->
   <script src="./config.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
   <!-- app -->
   <script type="module">
