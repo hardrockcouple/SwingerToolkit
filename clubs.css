@@ -12,7 +12,7 @@
    Nota: a barra de filtros é FIXA (fora do scroll).
    O conteúdo precisa de espaço no topo para não ficar por baixo do header + filtros. */
 .clubs-page .main-content{
-  padding-top: 100px;
+  padding-top: calc(var(--navbar-h) + var(--filters-h, 0px) - 20px);
 }
 
 .clubs-toolbar{
