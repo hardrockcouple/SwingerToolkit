@@ -152,10 +152,10 @@ select option{ background: #121212; color: #fff; }
 
 .stamp{
   position: absolute;
-  right: 14px;
-  bottom: 14px;
-  width: 64px;
-  height: 64px;
+  right: 10px;
+  bottom: 10px;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
   border: 2px solid rgba(211,169,74,.75);
   display: grid;
