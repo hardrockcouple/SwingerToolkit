@@ -356,3 +356,41 @@ select option{ background: #121212; color: #fff; }
   .kv{ grid-template-columns: 110px 1fr; }
   .modal-btn{ width: 100%; justify-content: center; }
 }
+
+/* Glow suave por linha na tabela de horários */
+.hours-table tr {
+  position: relative;
+}
+
+.hours-table tr::before{
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg,
+    rgba(212,175,55,.10),
+    rgba(212,175,55,.04) 35%,
+    rgba(0,0,0,0) 100%
+  );
+  opacity: .25;
+  pointer-events: none;
+}
+
+.hours-table tr:hover::before{
+  opacity: .55;
+}
+
+/* garantir que o texto fica por cima do glow */
+.hours-table td{
+  position: relative;
+  z-index: 1;
+}
+
+/* Linhas fechadas: glow mais discreto */
+.hours-table tr.closed::before{
+  opacity: .12;
+  background: linear-gradient(90deg,
+    rgba(255,255,255,.06),
+    rgba(255,255,255,.02) 35%,
+    rgba(0,0,0,0) 100%
+  );
+}
