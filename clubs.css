@@ -139,7 +139,7 @@ select option{ background: #121212; color: #fff; }
 .club-card:hover{ border-color: var(--card-bg); }
 
 .club-name{
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 800;
   margin: 0 0 8px;
 }
