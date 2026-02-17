@@ -187,33 +187,88 @@
   }
 
   function openModal(c) {
-    els.modalTitle.textContent = c.name;
 
-    const websiteHtml = c.website
-  ? `<a href="${escapeHtmlAttr(c.website)}" target="_blank" rel="noopener noreferrer">
-       ${escapeHtml(c.website)}
-     </a>`
-  : '<span style="opacity:.6">—</span>';
+  els.modalTitle.innerHTML = `
+    ${escapeHtml(c.name)}
+    ${c.Classificação ? `<span class="rating">${escapeHtml(c.Classificação)}</span>` : ''}
+  `;
 
-    const mapLink = (c.lat != null && c.lng != null)
-      ? `<a href="https://www.google.com/maps?q=${c.lat},${c.lng}" target="_blank" rel="noopener noreferrer">Open in Google Maps</a>`
-      : '<span style="opacity:.6">—</span>';
+  const websiteBtn = c.website
+    ? `<a class="modal-btn" href="${escapeHtmlAttr(c.website)}" target="_blank">Website</a>`
+    : '';
 
-    els.modalBody.innerHTML = `
-      <div class="kv"><div class="k">Country</div><div class="v">${escapeHtml(c.country || '—')}</div></div>
-      <div class="kv"><div class="k">City</div><div class="v">${escapeHtml(c.city || '—')}</div></div>
-      <div class="kv"><div class="k">Website</div><div class="v">${websiteHtml}</div></div>
-      <div class="kv"><div class="k">Map</div><div class="v">${mapLink}</div></div>
-    `;
+  const mapBtn = (c.lat && c.lng)
+    ? `<a class="modal-btn" href="https://maps.google.com/?q=${c.lat},${c.lng}" target="_blank">Maps</a>`
+    : '';
 
-    els.overlay.classList.add('open');
-    els.modal.classList.add('open');
-    els.overlay.setAttribute('aria-hidden', 'false');
-    els.modal.setAttribute('aria-hidden', 'false');
+  const phoneBtn = c.phone
+    ? `<a class="modal-btn" href="tel:${escapeHtmlAttr(c.phone)}">${escapeHtml(c.phone)}</a>`
+    : '';
 
-    // focus close button for accessibility
-    setTimeout(() => els.modalClose.focus(), 0);
-  }
+  const hours = formatOpeningHours(c);
+
+  els.modalBody.innerHTML = `
+
+    <div class="modal-actions">
+      ${websiteBtn}
+      ${mapBtn}
+      ${phoneBtn}
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">Info</div>
+
+      <div class="kv">
+        <div class="k">Location</div>
+        <div class="v">${escapeHtml(c.city)}, ${escapeHtml(c.country)}</div>
+      </div>
+
+      <div class="kv">
+        <div class="k">Address</div>
+        <div class="v">${escapeHtml(c.address || '—')}</div>
+      </div>
+
+      <div class="kv">
+        <div class="k">Type</div>
+        <div class="v">${escapeHtml(c.type || '—')}</div>
+      </div>
+
+      <div class="kv">
+        <div class="k">Hours</div>
+        <div class="v">${hours}</div>
+      </div>
+
+    </div>
+
+  `;
+
+  els.overlay.classList.add('open');
+  els.modal.classList.add('open');
+}
+
+function formatOpeningHours(c) {
+
+  const days = [
+    ['monday', 'Mon'],
+    ['tuesday', 'Tue'],
+    ['wednesday', 'Wed'],
+    ['thursday', 'Thu'],
+    ['friday', 'Fri'],
+    ['saturday', 'Sat'],
+    ['sunday', 'Sun']
+  ];
+
+  const openDays = days
+    .filter(d => c[`open_time_${d[0]}`] && c[`open_time_${d[0]}`] !== 'closed');
+
+  if (!openDays.length) return '—';
+
+  const first = openDays[0][1];
+  const last = openDays[openDays.length - 1][1];
+  const hours = c[`open_time_${openDays[0][0]}`];
+
+  return `${first}–${last} ${hours}`;
+}
 
   function closeModal() {
     els.overlay.classList.remove('open');
