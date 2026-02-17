@@ -15,10 +15,10 @@
 
 .clubs-toolbar {
   position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
   top: var(--navbar-h);
-  left: 0;
-  right: 0;
-  z-index: 900;
+  z-index: 160;
 
   /* FUNDO SÓLIDO (igual ao header) */
   background: #0b0b0b;
