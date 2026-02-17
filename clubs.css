@@ -263,7 +263,32 @@ select option{ background: #121212; color: #fff; }
 .modal-section{
   margin-top: 14px;
   padding-top: 14px;
-  border-top: 1px solid rgba(212,175,55,.18);
+  border-top: none;        /* remove linha simples */
+  position: relative;
+}
+
+/* glow da divisória */
+.modal-section::before{
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 1px;
+
+  background: linear-gradient(
+    90deg,
+    rgba(0,0,0,0),
+    rgba(212,175,55,.45),
+    rgba(0,0,0,0)
+  );
+
+  box-shadow:
+    0 0 12px rgba(212,175,55,.35),
+    0 0 28px rgba(212,175,55,.18);
+
+  opacity: .95;
+  pointer-events: none;
 }
 
 .modal-section-title{
