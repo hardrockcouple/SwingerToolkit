@@ -13,21 +13,24 @@
    espaço no topo para não ficar por baixo do header + filtros. */
 .clubs-page .main-content{ padding-top: calc(var(--filters-h, 0px) + 44px); }
 
-.clubs-toolbar{
-  background: var(--panel-bg);
-  border: 1px solid var(--panel-border);
-  border-radius: 18px;
-  padding: 18px;
-  /* fixa por baixo do header, fora do scroll */
-  width: min(1100px, calc(100% - 32px));
-  margin: 0;
-  box-shadow: 0 10px 40px rgba(0,0,0,.25);
-
+.clubs-toolbar {
   position: fixed;
-  left: 50%;
-  transform: translateX(-50%);
   top: var(--navbar-h);
-  z-index: 160;
+  left: 0;
+  right: 0;
+  z-index: 900;
+
+  /* FUNDO SÓLIDO (igual ao header) */
+  background: #0b0b0b;
+
+  /* opcional: ligeiro destaque */
+  border-bottom: 1px solid rgba(212,175,55,0.15);
+
+  /* remover transparências */
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+
+  padding: 12px 0;
 }
 
 
@@ -240,3 +243,7 @@ select option{ background: #121212; color: #fff; }
 
 /* Leaflet tweaks on dark UI */
 .leaflet-control-zoom a{ color: #000; }
+
+.main-content {
+  padding-top: calc(var(--navbar-h) + var(--filters-h));
+}
