@@ -44,6 +44,11 @@
     return (v ?? '').toString().trim();
   }
 
+  function yes(v) {
+    const s = safeText(v).toLowerCase();
+    return s === 'yes' || s === 'true' || v === true || v === 1;
+  }
+
   function normalizeClub(raw) {
     const name = safeText(raw.name || raw.club || raw.title);
     const country = safeText(raw.country);
@@ -64,7 +69,7 @@
       website: website || '',
       lat: Number.isFinite(lat) ? lat : null,
       lng: Number.isFinite(lng) ? lng : null,
-      visited: !!raw.visited,
+      visited: yes(raw.visited),
     };
   }
 
@@ -147,43 +152,90 @@
     return escapeHtml(s).replaceAll('`', '&#096;');
   }
 
-function formatOpeningHoursTable(c) {
+  function starsFromClassificacao(val) {
+    if (!val) return 0;
+    const s = safeText(val);
+    if (s.includes('*')) return (s.match(/\*/g) || []).length;
+    const n = parseInt(s, 10);
+    if (Number.isFinite(n)) return Math.max(0, Math.min(5, n));
+    return 0;
+  }
 
-  const days = [
-    ['monday', 'Mon'],
-    ['tuesday', 'Tue'],
-    ['wednesday', 'Wed'],
-    ['thursday', 'Thu'],
-    ['friday', 'Fri'],
-    ['saturday', 'Sat'],
-    ['sunday', 'Sun']
-  ];
+  function prettyDomain(url) {
+    const u = safeText(url);
+    if (!u) return '';
+    try {
+      const parsed = new URL(u);
+      return parsed.hostname.replace(/^www\./, '');
+    } catch {
+      return u.replace(/^https?:\/\//, '').replace(/^www\./, '');
+    }
+  }
 
-  const rows = days.map(([key, label]) => {
+  function normalizeTel(phone) {
+    return safeText(phone).replace(/[^\d+]/g, '');
+  }
 
-    const raw = (c[`open_time_${key}`] || '').trim();
+  function euroRange(c) {
+    const min = safeText(c.price_couples_min);
+    const max = safeText(c.price_couples_max);
+    const cur = safeText(c.price_currency || 'EUR');
+    const clean = (v) => v.replace(/\s+/g, ' ').trim();
+    const a = clean(min);
+    const b = clean(max);
+    if (a && b) return `${a} – ${b} (${cur})`;
+    if (a) return `${a} (${cur})`;
+    if (b) return `${b} (${cur})`;
+    return '—';
+  }
 
-    const isClosed =
-      !raw ||
-      raw.toLowerCase() === 'closed';
+  function amenitiesFromClub(c) {
+    const items = [
+      ['Sauna', yes(c.has_sauna)],
+      ['Pool', yes(c.has_pool)],
+      ['Darkroom', yes(c.has_darkroom)],
+      ['Private rooms', yes(c.has_private_rooms)],
+      ['Lockers', yes(c.has_lockers)],
+      ['Bar', yes(c.has_bar)],
+      ['Dancefloor', yes(c.has_dancefloor)],
+      ['Outdoor', yes(c.has_outdoor_area)],
+    ];
+    return items.filter(([, ok]) => ok).map(([name]) => name);
+  }
 
-    const display = isClosed ? 'Closed' : raw;
+  function openingHoursTable(c) {
+    const days = [
+      ['monday', 'Mon'],
+      ['tuesday', 'Tue'],
+      ['wednesday', 'Wed'],
+      ['thursday', 'Thu'],
+      ['friday', 'Fri'],
+      ['saturday', 'Sat'],
+      ['sunday', 'Sun'],
+    ];
+
+    const rows = days.map(([key, label]) => {
+      const raw = safeText(c[`open_time_${key}`]);
+      const isClosed = !raw || raw.toLowerCase() === 'closed';
+      const display = isClosed ? 'Closed' : raw;
+      return `
+        <tr class="${isClosed ? 'closed' : ''}">
+          <td class="d">${label}</td>
+          <td class="h">${escapeHtml(display)}</td>
+        </tr>
+      `;
+    }).join('');
+
+    const note = safeText(c.open_time_notes);
+    const noteHtml = note ? `<div class="hours-note">${escapeHtml(note)}</div>` : '';
 
     return `
-      <tr class="${isClosed ? 'closed' : 'open'}">
-        <td class="day">${label}</td>
-        <td class="time">${escapeHtml(display)}</td>
-      </tr>
+      <div class="hours-wrap">
+        <table class="hours-table"><tbody>${rows}</tbody></table>
+        ${noteHtml}
+      </div>
     `;
-
-  }).join('');
-
-  return `
-    <table class="hours-table">
-      ${rows}
-    </table>
-  `;
-}
+  }
 
   function renderGrid() {
     els.gridView.innerHTML = '';
@@ -224,226 +276,104 @@ function formatOpeningHoursTable(c) {
     els.gridView.appendChild(frag);
   }
 
-  function starsFromClassificacao(val) {
-  // aceita "****" ou "4" ou "4/5"
-  if (!val) return 0;
-  const s = String(val).trim();
-  if (s.includes('*')) return (s.match(/\*/g) || []).length;
-  const n = parseInt(s, 10);
-  if (Number.isFinite(n)) return Math.max(0, Math.min(5, n));
-  return 0;
-}
+  function openModal(c) {
+    const starCount = starsFromClassificacao(c['Classificação']);
+    const stars = starCount
+      ? `<span class="modal-stars" title="${starCount}/5">${'★'.repeat(starCount)}<span class="dim">${'★'.repeat(5 - starCount)}</span></span>`
+      : '';
 
-function prettyDomain(url) {
-  try {
-    const u = new URL(url);
-    return u.hostname.replace(/^www\./, '');
-  } catch {
-    return String(url).replace(/^https?:\/\//, '').replace(/^www\./, '');
-  }
-}
+    els.modalTitle.innerHTML = `<span class="modal-title-text">${escapeHtml(c.name || '—')}</span>${stars}`;
 
-function normalizeTel(phone) {
-  if (!phone) return '';
-  return String(phone).replace(/[^\d+]/g, '').trim();
-}
+    const websiteBtn = safeText(c.website)
+      ? `<a class="modal-btn primary" href="${escapeHtmlAttr(c.website)}" target="_blank" rel="noopener noreferrer">Website <span class="hint">${escapeHtml(prettyDomain(c.website))}</span></a>`
+      : '';
 
-function formatOpeningHours(c) {
-  const days = [
-    ['monday', 'Mon'],
-    ['tuesday', 'Tue'],
-    ['wednesday', 'Wed'],
-    ['thursday', 'Thu'],
-    ['friday', 'Fri'],
-    ['saturday', 'Sat'],
-    ['sunday', 'Sun']
-  ];
+    const mapHref = (c.lat != null && c.lng != null && String(c.lat).trim() && String(c.lng).trim())
+      ? `https://www.google.com/maps?q=${encodeURIComponent(String(c.lat).trim() + ',' + String(c.lng).trim())}`
+      : '';
 
-  const open = days
-    .map(([key, label]) => ({ key, label, val: (c[`open_time_${key}`] || '').trim() }))
-    .filter(x => x.val && x.val.toLowerCase() !== 'closed');
+    const mapBtn = mapHref
+      ? `<a class="modal-btn" href="${escapeHtmlAttr(mapHref)}" target="_blank" rel="noopener noreferrer">Maps</a>`
+      : '';
 
-  if (!open.length) return '—';
+    const tel = normalizeTel(c.phone);
+    const phoneBtn = tel
+      ? `<a class="modal-btn" href="tel:${escapeHtmlAttr(tel)}">${escapeHtml(safeText(c.phone))}</a>`
+      : '';
 
-  // se todos os dias abertos têm o mesmo horário, mostra "Tue–Sun 21:00–04:00"
-  const allSame = open.every(x => x.val === open[0].val);
-  if (allSame) {
-    const first = open[0].label;
-    const last = open[open.length - 1].label;
-    return `${first}–${last} ${open[0].val}`;
-  }
+    const email = safeText(c.email);
+    const emailBtn = email
+      ? `<a class="modal-btn" href="mailto:${escapeHtmlAttr(email)}">Email</a>`
+      : '';
 
-  // senão, lista curta por linhas
-  return open.map(x => `${x.label}: ${escapeHtml(x.val)}`).join('<br>');
-}
+    const location = [safeText(c.city), safeText(c.country)].filter(Boolean).join(', ') || '—';
+    const address = safeText(c.address) || '—';
+    const type = safeText(c.type) || '—';
+    const hoursTable = openingHoursTable(c);
 
-function euroRange(c) {
-  const min = (c.price_couples_min || '').toString().trim();
-  const max = (c.price_couples_max || '').toString().trim();
-  const cur = (c.price_currency || 'EUR').toString().trim();
+    const entryPolicy = safeText(c.entry_policy) || '—';
+    const singlesPolicy = safeText(c.singles_policy) || '—';
+    const coupleRange = euroRange(c);
+    const priceRange = safeText(c.price_range) || '—';
+    const pricingModel = safeText(c.pricing_model) || '—';
 
-  const clean = (v) => v.replace(/\s+/g, ' ').trim();
-  const a = clean(min);
-  const b = clean(max);
+    const entryNotes = safeText(c.entry_notes);
+    const pricingNotes = safeText(c.pricing_notes);
+    const obsGerais = safeText(c['Obs Gerais']);
+    const notes = [entryNotes, pricingNotes, obsGerais].filter(Boolean);
 
-  if (a && b) return `${a} – ${b} (${escapeHtml(cur)})`;
-  if (a) return `${a} (${escapeHtml(cur)})`;
-  if (b) return `${b} (${escapeHtml(cur)})`;
-  return '—';
-}
+    const amenities = amenitiesFromClub(c);
+    const amenitiesHtml = amenities.length
+      ? `<div class="amenities">${amenities.map(a => `<span class="amenity">${escapeHtml(a)}</span>`).join('')}</div>`
+      : `<span class="muted">—</span>`;
 
-function yes(v) {
-  return String(v || '').trim().toLowerCase() === 'yes';
-}
-
-function amenitiesFromClub(c) {
-  const items = [
-    ['Sauna', yes(c.has_sauna)],
-    ['Pool', yes(c.has_pool)],
-    ['Darkroom', yes(c.has_darkroom)],
-    ['Private rooms', yes(c.has_private_rooms)],
-    ['Lockers', yes(c.has_lockers)],
-    ['Bar', yes(c.has_bar)],
-    ['Dancefloor', yes(c.has_dancefloor)],
-    ['Outdoor', yes(c.has_outdoor_area)]
-  ];
-  return items.filter(([, ok]) => ok).map(([name]) => name);
-}
-
-function openModal(c) {
-  const starCount = starsFromClassificacao(c.Classificação);
-  const stars = starCount
-    ? `<span class="modal-stars" title="${starCount}/5">${'★'.repeat(starCount)}<span class="dim">${'★'.repeat(5 - starCount)}</span></span>`
-    : '';
-
-  els.modalTitle.innerHTML = `
-    <span class="modal-title-text">${escapeHtml(c.name || '—')}</span>
-    ${stars}
-  `;
-
-  // Buttons (top actions)
-  const websiteBtn = c.website
-    ? `<a class="modal-btn primary" href="${escapeHtmlAttr(c.website)}" target="_blank" rel="noopener noreferrer">
-         Website <span class="hint">${escapeHtml(prettyDomain(c.website))}</span>
-       </a>`
-    : '';
-
-  const mapHref = (c.lat != null && c.lng != null && String(c.lat).trim() && String(c.lng).trim())
-    ? `https://www.google.com/maps?q=${encodeURIComponent(String(c.lat).trim() + ',' + String(c.lng).trim())}`
-    : '';
-
-  const mapBtn = mapHref
-    ? `<a class="modal-btn" href="${escapeHtmlAttr(mapHref)}" target="_blank" rel="noopener noreferrer">Maps</a>`
-    : '';
-
-  const tel = normalizeTel(c.phone);
-  const phoneBtn = tel
-    ? `<a class="modal-btn" href="tel:${escapeHtmlAttr(tel)}">${escapeHtml(String(c.phone).trim())}</a>`
-    : '';
-
-  const email = (c.email || '').toString().trim();
-  const emailBtn = email
-    ? `<a class="modal-btn" href="mailto:${escapeHtmlAttr(email)}">Email</a>`
-    : '';
-
-  const location = [c.city, c.country].filter(Boolean).join(', ') || '—';
-  const address = (c.address || '').toString().trim() || '—';
-  const hoursTable = openingHoursTable(c);
-
-  const entryPolicy = (c.entry_policy || '').toString().trim() || '—';
-  const singlesPolicy = (c.singles_policy || '').toString().trim() || '—';
-  const pricingModel = (c.pricing_model || '').toString().trim() || '—';
-  const priceRange = (c.price_range || '').toString().trim() || '—';
-  const coupleRange = euroRange(c);
-
-  const entryNotes = (c.entry_notes || '').toString().trim();
-  const pricingNotes = (c.pricing_notes || '').toString().trim();
-  const obsGerais = (c["Obs Gerais"] || '').toString().trim();
-
-  const notes = [entryNotes, pricingNotes, obsGerais].filter(Boolean);
-
-  const amenities = amenitiesFromClub(c);
-  const amenitiesHtml = amenities.length
-    ? `<div class="amenities">
-         ${amenities.map(a => `<span class="amenity">${escapeHtml(a)}</span>`).join('')}
-       </div>`
-    : '<span class="muted">—</span>';
-
-  els.modalBody.innerHTML = `
-    <div class="modal-actions">
-      ${websiteBtn}
-      ${mapBtn}
-      ${phoneBtn}
-      ${emailBtn}
-    </div>
-
-    <div class="modal-section">
-      <div class="modal-section-title">Info</div>
-
-      <div class="kv"><div class="k">Location</div><div class="v">${escapeHtml(location)}</div></div>
-      <div class="kv"><div class="k">Address</div><div class="v pre">${escapeHtml(address)}</div></div>
-      <div class="kv"><div class="k">Type</div><div class="v">${escapeHtml((c.type || '—').toString())}</div></div>
-      <div class="kv kv-hours">
-      <div class="k">Hours</div>
-      <div class="v">${hoursTable}</div>
-      </div>
+    els.modalBody.innerHTML = `
+      <div class="modal-actions">
+        ${websiteBtn}
+        ${mapBtn}
+        ${phoneBtn}
+        ${emailBtn}
       </div>
 
-    <div class="modal-section">
-      <div class="modal-section-title">Entry</div>
+      <div class="modal-section">
+        <div class="modal-section-title">Info</div>
+        <div class="kv"><div class="k">Location</div><div class="v">${escapeHtml(location)}</div></div>
+        <div class="kv"><div class="k">Address</div><div class="v pre">${escapeHtml(address)}</div></div>
+        <div class="kv"><div class="k">Type</div><div class="v">${escapeHtml(type)}</div></div>
+        <div class="kv kv-hours"><div class="k">Hours</div><div class="v">${hoursTable}</div></div>
+      </div>
 
-      <div class="kv"><div class="k">Entry policy</div><div class="v">${escapeHtml(entryPolicy)}</div></div>
-      <div class="kv"><div class="k">Singles policy</div><div class="v">${escapeHtml(singlesPolicy)}</div></div>
-      <div class="kv"><div class="k">Couples</div><div class="v">${escapeHtml(coupleRange)}</div></div>
-      <div class="kv"><div class="k">Price range</div><div class="v">${escapeHtml(priceRange)}</div></div>
-      <div class="kv"><div class="k">Pricing model</div><div class="v">${escapeHtml(pricingModel)}</div></div>
-    </div>
+      <div class="modal-section">
+        <div class="modal-section-title">Entry</div>
+        <div class="kv"><div class="k">Entry policy</div><div class="v">${escapeHtml(entryPolicy)}</div></div>
+        <div class="kv"><div class="k">Singles policy</div><div class="v">${escapeHtml(singlesPolicy)}</div></div>
+        <div class="kv"><div class="k">Couples</div><div class="v">${escapeHtml(coupleRange)}</div></div>
+        <div class="kv"><div class="k">Price range</div><div class="v">${escapeHtml(priceRange)}</div></div>
+        <div class="kv"><div class="k">Pricing model</div><div class="v">${escapeHtml(pricingModel)}</div></div>
+      </div>
 
-    <div class="modal-section">
-      <div class="modal-section-title">Amenities</div>
-      ${amenitiesHtml}
-    </div>
+      <div class="modal-section">
+        <div class="modal-section-title">Amenities</div>
+        ${amenitiesHtml}
+      </div>
 
-    <div class="modal-section">
-      <div class="modal-section-title">Notes</div>
-      ${
-        notes.length
+      <div class="modal-section">
+        <div class="modal-section-title">Notes</div>
+        ${notes.length
           ? `<ul class="notes">${notes.map(n => `<li>${escapeHtml(n)}</li>`).join('')}</ul>`
           : `<span class="muted">—</span>`
-      }
-    </div>
-  `;
+        }
+      </div>
+    `;
 
-  els.overlay.classList.add('open');
-  els.modal.classList.add('open');
-  els.overlay.setAttribute('aria-hidden', 'false');
-  els.modal.setAttribute('aria-hidden', 'false');
-  setTimeout(() => els.modalClose.focus(), 0);
-}
+    els.overlay.classList.add('open');
+    els.modal.classList.add('open');
+    els.overlay.setAttribute('aria-hidden', 'false');
+    els.modal.setAttribute('aria-hidden', 'false');
 
-function formatOpeningHours(c) {
-
-  const days = [
-    ['monday', 'Mon'],
-    ['tuesday', 'Tue'],
-    ['wednesday', 'Wed'],
-    ['thursday', 'Thu'],
-    ['friday', 'Fri'],
-    ['saturday', 'Sat'],
-    ['sunday', 'Sun']
-  ];
-
-  const openDays = days
-    .filter(d => c[`open_time_${d[0]}`] && c[`open_time_${d[0]}`] !== 'closed');
-
-  if (!openDays.length) return '—';
-
-  const first = openDays[0][1];
-  const last = openDays[openDays.length - 1][1];
-  const hours = c[`open_time_${openDays[0][0]}`];
-
-  return `${first}–${last} ${hours}`;
-}
+    // focus close button for accessibility
+    setTimeout(() => els.modalClose.focus(), 0);
+  }
 
   function closeModal() {
     els.overlay.classList.remove('open');

@@ -9,37 +9,33 @@
 }
 
 /* Layout
-   Nota: a barra de filtros é FIXA (fora do scroll). O conteúdo precisa de
-   espaço no topo para não ficar por baixo do header + filtros. */
-.clubs-page .main-content{ padding-top: calc(var(--filters-h, 0px) + 44px); }
+   Nota: a barra de filtros é FIXA (fora do scroll).
+   O conteúdo precisa de espaço no topo para não ficar por baixo do header + filtros. */
+.clubs-page .main-content{
+  padding-top: calc(var(--navbar-h) + var(--filters-h, 0px) + 16px);
+}
 
 .clubs-toolbar{
-  background: var(--panel-bg);
-  border: 1px solid var(--panel-border);
-  border-radius: 18px;
-  padding: 18px;
   /* fixa por baixo do header, fora do scroll */
-  width: min(1100px, calc(100% - 32px));
-  margin: 0;
-  box-shadow: 0 10px 40px rgba(0,0,0,.25);
-
   position: fixed;
   left: 50%;
   transform: translateX(-50%);
   top: var(--navbar-h);
   z-index: 160;
 
-   /* FUNDO SÓLIDO (igual ao header) */
+  width: min(1100px, calc(100% - 32px));
+  margin: 0;
+  padding: 18px;
+  border-radius: 18px;
+  box-shadow: 0 10px 40px rgba(0,0,0,.25);
+
+  /* Fundo sólido para não deixar ver cartões por trás */
   background: #0b0b0b;
-
-  /* opcional: ligeiro destaque */
-  border-bottom: 1px solid rgba(212,175,55,0.15);
-
-  /* remover transparências */
+  border: 1px solid var(--panel-border);
+  border-bottom-color: rgba(212,175,55,0.15);
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
 }
-
 
 .toolbar-row{
   display: grid;
@@ -139,7 +135,7 @@ select option{ background: #121212; color: #fff; }
 .club-card:hover{ border-color: var(--gold); }
 
 .club-name{
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 800;
   margin: 0 0 8px;
 }
@@ -152,17 +148,17 @@ select option{ background: #121212; color: #fff; }
 
 .stamp{
   position: absolute;
-  right: 8px;
-  bottom: 8px;
-  width: 54px;
-  height: 54px;
+  right: 14px;
+  top: 14px;
+  width: 64px;
+  height: 64px;
   border-radius: 50%;
   border: 2px solid rgba(211,169,74,.75);
   display: grid;
   place-items: center;
   color: rgba(211,169,74,.95);
   font-weight: 900;
-  font-size: 8px;
+  font-size: 12px;
   letter-spacing: .08em;
   transform: rotate(-18deg);
   box-shadow: 0 0 0 4px rgba(211,169,74,.08);
@@ -209,6 +205,16 @@ select option{ background: #121212; color: #fff; }
 }
 
 .modal-title{ font-size: 22px; font-weight: 900; margin: 0; }
+.modal-title-text{ font-weight: 800; }
+
+.modal-stars{
+  margin-left: 10px;
+  color: #d4af37;
+  letter-spacing: 2px;
+  font-size: 18px;
+}
+
+.modal-stars .dim{ opacity: .25; }
 
 .modal-close{
   width: 36px;
@@ -221,13 +227,107 @@ select option{ background: #121212; color: #fff; }
 }
 
 .modal-body{ color: rgba(255,255,255,.88); font-size: 14px; line-height: 1.55; }
-
 .modal-body a{ color: var(--gold); text-decoration: none; font-weight: 700; }
 .modal-body a:hover{ text-decoration: underline; }
 
-.kv{ display:grid; grid-template-columns: 120px 1fr; gap: 10px; margin: 10px 0; }
-.k{ color: rgba(255,255,255,.65); font-weight: 700; }
-.v{ color: rgba(255,255,255,.95); }
+/* Modal actions */
+.modal-actions{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 12px 0 18px;
+}
+
+.modal-btn{
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(212,175,55,.35);
+  background: rgba(0,0,0,.35);
+  color: #d4af37;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.modal-btn.primary{
+  background: rgba(212,175,55,.95);
+  border-color: rgba(212,175,55,.95);
+  color: #111;
+}
+
+.modal-btn .hint{ font-weight: 600; opacity: .85; font-size: 12px; }
+
+.modal-section{
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(212,175,55,.18);
+}
+
+.modal-section-title{
+  font-weight: 800;
+  letter-spacing: .3px;
+  margin-bottom: 10px;
+  color: rgba(212,175,55,.95);
+}
+
+/* Key/value rows */
+.kv{
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 10px;
+  padding: 7px 0;
+  margin: 0;
+}
+
+.k{ color: rgba(255,255,255,.65); font-weight: 700; opacity: .75; }
+.v{ color: rgba(255,255,255,.95); opacity: .95; }
+.v.pre{ white-space: pre-wrap; }
+
+/* Amenities chips */
+.amenities{ display: flex; flex-wrap: wrap; gap: 10px; }
+.amenity{
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(212,175,55,.25);
+  background: rgba(255,255,255,.03);
+  color: rgba(255,255,255,.92);
+  font-weight: 700;
+  font-size: 13px;
+}
+
+/* Notes */
+.notes{ margin: 0; padding-left: 18px; }
+.notes li{ margin: 6px 0; opacity: .92; }
+.muted{ opacity: .6; }
+
+/* Hours table */
+.kv.kv-hours .v{ padding-top: 2px; }
+
+.hours-wrap{
+  width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(212,175,55,.14);
+  background: rgba(255,255,255,.02);
+}
+
+.hours-table{
+  width: 100%;
+  border-collapse: collapse;
+  background: transparent;
+  border: 0;
+}
+
+.hours-table td{ padding: 8px 10px; font-size: 13px; }
+.hours-table tr + tr td{ border-top: 1px solid rgba(212,175,55,.10); }
+.hours-table td.d{ width: 64px; opacity: .75; font-weight: 800; }
+.hours-table td.h{ text-align: right; opacity: .95; }
+.hours-table tr.closed td.h{ opacity: .55; font-style: italic; }
+
+.hours-note{ margin: 8px 10px 10px; opacity: .75; font-size: 12px; line-height: 1.35; }
 
 /* Map */
 .clubs-map-wrap{
@@ -251,132 +351,8 @@ select option{ background: #121212; color: #fff; }
 /* Leaflet tweaks on dark UI */
 .leaflet-control-zoom a{ color: #000; }
 
-.main-content {
-  padding-top: calc(var(--navbar-h) + var(--filters-h));
-}
-
-/* Title row */
-.modal-title-text { font-weight: 800; }
-.modal-stars { margin-left: 10px; color: #d4af37; letter-spacing: 2px; font-size: 18px; }
-.modal-stars .dim { opacity: .25; }
-
-/* Actions */
-.modal-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin: 12px 0 18px;
-}
-
-.modal-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 14px;
-  border-radius: 14px;
-  border: 1px solid rgba(212,175,55,.35);
-  background: rgba(0,0,0,.35);
-  color: #d4af37;
-  text-decoration: none;
-  font-weight: 700;
-  font-size: 14px;
-}
-
-.modal-btn.primary {
-  background: rgba(212,175,55,.95);
-  border-color: rgba(212,175,55,.95);
-  color: #111;
-}
-
-.modal-btn .hint {
-  font-weight: 600;
-  opacity: .85;
-  font-size: 12px;
-}
-
-.modal-section {
-  margin-top: 14px;
-  padding-top: 14px;
-  border-top: 1px solid rgba(212,175,55,.18);
-}
-
-.modal-section-title {
-  font-weight: 800;
-  letter-spacing: .3px;
-  margin-bottom: 10px;
-  color: rgba(212,175,55,.95);
-}
-
-/* kv rows (assumindo que já tens .kv .k .v) */
-.kv { display: grid; grid-template-columns: 140px 1fr; gap: 10px; padding: 7px 0; }
-.kv .k { opacity: .75; font-weight: 700; }
-.kv .v { opacity: .95; }
-.kv .v.pre { white-space: pre-wrap; }
-
-/* Amenities chips */
-.amenities { display: flex; flex-wrap: wrap; gap: 10px; }
-.amenity {
-  padding: 10px 12px;
-  border-radius: 14px;
-  border: 1px solid rgba(212,175,55,.25);
-  background: rgba(255,255,255,.03);
-  color: rgba(255,255,255,.92);
-  font-weight: 700;
-  font-size: 13px;
-}
-
-/* Notes */
-.notes { margin: 0; padding-left: 18px; }
-.notes li { margin: 6px 0; opacity: .92; }
-.muted { opacity: .6; }
-
 /* Mobile */
-@media (max-width: 640px) {
-  .kv { grid-template-columns: 110px 1fr; }
-  .modal-btn { width: 100%; justify-content: center; }
-}
-
-.kv.kv-hours .v { padding-top: 2px; }
-
-.hours-wrap { width: 100%; }
-
-.hours-table {
-  width: 100%;
-  border-collapse: collapse;
-  background: rgba(255,255,255,.02);
-  border: 1px solid rgba(212,175,55,.14);
-  border-radius: 12px;
-  overflow: hidden;
-}
-
-.hours-table td {
-  padding: 8px 10px;
-  font-size: 13px;
-}
-
-.hours-table tr + tr td {
-  border-top: 1px solid rgba(212,175,55,.10);
-}
-
-.hours-table td.d {
-  width: 64px;
-  opacity: .75;
-  font-weight: 800;
-}
-
-.hours-table td.h {
-  text-align: right;
-  opacity: .95;
-}
-
-.hours-table tr.closed td.h {
-  opacity: .55;
-  font-style: italic;
-}
-
-.hours-note {
-  margin-top: 8px;
-  opacity: .75;
-  font-size: 12px;
-  line-height: 1.35;
+@media (max-width: 640px){
+  .kv{ grid-template-columns: 110px 1fr; }
+  .modal-btn{ width: 100%; justify-content: center; }
 }
