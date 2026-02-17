@@ -272,9 +272,11 @@
     <span class="modal-title-text">${escapeHtml(c.name || '—')}</span>
     `;
 
-    const websiteBtn = safeText(c.website)
-      ? `<a class="modal-btn primary" href="${escapeHtmlAttr(c.website)}" target="_blank" rel="noopener noreferrer">Website <span class="hint">${escapeHtml(prettyDomain(c.website))}</span></a>`
-      : '';
+    const websiteBtn = c.website
+  ? `<a class="modal-btn primary" href="${escapeHtmlAttr(c.website)}" target="_blank" rel="noopener noreferrer">
+       Website
+     </a>`
+  : '';
 
     const mapHref = (c.lat != null && c.lng != null && String(c.lat).trim() && String(c.lng).trim())
       ? `https://www.google.com/maps?q=${encodeURIComponent(String(c.lat).trim() + ',' + String(c.lng).trim())}`
