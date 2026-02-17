@@ -11,9 +11,9 @@
 /* Layout
    Nota: a barra de filtros é FIXA (fora do scroll).
    O conteúdo precisa de espaço no topo para não ficar por baixo do header + filtros. */
-   
+
 .clubs-page .main-content{
-  padding-top: calc(var(--navbar-h) + var(--filters-h, 0px) - 20px);
+  padding-top: calc(var(--navbar-h) + var(--filters-h, 0px) - 40px);
 }
 
 .clubs-toolbar{
@@ -262,13 +262,13 @@ select option{ background: #121212; color: #fff; }
 .modal-btn .hint{ font-weight: 600; opacity: .85; font-size: 12px; }
 
 .modal-section{
-  margin-top: 14px;
-  padding-top: 14px;
-  border-top: none;        /* remove linha simples */
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: none;
   position: relative;
 }
 
-/* glow da divisória */
+/* linha principal */
 .modal-section::before{
   content: "";
   position: absolute;
@@ -279,23 +279,46 @@ select option{ background: #121212; color: #fff; }
 
   background: linear-gradient(
     90deg,
-    rgba(0,0,0,0),
-    rgba(212,175,55,.45),
-    rgba(0,0,0,0)
+    rgba(0,0,0,0) 0%,
+    rgba(212,175,55,.15) 20%,
+    rgba(212,175,55,.65) 50%,
+    rgba(212,175,55,.15) 80%,
+    rgba(0,0,0,0) 100%
   );
 
   box-shadow:
-    0 0 12px rgba(212,175,55,.35),
-    0 0 28px rgba(212,175,55,.18);
+    0 0 6px rgba(212,175,55,.45),
+    0 0 16px rgba(212,175,55,.35),
+    0 0 32px rgba(212,175,55,.18);
 
-  opacity: .95;
+  opacity: 1;
+  pointer-events: none;
+}
+
+/* glow difuso extra (camada suave) */
+.modal-section::after{
+  content: "";
+  position: absolute;
+  left: 10%;
+  right: 10%;
+  top: -1px;
+  height: 3px;
+
+  background: radial-gradient(
+    ellipse at center,
+    rgba(212,175,55,.35),
+    rgba(212,175,55,.12) 40%,
+    rgba(0,0,0,0) 70%
+  );
+
+  opacity: .9;
   pointer-events: none;
 }
 
 .modal-section-title{
   font-weight: 800;
   letter-spacing: .3px;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
   color: rgba(212,175,55,.95);
 }
 
