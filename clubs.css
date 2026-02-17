@@ -254,3 +254,84 @@ select option{ background: #121212; color: #fff; }
 .main-content {
   padding-top: calc(var(--navbar-h) + var(--filters-h));
 }
+
+/* Title row */
+.modal-title-text { font-weight: 800; }
+.modal-stars { margin-left: 10px; color: #d4af37; letter-spacing: 2px; font-size: 18px; }
+.modal-stars .dim { opacity: .25; }
+
+/* Actions */
+.modal-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 12px 0 18px;
+}
+
+.modal-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(212,175,55,.35);
+  background: rgba(0,0,0,.35);
+  color: #d4af37;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.modal-btn.primary {
+  background: rgba(212,175,55,.95);
+  border-color: rgba(212,175,55,.95);
+  color: #111;
+}
+
+.modal-btn .hint {
+  font-weight: 600;
+  opacity: .85;
+  font-size: 12px;
+}
+
+.modal-section {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(212,175,55,.18);
+}
+
+.modal-section-title {
+  font-weight: 800;
+  letter-spacing: .3px;
+  margin-bottom: 10px;
+  color: rgba(212,175,55,.95);
+}
+
+/* kv rows (assumindo que já tens .kv .k .v) */
+.kv { display: grid; grid-template-columns: 140px 1fr; gap: 10px; padding: 7px 0; }
+.kv .k { opacity: .75; font-weight: 700; }
+.kv .v { opacity: .95; }
+.kv .v.pre { white-space: pre-wrap; }
+
+/* Amenities chips */
+.amenities { display: flex; flex-wrap: wrap; gap: 10px; }
+.amenity {
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(212,175,55,.25);
+  background: rgba(255,255,255,.03);
+  color: rgba(255,255,255,.92);
+  font-weight: 700;
+  font-size: 13px;
+}
+
+/* Notes */
+.notes { margin: 0; padding-left: 18px; }
+.notes li { margin: 6px 0; opacity: .92; }
+.muted { opacity: .6; }
+
+/* Mobile */
+@media (max-width: 640px) {
+  .kv { grid-template-columns: 110px 1fr; }
+  .modal-btn { width: 100%; justify-content: center; }
+}
