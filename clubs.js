@@ -277,12 +277,9 @@
   }
 
   function openModal(c) {
-    const starCount = starsFromClassificacao(c['Classificação']);
-    const stars = starCount
-      ? `<span class="modal-stars" title="${starCount}/5">${'★'.repeat(starCount)}<span class="dim">${'★'.repeat(5 - starCount)}</span></span>`
-      : '';
-
-    els.modalTitle.innerHTML = `<span class="modal-title-text">${escapeHtml(c.name || '—')}</span>${stars}`;
+    els.modalTitle.innerHTML = `
+    <span class="modal-title-text">${escapeHtml(c.name || '—')}</span>
+    `;
 
     const websiteBtn = safeText(c.website)
       ? `<a class="modal-btn primary" href="${escapeHtmlAttr(c.website)}" target="_blank" rel="noopener noreferrer">Website <span class="hint">${escapeHtml(prettyDomain(c.website))}</span></a>`
