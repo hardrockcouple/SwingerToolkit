@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Clubs – Swinger Toolkit</title>
+
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="clubs.css" />
+
+  <!-- Leaflet (map) -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""
+  />
+</head>
+
+<body class="clubs-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="logo" href="index.html" aria-label="Swinger Toolkit">
+        <img id="siteLogo" alt="Swinger Toolkit" />
+      </a>
+      <nav class="navbar" aria-label="Menu">
+        <a href="index.html">Home</a>
+        <a class="active" href="clubs.html">Clubs</a>
+        <a href="shopping.html">Shopping</a>
+        <a href="capdagde.html">Cap D'Agde</a>
+        <a href="outras.html">Others</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <section class="clubs-toolbar" aria-label="Filtros">
+      <div class="toolbar-row">
+        <input id="searchInput" class="input" type="search" placeholder="Search by name..." autocomplete="off" />
+
+        <select id="countrySelect" class="select" aria-label="Country">
+          <option value="">Country</option>
+        </select>
+
+        <select id="citySelect" class="select" aria-label="City" disabled>
+          <option value="">City</option>
+        </select>
+
+        <div class="toolbar-actions" style="grid-column: span 2;">
+          <button id="btnGrid" class="btn active" type="button">Grid</button>
+          <button id="btnMap" class="btn" type="button">Map</button>
+          <button id="btnClear" class="btn" type="button">Clear</button>
+          <span id="resultsCount" class="results-meta">0 results</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="gridView" class="clubs-grid" aria-label="Lista de clubes"></section>
+
+    <section id="mapView" class="clubs-map-wrap" aria-label="Mapa">
+      <div id="clubsMap" role="application" aria-label="Mapa com os clubes"></div>
+    </section>
+  </main>
+
+  <!-- Modal -->
+  <div id="modalOverlay" class="modal-overlay" aria-hidden="true"></div>
+  <aside id="clubModal" class="club-modal" aria-hidden="true" aria-label="Detalhes do clube">
+    <div class="modal-top">
+      <h2 id="modalTitle" class="modal-title">Clube</h2>
+      <button id="modalClose" class="modal-close" type="button" aria-label="Fechar">✕</button>
+    </div>
+    <div id="modalBody" class="modal-body"></div>
+  </aside>
+
+  <script type="module">
+    import { initLogo } from './ui-common.js';
+    import { CONFIG } from './config.js';
+    initLogo(CONFIG);
+  </script>
+
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""
+  ></script>
+
+  <script src="clubs.js"></script>
+</body>
+</html>
