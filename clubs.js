@@ -190,8 +190,10 @@
     els.modalTitle.textContent = c.name;
 
     const websiteHtml = c.website
-      ? `<a href="${escapeHtmlAttr(c.website)}" target="_blank" rel="noopener noreferrer">Visit</a>`
-      : '<span style="opacity:.6">—</span>';
+  ? `<a href="${escapeHtmlAttr(c.website)}" target="_blank" rel="noopener noreferrer">
+       ${escapeHtml(c.website)}
+     </a>`
+  : '<span style="opacity:.6">—</span>';
 
     const mapLink = (c.lat != null && c.lng != null)
       ? `<a href="https://www.google.com/maps?q=${c.lat},${c.lng}" target="_blank" rel="noopener noreferrer">Open in Google Maps</a>`
