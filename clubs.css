@@ -136,7 +136,7 @@ select option{ background: #121212; color: #fff; }
   min-height: 110px;
 }
 
-.club-card:hover{ border-color: var(--card-bg); }
+.club-card:hover{ border-color: var(--gold); }
 
 .club-name{
   font-size: 20px;
