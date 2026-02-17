@@ -335,3 +335,48 @@ select option{ background: #121212; color: #fff; }
   .kv { grid-template-columns: 110px 1fr; }
   .modal-btn { width: 100%; justify-content: center; }
 }
+
+.kv.kv-hours .v { padding-top: 2px; }
+
+.hours-wrap { width: 100%; }
+
+.hours-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: rgba(255,255,255,.02);
+  border: 1px solid rgba(212,175,55,.14);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.hours-table td {
+  padding: 8px 10px;
+  font-size: 13px;
+}
+
+.hours-table tr + tr td {
+  border-top: 1px solid rgba(212,175,55,.10);
+}
+
+.hours-table td.d {
+  width: 64px;
+  opacity: .75;
+  font-weight: 800;
+}
+
+.hours-table td.h {
+  text-align: right;
+  opacity: .95;
+}
+
+.hours-table tr.closed td.h {
+  opacity: .55;
+  font-style: italic;
+}
+
+.hours-note {
+  margin-top: 8px;
+  opacity: .75;
+  font-size: 12px;
+  line-height: 1.35;
+}

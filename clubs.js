@@ -147,6 +147,44 @@
     return escapeHtml(s).replaceAll('`', '&#096;');
   }
 
+function formatOpeningHoursTable(c) {
+
+  const days = [
+    ['monday', 'Mon'],
+    ['tuesday', 'Tue'],
+    ['wednesday', 'Wed'],
+    ['thursday', 'Thu'],
+    ['friday', 'Fri'],
+    ['saturday', 'Sat'],
+    ['sunday', 'Sun']
+  ];
+
+  const rows = days.map(([key, label]) => {
+
+    const raw = (c[`open_time_${key}`] || '').trim();
+
+    const isClosed =
+      !raw ||
+      raw.toLowerCase() === 'closed';
+
+    const display = isClosed ? 'Closed' : raw;
+
+    return `
+      <tr class="${isClosed ? 'closed' : 'open'}">
+        <td class="day">${label}</td>
+        <td class="time">${escapeHtml(display)}</td>
+      </tr>
+    `;
+
+  }).join('');
+
+  return `
+    <table class="hours-table">
+      ${rows}
+    </table>
+  `;
+}
+
   function renderGrid() {
     els.gridView.innerHTML = '';
 
@@ -310,7 +348,7 @@ function openModal(c) {
 
   const location = [c.city, c.country].filter(Boolean).join(', ') || '—';
   const address = (c.address || '').toString().trim() || '—';
-  const hours = formatOpeningHours(c);
+  const hoursTable = openingHoursTable(c);
 
   const entryPolicy = (c.entry_policy || '').toString().trim() || '—';
   const singlesPolicy = (c.singles_policy || '').toString().trim() || '—';
@@ -345,8 +383,11 @@ function openModal(c) {
       <div class="kv"><div class="k">Location</div><div class="v">${escapeHtml(location)}</div></div>
       <div class="kv"><div class="k">Address</div><div class="v pre">${escapeHtml(address)}</div></div>
       <div class="kv"><div class="k">Type</div><div class="v">${escapeHtml((c.type || '—').toString())}</div></div>
-      <div class="kv"><div class="k">Hours</div><div class="v">${hours}</div></div>
-    </div>
+      <div class="kv kv-hours">
+      <div class="k">Hours</div>
+      <div class="v">${hoursTable}</div>
+      </div>
+      </div>
 
     <div class="modal-section">
       <div class="modal-section-title">Entry</div>
