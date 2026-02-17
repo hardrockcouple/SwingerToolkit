@@ -287,8 +287,13 @@
       : '';
 
     const tel = normalizeTel(c.phone);
+
     const phoneBtn = tel
-      ? `<a class="modal-btn" href="tel:${escapeHtmlAttr(tel)}">${escapeHtml(safeText(c.phone))}</a>`
+      ? `<a class="modal-btn"
+        href="tel:${escapeHtmlAttr(tel)}"
+        title="${escapeHtml(c.phone)}">
+        Phone
+        </a>`
       : '';
 
     const email = safeText(c.email);
