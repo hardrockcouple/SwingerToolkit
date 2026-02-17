@@ -148,17 +148,17 @@ select option{ background: #121212; color: #fff; }
 
 .stamp{
   position: absolute;
-  right: 14px;
-  top: 14px;
-  width: 64px;
-  height: 64px;
+  right: 8px;
+  bottom: 8px;
+  width: 58px;
+  height: 58px;
   border-radius: 50%;
   border: 2px solid rgba(211,169,74,.75);
   display: grid;
   place-items: center;
   color: rgba(211,169,74,.95);
   font-weight: 900;
-  font-size: 12px;
+  font-size: 8px;
   letter-spacing: .08em;
   transform: rotate(-18deg);
   box-shadow: 0 0 0 4px rgba(211,169,74,.08);
