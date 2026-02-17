@@ -268,9 +268,15 @@
   }
 
   function openModal(c) {
-    els.modalTitle.innerHTML = `
-    <span class="modal-title-text">${escapeHtml(c.name || '—')}</span>
-    `;
+    const typeInline = safeText(c.type); // já tens safeText()
+const typeBadge = typeInline
+  ? `<span class="modal-type-badge">${escapeHtml(typeInline)}</span>`
+  : '';
+
+els.modalTitle.innerHTML = `
+  <span class="modal-title-text">${escapeHtml(c.name || '—')}</span>
+  ${typeBadge}
+`;
 
     const websiteBtn = c.website
   ? `<a class="modal-btn primary" href="${escapeHtmlAttr(c.website)}" target="_blank" rel="noopener noreferrer">
