@@ -151,16 +151,7 @@
   function escapeHtmlAttr(s) {
     return escapeHtml(s).replaceAll('`', '&#096;');
   }
-
-  function starsFromClassificacao(val) {
-    if (!val) return 0;
-    const s = safeText(val);
-    if (s.includes('*')) return (s.match(/\*/g) || []).length;
-    const n = parseInt(s, 10);
-    if (Number.isFinite(n)) return Math.max(0, Math.min(5, n));
-    return 0;
-  }
-
+  
   function prettyDomain(url) {
     const u = safeText(url);
     if (!u) return '';

@@ -208,14 +208,7 @@ select option{ background: #121212; color: #fff; }
 .modal-title{ font-size: 22px; font-weight: 900; margin: 0; }
 .modal-title-text{ font-weight: 800; }
 
-.modal-stars{
-  margin-left: 10px;
-  color: #d4af37;
-  letter-spacing: 2px;
-  font-size: 18px;
-}
 
-.modal-stars .dim{ opacity: .25; }
 
 .modal-close{
   width: 36px;
