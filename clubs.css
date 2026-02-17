@@ -13,7 +13,7 @@
    O conteúdo precisa de espaço no topo para não ficar por baixo do header + filtros. */
 
 .clubs-page .main-content{
-  padding-top: calc(var(--navbar-h) + var(--filters-h, 0px) - 100px);
+  padding-top: calc(var(--navbar-h) + var(--filters-h, 0px) - 90px);
 }
 
 .clubs-toolbar{
