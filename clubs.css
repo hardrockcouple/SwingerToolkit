@@ -174,14 +174,14 @@ select option{ background: #121212; color: #fff; }
 .modal-overlay{
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,.75);   /* era .55 */
-  backdrop-filter: blur(3px);
-  -webkit-backdrop-filter: blur(3px);
+  background: rgba(0,0,0,.70);  /* ligeiramente menos pesado */
+  backdrop-filter: blur(1px);   /* antes 3px */
+  -webkit-backdrop-filter: blur(1px);
   display: none;
   z-index: 9998;
 }
 
-.modal-overlay.open{ display: block; }
+.modal-overlay.open{ display:block; }
 
 .club-modal{
   position: fixed;
