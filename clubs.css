@@ -19,7 +19,7 @@
    Nota: a barra de filtros é FIXA (fora do scroll).
    O conteúdo precisa de espaço no topo para não ficar por baixo do header + filtros. */
 .clubs-page .main-content{
-  padding-top: calc(var(--navbar-h) + var(--filters-h, 0px) - 80px);
+  padding-top: calc(var(--navbar-h) + var(--filters-h, 0px) - 90px);
 }
 
 /* Toolbar (filtros) fixa */
@@ -27,7 +27,7 @@
   position: fixed;
   left: 50%;
   transform: translateX(-50%);
-  top: var(--navbar-h);
+  top: calc(var(--navbar-h) + 12px);
   z-index: 160;
 
   width: min(1100px, calc(100% - 32px));
