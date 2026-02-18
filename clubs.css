@@ -218,7 +218,10 @@ select option{ background: #121212; color: #fff; }
   overflow-x: hidden;
 
   border-radius: 18px;
-  background: rgba(18,18,18,.96);
+  background:
+  linear-gradient(180deg, rgba(255,255,255,.03), rgba(0,0,0,0)),
+  radial-gradient(900px 240px at 30% 0%, rgba(34,48,58,.22), rgba(0,0,0,0) 60%),
+  rgba(18,18,20,.96);
   border: 1px solid rgba(255,255,255,.14); /* mais visível */
   box-shadow:
     0 24px 90px rgba(0,0,0,.70),
