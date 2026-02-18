@@ -25,7 +25,7 @@
   --pad-x: 22px;
 
   /* Calculado via JS (fallbacks aqui) */
-  --navbar-h: 84px;
+  --navbar-h: 104px;
   --filters-h: 92px;
 }
 
@@ -73,14 +73,14 @@ body{
 
 .nav-left{
   width:100%;
-  padding:10px var(--pad-x);
+  padding:12px var(--pad-x);
   display:flex;
   align-items:center;
   justify-content:space-between;
 }
 
 .logo-img{
-  height:84px;
+  height:96px;
   width:auto;
 }
 
