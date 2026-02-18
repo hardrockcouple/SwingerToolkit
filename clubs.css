@@ -73,11 +73,14 @@
   position:absolute;
 
   /* cobre cantos/lados */
-  inset:-14px;
+  left:-16px;
+  right:-16px;
 
-  /* sobe até ao header (para tapar o intervalo criado pelo gap) */
-  top: calc(-1 * var(--clubs-gap));
-  height: calc(100% + var(--clubs-gap) + 14px);
+  /* sobe um bocadinho para tapar a linha do header */
+  top: calc(-1 * var(--clubs-gap) - 3px);
+
+  /* garante cobertura total (gap + “costura” + respiro) */
+  height: calc(100% + var(--clubs-gap) + 22px);
 
   background:#0b0b0b;
   border-radius: 26px;
