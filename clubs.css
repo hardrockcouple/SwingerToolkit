@@ -305,13 +305,18 @@ select option{ background: #121212; color: #fff; }
   padding: 4px 12px;
   border-radius: 999px;
 
-  background: rgba(212,175,55,.18);
-  border: 1px solid rgba(212,175,55,.45);
+  background: #d4af37;      /* dourado sólido */
+  color: #111;              /* texto preto */
 
-  color: #d4af37;
+  border: none;
   font-weight: 700;
-  font-size: 13px;
-  line-height: 1;
+  font-size: 12px;
+  letter-spacing: .06em;
+  text-transform: lowercase;
+
+  box-shadow:
+    0 2px 8px rgba(212,175,55,.35),
+    0 0 12px rgba(212,175,55,.25);
 }
 
 .modal-close{
