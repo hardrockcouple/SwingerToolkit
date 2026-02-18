@@ -3,11 +3,16 @@
 :root{
   --gold:#d3a94a;
 
-  --panel-bg: rgba(14,14,14,.92);     /* filtros/painéis */
+  /* Base */
+  --panel-bg: rgba(20,20,22,.92);
   --panel-border: rgba(255,255,255,.10);
 
-  --card-bg: rgba(24,24,24,.88);      /* cartões */
+  --card-bg: rgba(26,26,28,.88);
   --card-border: rgba(255,255,255,.12);
+
+  /* “Life” (subtil, luxo) */
+  --tint: rgba(34,48,58,.35);      /* azul petróleo muito discreto */
+  --tint-2: rgba(255,255,255,.02); /* highlight frio */
 }
 
 /* Layout
@@ -31,14 +36,15 @@
   border-radius: 18px;
   box-shadow: 0 10px 40px rgba(0,0,0,.25);
 
-  background: var(--panel-bg);     
+  background:
+  linear-gradient(180deg, rgba(255,255,255,.03), rgba(0,0,0,0)),
+  radial-gradient(900px 220px at 30% 0%, var(--tint), rgba(0,0,0,0) 60%),
+  var(--panel-bg);
+
   border: 1px solid var(--panel-border);
-  border-bottom-color: rgba(212,175,55,0.15);
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
   box-shadow:
-    0 10px 40px rgba(0,0,0,.28),
-    0 0 0 1px rgba(212,175,55,.08);          /* anel dourado subtil */
+    0 12px 44px rgba(0,0,0,.30),
+    0 0 0 1px rgba(212,175,55,.10);
 }
 
 .toolbar-row{
@@ -134,11 +140,15 @@ select option{ background: #121212; color: #fff; }
   position: relative;
   border-radius: 18px;
   padding: 18px 18px 16px;
-  background: var(--card-bg);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.03), rgba(0,0,0,0) 65%),
+    radial-gradient(600px 160px at 30% 0%, rgba(34,48,58,.22), rgba(0,0,0,0) 60%),
+    var(--card-bg);
+
   border: 1px solid var(--card-border);
   box-shadow:
-    inset 0 0 0 1px rgba(0,0,0,.25),
-    0 10px 24px rgba(0,0,0,.18);            /* profundidade */
+    inset 0 1px 0 rgba(255,255,255,.05),
+    0 10px 22px rgba(0,0,0,.20);
   cursor: pointer;
   min-height: 110px;
 }
@@ -146,8 +156,8 @@ select option{ background: #121212; color: #fff; }
 .club-card:hover{
   border-color: rgba(212,175,55,.55);
   box-shadow:
-    inset 0 0 0 1px rgba(0,0,0,.25),
-    0 12px 28px rgba(0,0,0,.22),
+    inset 0 1px 0 rgba(255,255,255,.06),
+    0 14px 30px rgba(0,0,0,.26),
     0 0 0 1px rgba(212,175,55,.10);
 }
 
