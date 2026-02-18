@@ -1,30 +1,30 @@
-/* ================================
-   CLUBS PAGE – REFINED VERSION
-================================= */
+/* Clubs page specific styles (Grid + Map) */
 
 :root{
   --gold:#d3a94a;
 
+  /* Base */
   --panel-bg: rgba(20,20,22,.92);
   --panel-border: rgba(255,255,255,.10);
 
   --card-bg: rgba(26,26,28,.88);
   --card-border: rgba(255,255,255,.12);
 
-  --tint: rgba(34,48,58,.35);
-  --tint-2: rgba(255,255,255,.02);
+  /* “Life” (subtil, luxo) */
+  --tint: rgba(34,48,58,.35);      /* azul petróleo muito discreto */
+  --tint-2: rgba(255,255,255,.02); /* highlight frio */
 
-  /* Espaço entre header e toolbar */
+  /* Gap entre header e toolbar */
   --clubs-gap: 12px;
 
-  /* Espaço entre toolbar e grelha (para não tapar o 1º row) */
+  /* “respiração” entre toolbar e 1º row de cards (evita ficar tapado) */
   --toolbar-below: 18px;
 }
 
-/* ================================
-   LAYOUT
-================================= */
-
+/* =========================
+   Layout
+   (toolbar é FIXA, por isso o conteúdo precisa de espaço no topo)
+========================= */
 .clubs-page .main-content{
   padding-top: calc(
     var(--navbar-h)
@@ -34,10 +34,9 @@
   );
 }
 
-/* ================================
-   TOOLBAR
-================================= */
-
+/* =========================
+   Toolbar (filtros) fixa
+========================= */
 .clubs-toolbar{
   position: fixed;
   left: 50%;
@@ -46,37 +45,37 @@
   z-index: 160;
 
   width: min(1100px, calc(100% - 32px));
+  margin: 0;
   padding: 18px;
   border-radius: 18px;
 
-  /* importante p/ o pseudo-elemento ficar consistente */
-  position: fixed;
-  isolation: isolate;
-  overflow: visible;
-}
-
-.clubs-toolbar{
   background:
     linear-gradient(180deg, rgba(255,255,255,.03), rgba(0,0,0,0)),
     radial-gradient(900px 220px at 30% 0%, var(--tint), rgba(0,0,0,0) 60%),
-    #111113;
+    #111113; /* opaco */
 
   border: 1px solid var(--panel-border);
   box-shadow:
     0 12px 44px rgba(0,0,0,.30),
     0 0 0 1px rgba(212,175,55,.10);
+
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+
+  /* importante para o “tapete” atrás */
+  isolation: isolate;
+  overflow: visible;
 }
 
-/* Tapete opaco por trás: cobre os cantos arredondados
-   e também o gap acima (para não ver cards a passar). */
+/* Tapete opaco por trás (resolve bleed nos cantos arredondados + cobre o gap até ao header) */
 .clubs-toolbar::before{
   content:"";
   position:absolute;
 
-  /* cobre lados e cantos */
+  /* cobre cantos/lados */
   inset:-14px;
 
-  /* e ainda sobe até ao header */
+  /* sobe até ao header (para tapar o intervalo criado pelo gap) */
   top: calc(-1 * var(--clubs-gap));
   height: calc(100% + var(--clubs-gap) + 14px);
 
@@ -87,117 +86,117 @@
 }
 
 .toolbar-row{
-  display:grid;
-  grid-template-columns:1.6fr 1fr 1fr auto auto;
-  gap:14px;
-  align-items:center;
+  display: grid;
+  grid-template-columns: 1.6fr 1fr 1fr auto auto;
+  gap: 14px;
+  align-items: center;
 }
 
-@media (max-width:980px){
-  .toolbar-row{ grid-template-columns:1fr 1fr; }
-  .toolbar-actions{ grid-column:1 / -1; justify-content:flex-start; }
+@media (max-width: 980px){
+  .toolbar-row{ grid-template-columns: 1fr 1fr; }
+  .toolbar-actions{ justify-content: flex-start; grid-column: 1 / -1; }
 }
 
 .toolbar-actions{
-  display:flex;
-  gap:10px;
-  justify-content:flex-end;
-  align-items:center;
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  align-items: center;
 }
 
 .input,
 .select{
-  width:100%;
-  height:44px;
-  border-radius:14px;
-  border:1px solid rgba(255,255,255,.10);
-  background:rgba(20,20,20,.72);
-  color:#fff;
-  padding:0 14px;
-  outline:none;
+  width: 100%;
+  height: 44px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(20,20,20,.72);
+  color: #fff;
+  padding: 0 14px;
+  outline: none;
 }
 
-.input::placeholder{ color:rgba(255,255,255,.45); }
+.input::placeholder{ color: rgba(255,255,255,.45); }
 
 .select{
-  appearance:none;
+  appearance: none;
   background-image:
     linear-gradient(45deg, transparent 50%, rgba(255,255,255,.6) 50%),
     linear-gradient(135deg, rgba(255,255,255,.6) 50%, transparent 50%);
   background-position: calc(100% - 18px) 18px, calc(100% - 12px) 18px;
-  background-size:6px 6px;
-  background-repeat:no-repeat;
+  background-size: 6px 6px, 6px 6px;
+  background-repeat: no-repeat;
 }
 
-select option{ background:#121212; color:#fff; }
+/* Option menu (browser native dropdown) */
+select option{ background: #121212; color: #fff; }
 
 .btn{
-  height:44px;
-  padding:0 16px;
-  border-radius:14px;
-  border:1px solid rgba(255,255,255,.10);
-  background:rgba(22,22,22,.75);
-  color:#fff;
-  cursor:pointer;
+  height: 44px;
+  padding: 0 16px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(22,22,22,.75);
+  color: #fff;
+  cursor: pointer;
 }
 
-.btn:hover{ border-color:rgba(255,255,255,.18); }
+.btn:hover{ border-color: rgba(255,255,255,.18); }
 
 .btn.active{
-  border-color:rgba(211,169,74,.65);
-  box-shadow:0 0 0 2px rgba(211,169,74,.10);
+  border-color: rgba(211,169,74,.65);
+  box-shadow: 0 0 0 2px rgba(211,169,74,.10);
 }
 
 .results-meta{
-  color:rgba(255,255,255,.75);
-  font-weight:600;
-  margin-left:6px;
+  color: rgba(255,255,255,.75);
+  font-weight: 600;
+  margin-left: 6px;
 }
 
-/* ================================
-   GRID
-================================= */
-
+/* =========================
+   Grid
+========================= */
 .clubs-grid{
-  max-width:1100px;
-  margin:0 auto;
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:18px;
-  padding-bottom:60px;
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+  padding-bottom: 60px;
 }
 
-@media (max-width:1100px){
-  .clubs-grid{ grid-template-columns:repeat(3,1fr); }
+@media (max-width: 1100px){
+  .clubs-grid{ grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
-@media (max-width:860px){
-  .clubs-grid{ grid-template-columns:repeat(2,1fr); }
+@media (max-width: 860px){
+  .clubs-grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
-@media (max-width:560px){
-  .clubs-grid{ grid-template-columns:1fr; }
+@media (max-width: 560px){
+  .clubs-grid{ grid-template-columns: 1fr; }
 }
 
 .club-card{
-  position:relative;
-  border-radius:18px;
-  padding:18px 18px 16px;
+  position: relative;
+  border-radius: 18px;
+  padding: 18px 18px 16px;
 
   background:
     linear-gradient(180deg, rgba(255,255,255,.03), rgba(0,0,0,0) 65%),
     radial-gradient(600px 160px at 30% 0%, rgba(34,48,58,.22), rgba(0,0,0,0) 60%),
     var(--card-bg);
 
-  border:1px solid var(--card-border);
+  border: 1px solid var(--card-border);
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,.05),
     0 10px 22px rgba(0,0,0,.20);
 
-  cursor:pointer;
-  min-height:110px;
+  cursor: pointer;
+  min-height: 110px;
 }
 
 .club-card:hover{
-  border-color:rgba(212,175,55,.55);
+  border-color: rgba(212,175,55,.55);
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,.06),
     0 14px 30px rgba(0,0,0,.26),
@@ -205,65 +204,376 @@ select option{ background:#121212; color:#fff; }
 }
 
 .club-name{
-  font-size:22px;
-  font-weight:800;
-  margin:0 0 8px;
+  font-size: 22px;
+  font-weight: 800;
+  margin: 0 0 8px;
 }
 
 .club-meta{
-  color:rgba(255,255,255,.85);
-  font-size:14px;
-  line-height:1.35;
+  color: rgba(255,255,255,.85);
+  font-size: 14px;
+  line-height: 1.35;
 }
 
-/* ================================
-   MODAL
-================================= */
+/* VISITED stamp */
+.stamp{
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  border: 2px solid rgba(211,169,74,.75);
+  display: grid;
+  place-items: center;
+  color: rgba(211,169,74,.95);
+  font-weight: 900;
+  font-size: 8px;
+  letter-spacing: .08em;
+  transform: rotate(-18deg);
+  box-shadow: 0 0 0 4px rgba(211,169,74,.08);
+}
 
+.stamp.is-hidden{ display:none; }
+
+/* =========================
+   Modal
+========================= */
 .modal-overlay{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.70);
-  backdrop-filter:blur(1px);
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.70);
+  backdrop-filter: blur(1px);
   -webkit-backdrop-filter: blur(1px);
-  display:none;
-  z-index:9998;
+  display: none;
+  z-index: 9998;
 }
 
 .modal-overlay.open{ display:block; }
 
 .club-modal{
-  position:fixed;
-  left:50%;
-  top:50%;
-  transform:translate(-50%, -50%);
-  width:min(680px, calc(100vw - 40px));
-  max-height:min(78vh, 740px);
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: min(680px, calc(100vw - 40px));
+  max-height: min(78vh, 740px);
 
-  overflow-y:auto;
-  overflow-x:hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
 
-  border-radius:18px;
-  padding:18px;
+  border-radius: 18px;
+  padding: 18px;
 
   background:
     linear-gradient(180deg, rgba(255,255,255,.03), rgba(0,0,0,0)),
     radial-gradient(900px 240px at 30% 0%, rgba(34,48,58,.22), rgba(0,0,0,0) 60%),
     rgba(18,18,20,.96);
 
-  border:1px solid rgba(255,255,255,.14);
+  border: 1px solid rgba(255,255,255,.14);
 
   box-shadow:
     0 24px 90px rgba(0,0,0,.70),
     0 0 0 1px rgba(212,175,55,.10),
     0 0 28px rgba(212,175,55,.10);
 
-  display:none;
-  z-index:9999;
+  display: none;
+  z-index: 9999;
 }
 
 .club-modal.open{ display:block; }
 
+.modal-top{
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.modal-title{
+  font-size: 22px;
+  font-weight: 900;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.modal-title-text{ font-weight: 800; }
+
+.modal-type-badge{
+  padding: 4px 12px;
+  border-radius: 999px;
+
+  background: rgba(212,175,55,.18);
+  border: 1px solid rgba(212,175,55,.45);
+
+  color: #d4af37;
+  font-weight: 700;
+  font-size: 13px;
+  line-height: 1;
+}
+
+.modal-close{
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(0,0,0,.25);
+  color: #fff;
+  cursor: pointer;
+}
+
+.modal-body{
+  color: rgba(255,255,255,.88);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.modal-body, .modal-body .v, .modal-body .pre{
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.modal-body a{
+  color: var(--gold);
+  text-decoration: none;
+  font-weight: 700;
+}
+.modal-body a:hover{ text-decoration: underline; }
+
+/* Modal actions */
+.modal-actions{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 12px 0 18px;
+}
+
+.modal-btn{
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(212,175,55,.35);
+  background: rgba(0,0,0,.35);
+  color: #d4af37;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.modal-btn.primary{
+  background: rgba(212,175,55,.95);
+  border-color: rgba(212,175,55,.95);
+  color: #111;
+}
+
+/* Sections + glow divider */
+.modal-section{
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: none;
+  position: relative;
+}
+
+.modal-section::before{
+  content: "";
+  position: absolute;
+  left: -20px;
+  right: -20px;
+  top: 0;
+  height: 1px;
+
+  background: linear-gradient(
+    90deg,
+    rgba(0,0,0,0) 0%,
+    rgba(212,175,55,.12) 15%,
+    rgba(212,175,55,.45) 35%,
+    rgba(212,175,55,.65) 50%,
+    rgba(212,175,55,.45) 65%,
+    rgba(212,175,55,.12) 85%,
+    rgba(0,0,0,0) 100%
+  );
+
+  box-shadow:
+    0 0 8px rgba(212,175,55,.35),
+    0 0 22px rgba(212,175,55,.25),
+    0 0 46px rgba(212,175,55,.12);
+
+  opacity: .95;
+  pointer-events: none;
+}
+
+.modal-section::after{
+  content: "";
+  position: absolute;
+  left: 10%;
+  right: 10%;
+  top: -1px;
+  height: 3px;
+
+  background: radial-gradient(
+    ellipse at center,
+    rgba(212,175,55,.35),
+    rgba(212,175,55,.12) 40%,
+    rgba(0,0,0,0) 70%
+  );
+
+  opacity: .9;
+  pointer-events: none;
+}
+
+.modal-section-title{
+  font-weight: 800;
+  letter-spacing: .3px;
+  margin-bottom: 12px;
+  color: rgba(212,175,55,.95);
+}
+
+/* Key/value rows */
+.kv{
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 10px;
+  padding: 7px 0;
+  margin: 0;
+}
+
+.k{
+  color: rgba(255,255,255,.65);
+  font-weight: 700;
+  opacity: .75;
+}
+.v{
+  color: rgba(255,255,255,.95);
+  opacity: .95;
+}
+.v.pre{ white-space: pre-wrap; }
+
+/* Subsection inside a section (ex: Hours inside Info) */
+.modal-subsection{ margin-top: 18px; }
+
+.modal-subtitle{
+  font-weight: 800;
+  margin-bottom: 8px;
+  color: rgba(255,255,255,.85);
+  letter-spacing: .02em;
+}
+
+/* Hours (minimal premium) */
+.hours-wrap{
+  width: 100%;
+  border: 0;
+  border-radius: 0;
+  overflow: visible;
+  background: transparent;
+  box-shadow: none;
+}
+
+.hours-table{
+  width: 100%;
+  border-collapse: collapse;
+  background: transparent;
+  border: 0;
+}
+
+.hours-table td{
+  padding: 14px 10px;
+  font-size: 14px;
+}
+
+.hours-table tr{
+  border-bottom: 1px solid rgba(212,175,55,.12);
+}
+.hours-table tr:last-child{
+  border-bottom: 0;
+}
+
+.hours-table td.d{
+  width: 78px;
+  opacity: .85;
+  font-weight: 800;
+  letter-spacing: .02em;
+}
+
+.hours-table td.h{
+  text-align: right;
+  font-weight: 600;
+  opacity: .95;
+  font-variant-numeric: tabular-nums;
+}
+
+.hours-table tr.closed td.h{
+  opacity: .45;
+  font-style: italic;
+  font-weight: 500;
+}
+
+.hours-table tr:hover{
+  background: rgba(212,175,55,.06);
+  transition: background .18s ease;
+}
+
+.hours-note{
+  margin: 10px 10px 12px;
+  opacity: .75;
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+/* Amenities chips */
+.amenities{ display: flex; flex-wrap: wrap; gap: 10px; }
+.amenity{
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(212,175,55,.25);
+  background: rgba(255,255,255,.03);
+  color: rgba(255,255,255,.92);
+  font-weight: 700;
+  font-size: 13px;
+}
+
+/* Notes */
+.notes{ margin: 0; padding-left: 18px; }
+.notes li{ margin: 6px 0; opacity: .92; }
+.muted{ opacity: .6; }
+
+/* =========================
+   Map
+========================= */
+.clubs-map-wrap{
+  max-width: 1100px;
+  margin: 0 auto;
+  display: none;
+  padding-bottom: 60px;
+}
+
+.clubs-map-wrap.active{ display:block; }
+
+#clubsMap{
+  width: 100%;
+  height: 560px;
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.06);
+}
+
+/* Leaflet tweaks on dark UI */
+.leaflet-control-zoom a{ color: #000; }
+
+/* =========================
+   Mobile
+========================= */
+@media (max-width: 640px){
+  .kv{ grid-template-columns: 110px 1fr; }
+  .modal-btn{ width: 100%; justify-content: center; }
+}
+
+/* lock page scroll when modal open */
 body.modal-open{
-  overflow:hidden;
+  overflow: hidden;
 }
