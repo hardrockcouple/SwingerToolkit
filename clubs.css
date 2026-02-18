@@ -355,8 +355,8 @@ select option{ background: #121212; color: #fff; }
   align-items: center;
   gap: 8px;
 
-  padding: 7px 14px;           /* menos altura */
-  border-radius: 700px;        /* pill elegante */
+  padding: 5px 12px;           /* menos altura */
+  border-radius: 10px;        /* pill elegante */
   border: 1px solid rgba(212,175,55,.35);
 
   background: rgba(0,0,0,.25);
@@ -364,8 +364,8 @@ select option{ background: #121212; color: #fff; }
   text-decoration: none;
 
   font-weight: 600;            /* menos pesado */
-  font-size: 13px;             /* ligeiramente menor */
-  letter-spacing: .02em;
+  font-size: 12px;             /* ligeiramente menor */
+  letter-spacing: .04em;
 
   transition: all .2s ease;
 }
