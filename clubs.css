@@ -2,10 +2,12 @@
 
 :root{
   --gold:#d3a94a;
-  --panel-bg:rgba(10,10,10,.78);
-  --panel-border:rgba(255,255,255,.08);
-  --card-bg: rgba(24,24,24,.85);
-  --card-border:rgba(255,255,255,.08);
+
+  --panel-bg: rgba(14,14,14,.92);     /* filtros/painéis */
+  --panel-border: rgba(255,255,255,.10);
+
+  --card-bg: rgba(24,24,24,.88);      /* cartões */
+  --card-border: rgba(255,255,255,.12);
 }
 
 /* Layout
