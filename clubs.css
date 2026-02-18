@@ -353,21 +353,34 @@ select option{ background: #121212; color: #fff; }
 .modal-btn{
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  padding: 10px 14px;
-  border-radius: 14px;
+  gap: 8px;
+
+  padding: 7px 14px;           /* menos altura */
+  border-radius: 999px;        /* pill elegante */
   border: 1px solid rgba(212,175,55,.35);
-  background: rgba(0,0,0,.35);
+
+  background: rgba(0,0,0,.25);
   color: #d4af37;
   text-decoration: none;
-  font-weight: 700;
-  font-size: 14px;
+
+  font-weight: 600;            /* menos pesado */
+  font-size: 13px;             /* ligeiramente menor */
+  letter-spacing: .02em;
+
+  transition: all .2s ease;
+}
+
+.modal-btn:hover{
+  background: rgba(212,175,55,.10);
+  border-color: rgba(212,175,55,.65);
 }
 
 .modal-btn.primary{
-  background: rgba(212,175,55,.95);
-  border-color: rgba(212,175,55,.95);
+  background: #d4af37;
+  border-color: #d4af37;
   color: #111;
+
+  padding: 8px 16px;   /* ligeiramente maior que os outros */
 }
 
 /* Sections + glow divider */
