@@ -26,12 +26,7 @@
    (toolbar é FIXA, por isso o conteúdo precisa de espaço no topo)
 ========================= */
 .clubs-page .main-content{
-  padding-top: calc(
-    var(--navbar-h)
-    + var(--clubs-gap)
-    + var(--filters-h, 0px)
-    + var(--toolbar-below)
-  );
+  padding-top: calc(var(--navbar-h) + var(--clubs-gap) + var(--filters-h, 0px));
 }
 
 /* =========================
