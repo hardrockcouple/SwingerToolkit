@@ -371,6 +371,8 @@ els.modalTitle.innerHTML = `
     els.overlay.setAttribute('aria-hidden', 'false');
     els.modal.setAttribute('aria-hidden', 'false');
 
+    document.body.classList.add('modal-open');
+
     // focus close button for accessibility
     setTimeout(() => els.modalClose.focus(), 0);
   }
@@ -380,6 +382,7 @@ els.modalTitle.innerHTML = `
     els.modal.classList.remove('open');
     els.overlay.setAttribute('aria-hidden', 'true');
     els.modal.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('modal-open');
   }
 
   function ensureMap() {

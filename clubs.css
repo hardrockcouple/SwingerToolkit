@@ -519,3 +519,7 @@ select option{ background: #121212; color: #fff; }
   .kv{ grid-template-columns: 110px 1fr; }
   .modal-btn{ width: 100%; justify-content: center; }
 }
+
+body.modal-open{
+  overflow: hidden;
+}
