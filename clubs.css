@@ -361,7 +361,7 @@ select option{ background: #121212; color: #fff; }
   gap: 8px;
 
   padding: 5px 12px;           /* menos altura */
-  border-radius: 10px;        /* pill elegante */
+  border-radius: 100px;        /* pill elegante */
   border: 1px solid rgba(212,175,55,.35);
 
   background: rgba(0,0,0,.25);
