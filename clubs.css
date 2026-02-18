@@ -4,7 +4,7 @@
   --gold:#d3a94a;
   --panel-bg:rgba(10,10,10,.78);
   --panel-border:rgba(255,255,255,.08);
-  --card-bg:rgba(18,18,18,.72);
+  --card-bg: rgba(24,24,24,.85);
   --card-border:rgba(255,255,255,.08);
 }
 
@@ -145,7 +145,7 @@ select option{ background: #121212; color: #fff; }
 }
 
 .club-meta{
-  color: rgba(255,255,255,.8);
+  color: rgba(255,255,255,.85);
   font-size: 14px;
   line-height: 1.35;
 }
@@ -195,7 +195,7 @@ select option{ background: #121212; color: #fff; }
   overflow-x: hidden;
 
   border-radius: 18px;
-  background: rgba(10,10,10,.94); /* um pouco mais sólido */
+  background: rgba(18,18,18,.96);
   border: 1px solid rgba(255,255,255,.14); /* mais visível */
   box-shadow:
     0 24px 90px rgba(0,0,0,.70),
