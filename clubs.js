@@ -340,7 +340,7 @@ els.modalTitle.innerHTML = `
         <div class="modal-section-title">Info</div>
         <div class="kv"><div class="k">Location</div><div class="v">${escapeHtml(location)}</div></div>
         <div class="kv"><div class="k">Address</div><div class="v pre">${escapeHtml(address)}</div></div>
-        <div class="kv kv-hours"><div class="k">Hours</div><div class="v">${hoursTable}</div></div>
+        <div class="modal-subsection"><div class="modal-subtitle">Hours</div>${hoursTable}</div>
       </div>
 
       <div class="modal-section">

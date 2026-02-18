@@ -462,3 +462,14 @@ select option{ background: #121212; color: #fff; }
   align-items: center;
   gap: 16px;
 }
+
+.modal-subsection{
+  margin-top: 18px;
+}
+
+.modal-subtitle{
+  font-weight: 800;
+  margin-bottom: 8px;
+  color: rgba(255,255,255,.85);
+  letter-spacing: .02em;
+}
