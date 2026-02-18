@@ -18,7 +18,7 @@
   --clubs-gap: 12px;
 
   /* “respiração” entre toolbar e 1º row de cards (evita ficar tapado) */
-  --toolbar-below: 18px;
+  --toolbar-below: 0px;
 }
 
 /* =========================
@@ -26,8 +26,12 @@
    (toolbar é FIXA, por isso o conteúdo precisa de espaço no topo)
 ========================= */
 .clubs-page .main-content{
-  /* header + gap + altura REAL da toolbar */
-  padding-top: calc(var(--navbar-h) + var(--clubs-gap) + var(--filters-h, 0px));
+  padding-top: calc(
+    var(--navbar-h) +
+    var(--clubs-gap) +
+    var(--filters-h, 0px) +
+    var(--toolbar-below)
+  );
 }
 
 /* =========================
