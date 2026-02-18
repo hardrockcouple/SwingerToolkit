@@ -174,7 +174,9 @@ select option{ background: #121212; color: #fff; }
 .modal-overlay{
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,.55);
+  background: rgba(0,0,0,.75);   /* era .55 */
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
   display: none;
   z-index: 9998;
 }
@@ -193,12 +195,15 @@ select option{ background: #121212; color: #fff; }
   overflow-x: hidden;
 
   border-radius: 18px;
-  background: rgba(12,12,12,.92);
-  border: 1px solid rgba(255,255,255,.10);
-  box-shadow: 0 20px 80px rgba(0,0,0,.55);
-  padding: 18px;
-  display: none;
-  z-index: 9999;
+  background: rgba(10,10,10,.94); /* um pouco mais sólido */
+  border: 1px solid rgba(255,255,255,.14); /* mais visível */
+  box-shadow:
+    0 24px 90px rgba(0,0,0,.70),
+    0 0 0 1px rgba(212,175,55,.10),         /* anel fino dourado */
+    0 0 28px rgba(212,175,55,.10);          /* glow suave */
+    padding: 18px;
+    display: none;
+    z-index: 9999;
 }
 
 .club-modal.open{ display:block; }
