@@ -364,13 +364,55 @@ select option{ background: #121212; color: #fff; }
   border: 0;
 }
 
-.hours-table td{ padding: 8px 10px; font-size: 13px; }
-.hours-table tr + tr td{ border-top: 1px solid rgba(212,175,55,.10); }
-.hours-table td.d{ width: 64px; opacity: .75; font-weight: 800; }
-.hours-table td.h{ text-align: right; opacity: .95; }
-.hours-table tr.closed td.h{ opacity: .55; font-style: italic; }
+.hours-table td{
+  padding: 14px 10px;      /* mais “respiração” */
+  font-size: 14px;
+}
 
-.hours-note{ margin: 8px 10px 10px; opacity: .75; font-size: 12px; line-height: 1.35; }
+/* separador elegante: linha em baixo de cada row */
+.hours-table tr{
+  border-bottom: 1px solid rgba(212,175,55,.12);
+}
+.hours-table tr:last-child{
+  border-bottom: 0;
+}
+
+/* remove o teu antigo border-top */
+.hours-table tr + tr td{
+  border-top: 0;
+}
+
+.hours-table td.d{
+  width: 78px;             /* um pouco mais largo */
+  opacity: .85;
+  font-weight: 800;
+}
+
+.hours-table td.h{
+  text-align: right;
+  font-weight: 600;
+  opacity: .95;
+}
+
+/* Closed mais discreto */
+.hours-table tr.closed td.h{
+  opacity: .45;
+  font-style: italic;
+  font-weight: 500;
+}
+
+/* hover subtil (premium) */
+.hours-table tr:hover{
+  background: rgba(212,175,55,.06);
+  transition: background .18s ease;
+}
+
+.hours-note{
+  margin: 10px 10px 12px;
+  opacity: .75;
+  font-size: 12px;
+  line-height: 1.35;
+}
 
 /* Map */
 .clubs-map-wrap{
