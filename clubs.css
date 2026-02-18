@@ -11,13 +11,12 @@
 /* Layout
    Nota: a barra de filtros é FIXA (fora do scroll).
    O conteúdo precisa de espaço no topo para não ficar por baixo do header + filtros. */
-
 .clubs-page .main-content{
   padding-top: calc(var(--navbar-h) + var(--filters-h, 0px) - 90px);
 }
 
+/* Toolbar (filtros) fixa */
 .clubs-toolbar{
-  /* fixa por baixo do header, fora do scroll */
   position: fixed;
   left: 50%;
   transform: translateX(-50%);
@@ -30,7 +29,6 @@
   border-radius: 18px;
   box-shadow: 0 10px 40px rgba(0,0,0,.25);
 
-  /* Fundo sólido para não deixar ver cartões por trás */
   background: #0b0b0b;
   border: 1px solid var(--panel-border);
   border-bottom-color: rgba(212,175,55,0.15);
@@ -73,8 +71,9 @@
 
 .select{
   appearance: none;
-  background-image: linear-gradient(45deg, transparent 50%, rgba(255,255,255,.6) 50%),
-                    linear-gradient(135deg, rgba(255,255,255,.6) 50%, transparent 50%);
+  background-image:
+    linear-gradient(45deg, transparent 50%, rgba(255,255,255,.6) 50%),
+    linear-gradient(135deg, rgba(255,255,255,.6) 50%, transparent 50%);
   background-position: calc(100% - 18px) 18px, calc(100% - 12px) 18px;
   background-size: 6px 6px, 6px 6px;
   background-repeat: no-repeat;
@@ -100,7 +99,11 @@ select option{ background: #121212; color: #fff; }
   box-shadow: 0 0 0 2px rgba(211,169,74,.10);
 }
 
-.results-meta{ color: rgba(255,255,255,.75); font-weight: 600; margin-left: 6px; }
+.results-meta{
+  color: rgba(255,255,255,.75);
+  font-weight: 600;
+  margin-left: 6px;
+}
 
 /* Grid */
 .clubs-grid{
@@ -185,7 +188,10 @@ select option{ background: #121212; color: #fff; }
   transform: translate(-50%, -50%);
   width: min(680px, calc(100vw - 40px));
   max-height: min(78vh, 740px);
-  overflow: auto;
+
+  overflow-y: auto;
+  overflow-x: hidden;
+
   border-radius: 18px;
   background: rgba(12,12,12,.92);
   border: 1px solid rgba(255,255,255,.10);
@@ -205,10 +211,27 @@ select option{ background: #121212; color: #fff; }
   margin-bottom: 12px;
 }
 
-.modal-title{ font-size: 22px; font-weight: 900; margin: 0; }
+.modal-title{
+  font-size: 22px;
+  font-weight: 900;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
 .modal-title-text{ font-weight: 800; }
 
-
+.modal-type-badge{
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: rgba(212,175,55,.18);
+  border: 1px solid rgba(212,175,55,.45);
+  color: #d4af37;
+  font-weight: 700;
+  font-size: 13px;
+  line-height: 1;
+}
 
 .modal-close{
   width: 36px;
@@ -220,8 +243,22 @@ select option{ background: #121212; color: #fff; }
   cursor: pointer;
 }
 
-.modal-body{ color: rgba(255,255,255,.88); font-size: 14px; line-height: 1.55; }
-.modal-body a{ color: var(--gold); text-decoration: none; font-weight: 700; }
+.modal-body{
+  color: rgba(255,255,255,.88);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.modal-body, .modal-body .v, .modal-body .pre{
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.modal-body a{
+  color: var(--gold);
+  text-decoration: none;
+  font-weight: 700;
+}
 .modal-body a:hover{ text-decoration: underline; }
 
 /* Modal actions */
@@ -252,8 +289,7 @@ select option{ background: #121212; color: #fff; }
   color: #111;
 }
 
-.modal-btn .hint{ font-weight: 600; opacity: .85; font-size: 12px; }
-
+/* Sections + glow divider */
 .modal-section{
   margin-top: 18px;
   padding-top: 18px;
@@ -261,7 +297,6 @@ select option{ background: #121212; color: #fff; }
   position: relative;
 }
 
-/* linha principal */
 .modal-section::before{
   content: "";
   position: absolute;
@@ -287,9 +322,9 @@ select option{ background: #121212; color: #fff; }
     0 0 46px rgba(212,175,55,.12);
 
   opacity: .95;
+  pointer-events: none;
 }
 
-/* glow difuso extra (camada suave) */
 .modal-section::after{
   content: "";
   position: absolute;
@@ -325,30 +360,28 @@ select option{ background: #121212; color: #fff; }
   margin: 0;
 }
 
-.k{ color: rgba(255,255,255,.65); font-weight: 700; opacity: .75; }
-.v{ color: rgba(255,255,255,.95); opacity: .95; }
+.k{
+  color: rgba(255,255,255,.65);
+  font-weight: 700;
+  opacity: .75;
+}
+.v{
+  color: rgba(255,255,255,.95);
+  opacity: .95;
+}
 .v.pre{ white-space: pre-wrap; }
 
-/* Amenities chips */
-.amenities{ display: flex; flex-wrap: wrap; gap: 10px; }
-.amenity{
-  padding: 10px 12px;
-  border-radius: 14px;
-  border: 1px solid rgba(212,175,55,.25);
-  background: rgba(255,255,255,.03);
-  color: rgba(255,255,255,.92);
-  font-weight: 700;
-  font-size: 13px;
+/* Subsection inside a section (ex: Hours inside Info) */
+.modal-subsection{ margin-top: 18px; }
+
+.modal-subtitle{
+  font-weight: 800;
+  margin-bottom: 8px;
+  color: rgba(255,255,255,.85);
+  letter-spacing: .02em;
 }
 
-/* Notes */
-.notes{ margin: 0; padding-left: 18px; }
-.notes li{ margin: 6px 0; opacity: .92; }
-.muted{ opacity: .6; }
-
-/* Hours table */
-.kv.kv-hours .v{ padding-top: 2px; }
-
+/* Hours (minimal premium) */
 .hours-wrap{
   width: 100%;
   border: 0;
@@ -366,11 +399,10 @@ select option{ background: #121212; color: #fff; }
 }
 
 .hours-table td{
-  padding: 14px 10px;      /* mais “respiração” */
+  padding: 14px 10px;
   font-size: 14px;
 }
 
-/* separador elegante: linha em baixo de cada row */
 .hours-table tr{
   border-bottom: 1px solid rgba(212,175,55,.12);
 }
@@ -378,31 +410,26 @@ select option{ background: #121212; color: #fff; }
   border-bottom: 0;
 }
 
-/* remove o teu antigo border-top */
-.hours-table tr + tr td{
-  border-top: 0;
-}
-
 .hours-table td.d{
-  width: 78px;             /* um pouco mais largo */
+  width: 78px;
   opacity: .85;
   font-weight: 800;
+  letter-spacing: .02em;
 }
 
 .hours-table td.h{
   text-align: right;
   font-weight: 600;
   opacity: .95;
+  font-variant-numeric: tabular-nums;
 }
 
-/* Closed mais discreto */
 .hours-table tr.closed td.h{
   opacity: .45;
   font-style: italic;
   font-weight: 500;
 }
 
-/* hover subtil (premium) */
 .hours-table tr:hover{
   background: rgba(212,175,55,.06);
   transition: background .18s ease;
@@ -414,6 +441,23 @@ select option{ background: #121212; color: #fff; }
   font-size: 12px;
   line-height: 1.35;
 }
+
+/* Amenities chips */
+.amenities{ display: flex; flex-wrap: wrap; gap: 10px; }
+.amenity{
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(212,175,55,.25);
+  background: rgba(255,255,255,.03);
+  color: rgba(255,255,255,.92);
+  font-weight: 700;
+  font-size: 13px;
+}
+
+/* Notes */
+.notes{ margin: 0; padding-left: 18px; }
+.notes li{ margin: 6px 0; opacity: .92; }
+.muted{ opacity: .6; }
 
 /* Map */
 .clubs-map-wrap{
@@ -441,35 +485,4 @@ select option{ background: #121212; color: #fff; }
 @media (max-width: 640px){
   .kv{ grid-template-columns: 110px 1fr; }
   .modal-btn{ width: 100%; justify-content: center; }
-}
-
-
-.modal-type-badge{
-  padding: 4px 12px;
-  border-radius: 999px;
-
-  background: rgba(212,175,55,.18);
-  border: 1px solid rgba(212,175,55,.45);
-
-  color: #d4af37;
-  font-weight: 700;
-  font-size: 13px;
-
-  line-height: 1;
-}
-.modal-title{
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-.modal-subsection{
-  margin-top: 18px;
-}
-
-.modal-subtitle{
-  font-weight: 800;
-  margin-bottom: 8px;
-  color: rgba(255,255,255,.85);
-  letter-spacing: .02em;
 }
