@@ -464,5 +464,5 @@ select option{ background: #121212; color: #fff; }
 .modal-title{
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 16px;
 }
