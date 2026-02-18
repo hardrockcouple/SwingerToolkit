@@ -18,7 +18,7 @@
   --clubs-gap: 12px;
 
   /* “respiração” entre toolbar e 1º row de cards (evita ficar tapado) */
-  --toolbar-below: 18px;
+  --toolbar-below: 20px;
 }
 
 /* =========================
