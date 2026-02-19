@@ -484,13 +484,13 @@ select option{ background: #121212; color: #fff; }
 }
 
 .hours-table td{ 
-  padding: 6px 8px;          /* era 14px 10px */
-  font-size: 13px;           /* ligeiramente menor */
-  line-height: 1.15;         /* reduz altura total */
+  padding: 3px 6px;        /* bem mais compacto */
+  font-size: 12px;         /* menor */
+  line-height: 1.05;       /* quase sem altura extra */
 }
 
 .hours-table tr{ 
-  border-bottom: 1px solid rgba(212,175,55,.08); /* divisor mais subtil */
+  border-bottom: 1px solid rgba(212,175,55,.06); 
 }
 
 .hours-table tr:last-child{ 
@@ -498,7 +498,7 @@ select option{ background: #121212; color: #fff; }
 }
 
 .hours-table td.d{ 
-  width: 60px;               /* era 78px */
+  width: 48px;             /* mais estreito */
   opacity: .85; 
   font-weight: 800; 
 }
@@ -516,15 +516,15 @@ select option{ background: #121212; color: #fff; }
 }
 
 .hours-table tr:hover{ 
-  background: rgba(212,175,55,.05); 
+  background: rgba(212,175,55,.04); 
   transition: background .18s ease; 
 }
 
 .hours-note{
-  margin: 6px 8px 8px;   /* menos espaço */
+  margin: 4px 6px 6px;
   opacity: .75;
-  font-size: 12px;
-  line-height: 1.3;
+  font-size: 11px;
+  line-height: 1.2;
 }
 
 /* Amenities */
