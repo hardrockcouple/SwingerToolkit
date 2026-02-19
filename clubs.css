@@ -17,8 +17,14 @@
   /* Gap entre header e toolbar */
   --clubs-gap: 12px;
 
-  /* “respiração” entre toolbar e 1º row de cards (evita ficar tapado) */
-  --toolbar-below: 20px;
+  /* Margem lateral igual para toolbar + grid (alinha limites) */
+  --clubs-gutter: 16px;
+
+  /* “respiração” entre toolbar e 1º row de cards */
+  --toolbar-below: 16px;
+
+  /* Fallback do fundo (se não existir --bg do styles.css) */
+  --clubs-bg: var(--bg, #0e0e0e);
 }
 
 /* =========================
@@ -26,8 +32,10 @@
    (toolbar é FIXA, por isso o conteúdo precisa de espaço no topo)
 ========================= */
 .clubs-page .main-content{
-  /* o header já “empurra” o main, por isso NÃO metas navbar-h aqui */
-  padding-top: calc(var(--clubs-gap) + var(--filters-h, 0px) + var(--toolbar-below, 0px));
+  /* header já “empurra” o main, por isso NÃO metas navbar-h aqui */
+  padding-top: calc(var(--clubs-gap) + var(--filters-h, 0px) + var(--toolbar-below));
+  padding-left: var(--clubs-gutter);
+  padding-right: var(--clubs-gutter);
 }
 
 /* =========================
@@ -40,7 +48,7 @@
   top: calc(var(--navbar-h) + var(--clubs-gap));
   z-index: 160;
 
-  width: min(1100px, calc(100% - 32px));
+  width: min(1100px, 100%); /* <-- já não usamos calc(100% - 32px) */
   margin: 0;
   padding: 18px;
   border-radius: 18px;
@@ -58,27 +66,26 @@
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
 
-  /* importante para o “tapete” atrás */
   isolation: isolate;
   overflow: visible;
 }
 
-/* Tapete opaco por trás (resolve bleed nos cantos arredondados + cobre o gap até ao header) */
+/* Tapete opaco por trás (resolve bleed nos cantos + cobre a “costura” até ao header) */
 .clubs-toolbar::before{
   content:"";
   position:absolute;
 
   /* cobre cantos/lados */
-  left:-16px;
-  right:-16px;
+  left:-18px;
+  right:-18px;
 
-  /* sobe um bocadinho para tapar a linha do header */
+  /* sobe para tapar qualquer linha do header */
   top: calc(-1 * var(--clubs-gap) - 3px);
 
-  /* garante cobertura total (gap + “costura” + respiro) */
-  height: calc(100% + var(--clubs-gap) + 22px);
+  /* cobre toolbar + gap acima + “respiração” abaixo */
+  height: calc(100% + var(--clubs-gap) + var(--toolbar-below) + 8px);
 
-  background:#0b0b0b;
+  background: var(--clubs-bg); /* <-- em vez de #0b0b0b */
   border-radius: 26px;
   z-index:-1;
   pointer-events:none;
@@ -127,7 +134,6 @@
   background-repeat: no-repeat;
 }
 
-/* Option menu (browser native dropdown) */
 select option{ background: #121212; color: #fff; }
 
 .btn{
@@ -163,6 +169,9 @@ select option{ background: #121212; color: #fff; }
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 18px;
   padding-bottom: 60px;
+
+  /* garante que a grelha não encosta às bordas mesmo em ecrãs grandes */
+  width: 100%;
 }
 
 @media (max-width: 1100px){
@@ -247,7 +256,6 @@ select option{ background: #121212; color: #fff; }
   display: none;
   z-index: 9998;
 }
-
 .modal-overlay.open{ display:block; }
 
 .club-modal{
@@ -279,7 +287,6 @@ select option{ background: #121212; color: #fff; }
   display: none;
   z-index: 9999;
 }
-
 .club-modal.open{ display:block; }
 
 .modal-top{
@@ -304,16 +311,13 @@ select option{ background: #121212; color: #fff; }
 .modal-type-badge{
   padding: 4px 12px;
   border-radius: 999px;
-
-  background: #d4af37;      /* dourado sólido */
-  color: #111;              /* texto preto */
-
+  background: #d4af37;
+  color: #111;
   border: none;
   font-weight: 700;
   font-size: 12px;
   letter-spacing: .06em;
   text-transform: lowercase;
-
   box-shadow:
     0 2px 8px rgba(212,175,55,.35),
     0 0 12px rgba(212,175,55,.25);
@@ -359,19 +363,15 @@ select option{ background: #121212; color: #fff; }
   display: inline-flex;
   align-items: center;
   gap: 8px;
-
-  padding: 5px 12px;           /* menos altura */
-  border-radius: 100px;        /* pill elegante */
+  padding: 5px 12px;
+  border-radius: 12px; /* <-- menos redondo do que pill */
   border: 1px solid rgba(212,175,55,.35);
-
   background: rgba(0,0,0,.25);
   color: #d4af37;
   text-decoration: none;
-
-  font-weight: 600;            /* menos pesado */
-  font-size: 12px;             /* ligeiramente menor */
+  font-weight: 600;
+  font-size: 12px;
   letter-spacing: .04em;
-
   transition: all .2s ease;
 }
 
@@ -379,7 +379,6 @@ select option{ background: #121212; color: #fff; }
   background: rgba(212,175,55,.10);
   border-color: rgba(212,175,55,.65);
 }
-
 
 /* Sections + glow divider */
 .modal-section{
@@ -463,7 +462,6 @@ select option{ background: #121212; color: #fff; }
 }
 .v.pre{ white-space: pre-wrap; }
 
-/* Subsection inside a section (ex: Hours inside Info) */
 .modal-subsection{ margin-top: 18px; }
 
 .modal-subtitle{
@@ -473,59 +471,16 @@ select option{ background: #121212; color: #fff; }
   letter-spacing: .02em;
 }
 
-/* Hours (minimal premium) */
-.hours-wrap{
-  width: 100%;
-  border: 0;
-  border-radius: 0;
-  overflow: visible;
-  background: transparent;
-  box-shadow: none;
-}
-
-.hours-table{
-  width: 100%;
-  border-collapse: collapse;
-  background: transparent;
-  border: 0;
-}
-
-.hours-table td{
-  padding: 14px 10px;
-  font-size: 14px;
-}
-
-.hours-table tr{
-  border-bottom: 1px solid rgba(212,175,55,.12);
-}
-.hours-table tr:last-child{
-  border-bottom: 0;
-}
-
-.hours-table td.d{
-  width: 78px;
-  opacity: .85;
-  font-weight: 800;
-  letter-spacing: .02em;
-}
-
-.hours-table td.h{
-  text-align: right;
-  font-weight: 600;
-  opacity: .95;
-  font-variant-numeric: tabular-nums;
-}
-
-.hours-table tr.closed td.h{
-  opacity: .45;
-  font-style: italic;
-  font-weight: 500;
-}
-
-.hours-table tr:hover{
-  background: rgba(212,175,55,.06);
-  transition: background .18s ease;
-}
+/* Hours */
+.hours-wrap{ width: 100%; background: transparent; }
+.hours-table{ width: 100%; border-collapse: collapse; background: transparent; }
+.hours-table td{ padding: 14px 10px; font-size: 14px; }
+.hours-table tr{ border-bottom: 1px solid rgba(212,175,55,.12); }
+.hours-table tr:last-child{ border-bottom: 0; }
+.hours-table td.d{ width: 78px; opacity: .85; font-weight: 800; }
+.hours-table td.h{ text-align: right; font-weight: 600; font-variant-numeric: tabular-nums; }
+.hours-table tr.closed td.h{ opacity: .45; font-style: italic; font-weight: 500; }
+.hours-table tr:hover{ background: rgba(212,175,55,.06); transition: background .18s ease; }
 
 .hours-note{
   margin: 10px 10px 12px;
@@ -534,7 +489,7 @@ select option{ background: #121212; color: #fff; }
   line-height: 1.35;
 }
 
-/* Amenities chips */
+/* Amenities */
 .amenities{ display: flex; flex-wrap: wrap; gap: 10px; }
 .amenity{
   padding: 10px 12px;
@@ -559,6 +514,7 @@ select option{ background: #121212; color: #fff; }
   margin: 0 auto;
   display: none;
   padding-bottom: 60px;
+  width: 100%;
 }
 
 .clubs-map-wrap.active{ display:block; }
@@ -572,7 +528,6 @@ select option{ background: #121212; color: #fff; }
   background: rgba(255,255,255,.06);
 }
 
-/* Leaflet tweaks on dark UI */
 .leaflet-control-zoom a{ color: #000; }
 
 /* =========================
