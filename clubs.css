@@ -21,7 +21,7 @@
   --clubs-gutter: 16px;
 
   /* “respiração” entre toolbar e 1º row de cards */
-  --toolbar-below: 50px;
+  --toolbar-below: 16px;
 
   /* Fallback do fundo (se não existir --bg do styles.css) */
   --clubs-bg: var(--bg, #0e0e0e);
