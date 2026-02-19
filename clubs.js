@@ -269,20 +269,20 @@
 
   function openModal(c) {
     const typeInline = safeText(c.type); // já tens safeText()
-const typeBadge = typeInline
-  ? `<span class="modal-type-badge">${escapeHtml(typeInline)}</span>`
-  : '';
+    const typeBadge = typeInline
+      ? `<span class="modal-type-badge">${escapeHtml(typeInline)}</span>`
+      : '';
 
-els.modalTitle.innerHTML = `
-  <span class="modal-title-text">${escapeHtml(c.name || '—')}</span>
-  ${typeBadge}
-`;
+    els.modalTitle.innerHTML = `
+      <span class="modal-title-text">${escapeHtml(c.name || '—')}</span>
+      ${typeBadge}
+    `;
 
     const websiteBtn = c.website
-  ? `<a class="modal-btn primary" href="${escapeHtmlAttr(c.website)}" target="_blank" rel="noopener noreferrer">
-       Website
-     </a>`
-  : '';
+      ? `<a class="modal-btn primary" href="${escapeHtmlAttr(c.website)}" target="_blank" rel="noopener noreferrer">
+           Website
+         </a>`
+      : '';
 
     const mapHref = (c.lat != null && c.lng != null && String(c.lat).trim() && String(c.lng).trim())
       ? `https://www.google.com/maps?q=${encodeURIComponent(String(c.lat).trim() + ',' + String(c.lng).trim())}`
@@ -296,9 +296,9 @@ els.modalTitle.innerHTML = `
 
     const phoneBtn = tel
       ? `<a class="modal-btn"
-        href="tel:${escapeHtmlAttr(tel)}"
-        title="${escapeHtml(c.phone)}">
-        Phone
+          href="tel:${escapeHtmlAttr(tel)}"
+          title="${escapeHtml(c.phone)}">
+          Phone
         </a>`
       : '';
 
@@ -309,7 +309,6 @@ els.modalTitle.innerHTML = `
 
     const location = [safeText(c.city), safeText(c.country)].filter(Boolean).join(', ') || '—';
     const address = safeText(c.address) || '—';
-    const type = safeText(c.type) || '—';
     const hoursTable = openingHoursTable(c);
 
     const entryPolicy = safeText(c.entry_policy) || '—';
@@ -328,6 +327,7 @@ els.modalTitle.innerHTML = `
       ? `<div class="amenities">${amenities.map(a => `<span class="amenity">${escapeHtml(a)}</span>`).join('')}</div>`
       : `<span class="muted">—</span>`;
 
+    // ✅ ALTERAÇÃO: Hours + Entry em 2 colunas (Entry à direita)
     els.modalBody.innerHTML = `
       <div class="modal-actions">
         ${websiteBtn}
@@ -340,16 +340,22 @@ els.modalTitle.innerHTML = `
         <div class="modal-section-title">Info</div>
         <div class="kv"><div class="k">Location</div><div class="v">${escapeHtml(location)}</div></div>
         <div class="kv"><div class="k">Address</div><div class="v pre">${escapeHtml(address)}</div></div>
-        <div class="modal-subsection"><div class="modal-subtitle">Hours</div>${hoursTable}</div>
-      </div>
 
-      <div class="modal-section">
-        <div class="modal-section-title">Entry</div>
-        <div class="kv"><div class="k">Entry policy</div><div class="v">${escapeHtml(entryPolicy)}</div></div>
-        <div class="kv"><div class="k">Singles policy</div><div class="v">${escapeHtml(singlesPolicy)}</div></div>
-        <div class="kv"><div class="k">Couples</div><div class="v">${escapeHtml(coupleRange)}</div></div>
-        <div class="kv"><div class="k">Price range</div><div class="v">${escapeHtml(priceRange)}</div></div>
-        <div class="kv"><div class="k">Pricing model</div><div class="v">${escapeHtml(pricingModel)}</div></div>
+        <div class="modal-columns">
+          <div class="modal-panel">
+            <div class="modal-panel-title">Hours</div>
+            ${hoursTable}
+          </div>
+
+          <div class="modal-panel">
+            <div class="modal-panel-title">Entry</div>
+            <div class="kv"><div class="k">Entry policy</div><div class="v">${escapeHtml(entryPolicy)}</div></div>
+            <div class="kv"><div class="k">Singles policy</div><div class="v">${escapeHtml(singlesPolicy)}</div></div>
+            <div class="kv"><div class="k">Couples</div><div class="v">${escapeHtml(coupleRange)}</div></div>
+            <div class="kv"><div class="k">Price range</div><div class="v">${escapeHtml(priceRange)}</div></div>
+            <div class="kv"><div class="k">Pricing model</div><div class="v">${escapeHtml(pricingModel)}</div></div>
+          </div>
+        </div>
       </div>
 
       <div class="modal-section">
