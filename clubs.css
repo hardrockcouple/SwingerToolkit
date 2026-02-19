@@ -472,21 +472,59 @@ select option{ background: #121212; color: #fff; }
 }
 
 /* Hours */
-.hours-wrap{ width: 100%; background: transparent; }
-.hours-table{ width: 100%; border-collapse: collapse; background: transparent; }
-.hours-table td{ padding: 14px 10px; font-size: 14px; }
-.hours-table tr{ border-bottom: 1px solid rgba(212,175,55,.12); }
-.hours-table tr:last-child{ border-bottom: 0; }
-.hours-table td.d{ width: 78px; opacity: .85; font-weight: 800; }
-.hours-table td.h{ text-align: right; font-weight: 600; font-variant-numeric: tabular-nums; }
-.hours-table tr.closed td.h{ opacity: .45; font-style: italic; font-weight: 500; }
-.hours-table tr:hover{ background: rgba(212,175,55,.06); transition: background .18s ease; }
+.hours-wrap{ 
+  width: 100%; 
+  background: transparent; 
+}
+
+.hours-table{ 
+  width: 100%; 
+  border-collapse: collapse; 
+  background: transparent; 
+}
+
+.hours-table td{ 
+  padding: 6px 8px;          /* era 14px 10px */
+  font-size: 13px;           /* ligeiramente menor */
+  line-height: 1.15;         /* reduz altura total */
+}
+
+.hours-table tr{ 
+  border-bottom: 1px solid rgba(212,175,55,.08); /* divisor mais subtil */
+}
+
+.hours-table tr:last-child{ 
+  border-bottom: 0; 
+}
+
+.hours-table td.d{ 
+  width: 60px;               /* era 78px */
+  opacity: .85; 
+  font-weight: 800; 
+}
+
+.hours-table td.h{ 
+  text-align: right; 
+  font-weight: 600; 
+  font-variant-numeric: tabular-nums; 
+}
+
+.hours-table tr.closed td.h{ 
+  opacity: .45; 
+  font-style: italic; 
+  font-weight: 500; 
+}
+
+.hours-table tr:hover{ 
+  background: rgba(212,175,55,.05); 
+  transition: background .18s ease; 
+}
 
 .hours-note{
-  margin: 10px 10px 12px;
+  margin: 6px 8px 8px;   /* menos espaço */
   opacity: .75;
   font-size: 12px;
-  line-height: 1.35;
+  line-height: 1.3;
 }
 
 /* Amenities */
