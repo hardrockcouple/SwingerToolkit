@@ -25,6 +25,8 @@
 
   /* Fallback do fundo (se não existir --bg do styles.css) */
   --clubs-bg: var(--bg, #0e0e0e);
+
+   --cards-offset: 10px;
 }
 
 /* =========================
@@ -33,7 +35,7 @@
 ========================= */
 .clubs-page .main-content{
   /* header já “empurra” o main, por isso NÃO metas navbar-h aqui */
-  padding-top: calc(var(--clubs-gap) + var(--filters-h, 0px) + var(--toolbar-below));
+  padding-top: calc(var(--clubs-gap) + var(--filters-h, 0px) + var(--toolbar-below)) + var(--cards-offset);
   padding-left: var(--clubs-gutter);
   padding-right: var(--clubs-gutter);
 }
