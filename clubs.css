@@ -50,7 +50,7 @@
 
   width: min(1100px, 100%); /* <-- já não usamos calc(100% - 32px) */
   margin: 0;
-  padding: 18px;
+  padding: 0px;
   border-radius: 18px;
 
   background:
