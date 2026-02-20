@@ -352,12 +352,12 @@
 
         <div class="modal-columns">
           <div class="modal-panel">
-            <div class="modal-panel-title">Hours</div>
+            <div class="modal-panel-title">Opening Hours</div>
             ${hoursTable}
           </div>
 
           <div class="modal-panel">
-            <div class="modal-panel-title">Entry</div>
+            <div class="modal-panel-title">Access, Rules & Pricing</div>
             <div class="kv"><div class="k">Entry policy</div><div class="v">${escapeHtml(entryPolicy)}</div></div>
             <div class="kv"><div class="k">Singles policy</div><div class="v">${escapeHtml(singlesPolicy)}</div></div>
             <div class="kv"><div class="k">Couples</div><div class="v">${escapeHtml(coupleRange)}</div></div>
