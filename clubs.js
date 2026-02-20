@@ -346,7 +346,7 @@
       </div>
 
       <div class="modal-section">
-        <div class="modal-section-title">Info</div>
+        <div class="modal-section-title">General Info</div>
         <div class="kv"><div class="k">Location</div><div class="v">${escapeHtml(location)}</div></div>
         <div class="kv"><div class="k">Address</div><div class="v pre">${escapeHtml(address)}</div></div>
 
