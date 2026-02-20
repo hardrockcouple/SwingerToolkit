@@ -440,7 +440,6 @@ select option{ background: #121212; color: #fff; }
   letter-spacing: .3px;
   margin-bottom: 12px;
   color: rgba(212,175,55,.95);
-  text-align: center;
 }
 
 /* Key/value rows */
