@@ -623,6 +623,8 @@ select option{ background: #121212; color: #fff; }
 body.modal-open{
   overflow: hidden;
 }
+
+
 /* ✅ Hours – ultra compacto (coloca NO FIM do clubs.css) */
 .club-modal .hours-table td{
   padding: 7px 10px !important;   /* ↓ altura das linhas */
