@@ -3,6 +3,7 @@
 (function () {
   const $ = (id) => document.getElementById(id);
 
+  // Mantém a altura dos filtros em CSS var para o layout (top padding / drawers)
   function updateFiltersVar() {
     const bar = document.querySelector('.clubs-toolbar');
     if (!bar) return;
@@ -34,6 +35,7 @@
   let map = null;
   let markersLayer = null;
 
+  // calcula já e mantém actualizado
   updateFiltersVar();
   window.addEventListener('resize', () => requestAnimationFrame(updateFiltersVar));
   window.addEventListener('orientationchange', () => requestAnimationFrame(updateFiltersVar));
@@ -53,6 +55,7 @@
     const city = safeText(raw.city || raw.town);
     const website = safeText(raw.website || raw.url);
 
+    // geo may come in many shapes
     const lat = Number(raw.lat ?? raw.latitude ?? raw.Latitude ?? raw.LAT);
     const lng = Number(raw.lng ?? raw.lon ?? raw.long ?? raw.longitude ?? raw.Longitude ?? raw.LNG);
 
@@ -60,7 +63,7 @@
 
     return {
       ...raw,
-      name,
+      name: name,
       country: country || '',
       city: city || '',
       website: website || '',
@@ -87,6 +90,7 @@
     if (mode === 'map') {
       ensureMap();
       refreshMap();
+      // Leaflet needs invalidateSize after display
       setTimeout(() => map && map.invalidateSize(), 50);
     }
   }
@@ -147,6 +151,17 @@
   function escapeHtmlAttr(s) {
     return escapeHtml(s).replaceAll('`', '&#096;');
   }
+  
+  function prettyDomain(url) {
+    const u = safeText(url);
+    if (!u) return '';
+    try {
+      const parsed = new URL(u);
+      return parsed.hostname.replace(/^www\./, '');
+    } catch {
+      return u.replace(/^https?:\/\//, '').replace(/^www\./, '');
+    }
+  }
 
   function normalizeTel(phone) {
     return safeText(phone).replace(/[^\d+]/g, '');
@@ -156,9 +171,12 @@
     const min = safeText(c.price_couples_min);
     const max = safeText(c.price_couples_max);
     const cur = safeText(c.price_currency || 'EUR');
-    if (min && max) return `${min} – ${max} (${cur})`;
-    if (min) return `${min} (${cur})`;
-    if (max) return `${max} (${cur})`;
+    const clean = (v) => v.replace(/\s+/g, ' ').trim();
+    const a = clean(min);
+    const b = clean(max);
+    if (a && b) return `${a} – ${b} (${cur})`;
+    if (a) return `${a} (${cur})`;
+    if (b) return `${b} (${cur})`;
     return '—';
   }
 
@@ -199,16 +217,60 @@
       `;
     }).join('');
 
+    const note = safeText(c.open_time_notes);
+    const noteHtml = note ? `<div class="hours-note">${escapeHtml(note)}</div>` : '';
+
     return `
       <div class="hours-wrap">
         <table class="hours-table"><tbody>${rows}</tbody></table>
+        ${noteHtml}
       </div>
     `;
   }
 
+  function renderGrid() {
+    els.gridView.innerHTML = '';
+
+    const frag = document.createDocumentFragment();
+
+    filtered.forEach((c) => {
+      const card = document.createElement('article');
+      card.className = 'club-card';
+      card.tabIndex = 0;
+      card.setAttribute('role', 'button');
+      card.setAttribute('aria-label', `Abrir detalhes: ${c.name}`);
+
+      const stamp = document.createElement('div');
+      stamp.className = 'stamp' + (c.visited ? '' : ' is-hidden');
+      stamp.textContent = 'VISITED';
+
+      card.innerHTML = `
+        <h3 class="club-name">${escapeHtml(c.name)}</h3>
+        <div class="club-meta">
+          <div>${escapeHtml(c.country || '')}</div>
+          <div>${escapeHtml(c.city || '')}</div>
+        </div>
+      `;
+      card.appendChild(stamp);
+
+      card.addEventListener('click', () => openModal(c));
+      card.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          openModal(c);
+        }
+      });
+
+      frag.appendChild(card);
+    });
+
+    els.gridView.appendChild(frag);
+  }
+
   function openModal(c) {
-    const typeBadge = safeText(c.type)
-      ? `<span class="modal-type-badge">${escapeHtml(c.type)}</span>`
+    const typeInline = safeText(c.type);
+    const typeBadge = typeInline
+      ? `<span class="modal-type-badge">${escapeHtml(typeInline)}</span>`
       : '';
 
     els.modalTitle.innerHTML = `
@@ -217,7 +279,32 @@
     `;
 
     const websiteBtn = c.website
-      ? `<a class="modal-btn primary" href="${escapeHtmlAttr(c.website)}" target="_blank">Website</a>`
+      ? `<a class="modal-btn primary" href="${escapeHtmlAttr(c.website)}" target="_blank" rel="noopener noreferrer">
+           Website
+         </a>`
+      : '';
+
+    const mapHref = (c.lat != null && c.lng != null && String(c.lat).trim() && String(c.lng).trim())
+      ? `https://www.google.com/maps?q=${encodeURIComponent(String(c.lat).trim() + ',' + String(c.lng).trim())}`
+      : '';
+
+    const mapBtn = mapHref
+      ? `<a class="modal-btn" href="${escapeHtmlAttr(mapHref)}" target="_blank" rel="noopener noreferrer">Maps</a>`
+      : '';
+
+    const tel = normalizeTel(c.phone);
+
+    const phoneBtn = tel
+      ? `<a class="modal-btn"
+        href="tel:${escapeHtmlAttr(tel)}"
+        title="${escapeHtml(c.phone)}">
+        Phone
+        </a>`
+      : '';
+
+    const email = safeText(c.email);
+    const emailBtn = email
+      ? `<a class="modal-btn" href="mailto:${escapeHtmlAttr(email)}">Email</a>`
       : '';
 
     const location = [safeText(c.city), safeText(c.country)].filter(Boolean).join(', ') || '—';
@@ -240,8 +327,23 @@
       ? `<div class="amenities">${amenities.map(a => `<span class="amenity">${escapeHtml(a)}</span>`).join('')}</div>`
       : `<span class="muted">—</span>`;
 
+    // ✅ ÚNICA ALTERAÇÃO: Notes vai para dentro do painel Entry (logo após Pricing model)
+    const notesInlineHtml = notes.length
+      ? `
+        <div class="modal-subsection" style="margin-top: 12px;">
+          <div class="modal-subtitle">Notes</div>
+          <ul class="notes">${notes.map(n => `<li>${escapeHtml(n)}</li>`).join('')}</ul>
+        </div>
+      `
+      : '';
+
     els.modalBody.innerHTML = `
-      <div class="modal-actions">${websiteBtn}</div>
+      <div class="modal-actions">
+        ${websiteBtn}
+        ${mapBtn}
+        ${phoneBtn}
+        ${emailBtn}
+      </div>
 
       <div class="modal-section">
         <div class="modal-section-title">Info</div>
@@ -261,18 +363,7 @@
             <div class="kv"><div class="k">Couples</div><div class="v">${escapeHtml(coupleRange)}</div></div>
             <div class="kv"><div class="k">Price range</div><div class="v">${escapeHtml(priceRange)}</div></div>
             <div class="kv"><div class="k">Pricing model</div><div class="v">${escapeHtml(pricingModel)}</div></div>
-
-            ${notes.length
-              ? `
-                <div class="modal-subsection" style="margin-top: 12px;">
-                  <div class="modal-subtitle">Notes</div>
-                  <ul class="notes">
-                    ${notes.map(n => `<li>${escapeHtml(n)}</li>`).join('')}
-                  </ul>
-                </div>
-              `
-              : ''
-            }
+            ${notesInlineHtml}
           </div>
         </div>
       </div>
@@ -285,7 +376,134 @@
 
     els.overlay.classList.add('open');
     els.modal.classList.add('open');
+    els.overlay.setAttribute('aria-hidden', 'false');
+    els.modal.setAttribute('aria-hidden', 'false');
+
     document.body.classList.add('modal-open');
+
+    // focus close button for accessibility
+    setTimeout(() => els.modalClose.focus(), 0);
   }
 
+  function closeModal() {
+    els.overlay.classList.remove('open');
+    els.modal.classList.remove('open');
+    els.overlay.setAttribute('aria-hidden', 'true');
+    els.modal.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('modal-open');
+  }
+
+  function ensureMap() {
+    if (map) return;
+
+    if (!window.L) {
+      console.error('Leaflet (L) not found.');
+      return;
+    }
+
+    map = L.map(els.mapEl, {
+      zoomControl: true,
+      scrollWheelZoom: true,
+    }).setView([39.5, -3.5], 5);
+
+    // Dark basemap
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; OpenStreetMap &copy; CARTO',
+      maxZoom: 19,
+    }).addTo(map);
+
+    markersLayer = L.layerGroup().addTo(map);
+  }
+
+  function refreshMap() {
+    if (!map || !markersLayer) return;
+
+    markersLayer.clearLayers();
+
+    const points = [];
+
+    filtered.forEach((c) => {
+      if (c.lat == null || c.lng == null) return;
+      points.push([c.lat, c.lng]);
+
+      const m = L.circleMarker([c.lat, c.lng], {
+        radius: 7,
+        weight: 2,
+        color: '#d3a94a',
+        fillColor: '#d3a94a',
+        fillOpacity: 0.35,
+      });
+
+      const popup = `<b>${escapeHtml(c.name)}</b><br>${escapeHtml(c.city || '')}${c.city && c.country ? ', ' : ''}${escapeHtml(c.country || '')}`;
+      m.bindPopup(popup);
+      m.on('click', () => openModal(c));
+      m.addTo(markersLayer);
+    });
+
+    if (points.length) {
+      try {
+        map.fitBounds(points, { padding: [30, 30] });
+      } catch (_) {
+        // ignore
+      }
+    }
+  }
+
+  async function loadClubs() {
+    try {
+      // cache-bust to avoid GH Pages caching surprises
+      const url = `clubs.json?v=${Date.now()}`;
+      const res = await fetch(url, { cache: 'no-store' });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+
+      // Data can be an array or object with key
+      const list = Array.isArray(data) ? data : (data.clubs || data.items || []);
+      allClubs = list.map(normalizeClub).filter(Boolean);
+
+      fillCountries();
+      fillCities();
+
+      filtered = [...allClubs];
+      applyFilters();
+    } catch (err) {
+      console.error('Erro a carregar clubs.json:', err);
+      els.count.textContent = '0 results';
+      els.gridView.innerHTML = '<div style="max-width:1100px;margin:0 auto;color:rgba(255,255,255,.75)">Erro a carregar os clubs. Vê a consola.</div>';
+    }
+  }
+
+  function wireEvents() {
+    els.search.addEventListener('input', () => applyFilters());
+
+    els.country.addEventListener('change', () => {
+      fillCities();
+      applyFilters();
+    });
+
+    els.city.addEventListener('change', () => applyFilters());
+
+    els.btnGrid.addEventListener('click', () => setMode('grid'));
+    els.btnMap.addEventListener('click', () => setMode('map'));
+    els.btnClear.addEventListener('click', () => clearFilters());
+
+    els.modalClose.addEventListener('click', closeModal);
+    els.overlay.addEventListener('click', closeModal);
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeModal();
+    });
+  }
+
+  function init() {
+    wireEvents();
+    setMode('grid');
+    loadClubs();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
 })();
