@@ -555,9 +555,10 @@ select option{ background: #121212; color: #fff; }
 
 .modal-panel-title{
   font-weight: 800;
-  margin: 0 0 10px;
-  color: rgba(255,255,255,.82);
-  letter-spacing: .02em;
+  margin: 0 0 14px;
+  color: rgba(212,175,55,.95); /* mesma cor do General Info */
+  letter-spacing: .3px;
+  text-align: center;
 }
 
 /* Hours mais compacto */
