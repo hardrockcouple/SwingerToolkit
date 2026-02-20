@@ -471,60 +471,50 @@ select option{ background: #121212; color: #fff; }
   letter-spacing: .02em;
 }
 
-/* Hours */
-.hours-wrap{ 
-  width: 100%; 
-  background: transparent; 
+/* Hours – ultra compacto */
+.hours-table{
+  width: 100%;
+  border-collapse: collapse;
+  background: transparent;
 }
 
-.hours-table{ 
-  width: 100%; 
-  border-collapse: collapse; 
-  background: transparent; 
+.hours-table td{
+  padding: 2px 4px;        /* mínimo viável */
+  font-size: 11.5px;       /* ligeiramente menor */
+  line-height: 1;          /* remove altura extra */
 }
 
-.hours-table td{ 
-  padding: 3px 6px;        /* bem mais compacto */
-  font-size: 12px;         /* menor */
-  line-height: 1.05;       /* quase sem altura extra */
+.hours-table td.d{
+  width: 42px;             /* coluna do dia bem estreita */
+  font-weight: 800;
+  opacity: .85;
 }
 
-.hours-table tr{ 
-  border-bottom: 1px solid rgba(212,175,55,.06); 
+.hours-table td.h{
+  text-align: right;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
 }
 
-.hours-table tr:last-child{ 
-  border-bottom: 0; 
+.hours-table tr{
+  border-bottom: 1px solid rgba(212,175,55,.05);
 }
 
-.hours-table td.d{ 
-  width: 48px;             /* mais estreito */
-  opacity: .85; 
-  font-weight: 800; 
+.hours-table tr:last-child{
+  border-bottom: 0;
 }
 
-.hours-table td.h{ 
-  text-align: right; 
-  font-weight: 600; 
-  font-variant-numeric: tabular-nums; 
-}
-
-.hours-table tr.closed td.h{ 
-  opacity: .45; 
-  font-style: italic; 
-  font-weight: 500; 
-}
-
-.hours-table tr:hover{ 
-  background: rgba(212,175,55,.04); 
-  transition: background .18s ease; 
+.hours-table tr.closed td.h{
+  opacity: .45;
+  font-style: italic;
+  font-weight: 500;
 }
 
 .hours-note{
-  margin: 4px 6px 6px;
-  opacity: .75;
-  font-size: 11px;
-  line-height: 1.2;
+  margin: 3px 4px 4px;
+  font-size: 10.5px;
+  line-height: 1.15;
+  opacity: .7;
 }
 
 /* Amenities */
