@@ -19,19 +19,9 @@
 </head>
 
 <body class="clubs-page">
-  <!-- Header igual às restantes páginas (sticky) -->
-  <header class="navbar">
-    <div class="nav-left">
-      <img id="siteLogo" class="logo-img" alt="Swinger Toolkit" />
-      <nav class="navLinks" aria-label="Menu">
-        <a href="index.html">Home</a>
-        <a class="active" href="clubs.html">Clubs</a>
-        <a href="shopping.html">Shopping</a>
-        <a href="capdagde.html">Cap D'Agde</a>
-        <a href="outras.html">Others</a>
-      </nav>
-    </div>
-  </header>
+
+  <!-- Header injected by header-loader.js -->
+  <div id="siteHeader"></div>
 
   <main class="main-content">
     <section class="clubs-toolbar" aria-label="Filtros">
@@ -74,9 +64,13 @@
 
   <!-- config.js expõe window.CONFIG (não é ES module) -->
   <script src="config.js"></script>
+
+  <!-- inject header -->
+  <script src="header-loader.js"></script>
+
+  <!-- init logo after header exists -->
   <script type="module">
     import { initLogo } from './ui-common.js';
-    // initLogo lê window.CONFIG internamente
     initLogo();
   </script>
 
