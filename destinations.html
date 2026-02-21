@@ -24,14 +24,14 @@
   <script src="./header-loader.js"></script>
 
   <!-- init logo ONLY after header exists -->
-  <script type="module">
-    import { initLogo, updateLayoutVars } from "./ui-common.js";
+ <script type="module">
+  import { initLogo } from "./ui-common.js";
 
-    window.addEventListener("header:loaded", () => {
-      initLogo();
-      updateLayoutVars();
-    });
-  </script>
+  // espera que o header seja injetado
+  window.addEventListener("header:loaded", () => {
+    initLogo();
+  }, { once: true });
+</script>
 
 </body>
 </html>
