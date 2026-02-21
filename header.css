@@ -23,10 +23,9 @@
   background: var(--header-bg);
   border-bottom: 0;
 
-  /* ✅ para o pseudo-elemento absoluto */
-  position: sticky;
-  /* ✅ referência do ::after */
-  position: relative;
+  /* ajuda a controlar layering do ::after */
+  isolation: isolate;
+  overflow: visible;
 }
 
 .navbar::after{
