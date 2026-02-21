@@ -3,36 +3,31 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Cap D'Agde</title>
+  <title>Swinger Destinations – Swinger Toolkit</title>
 
   <link rel="stylesheet" href="./styles.css" />
   <link rel="stylesheet" href="./header.css" />
 </head>
 <body>
 
-<header class="navbar">
-  <div class="nav-left">
-    <img id="siteLogo" class="logo-img" alt="Logo" />
-    <nav class="navLinks">
-      <a href="index.html">Home</a>
-      <a href="clubs.html">Clubs</a>
-      <a href="shopping.html">Shopping</a>
-      <a href="capdagde.html" class="active">Cap D'Agde</a>
-      <a href="outras.html">Others</a>
-    </nav>
-  </div>
-</header>
+  <!-- Header injected by header-loader.js -->
+  <div id="siteHeader"></div>
 
-<main class="main-content">
-  <h1>Cap D'Agde</h1>
-  <p class="muted">Cap D'Agde page (placeholder).</p>
-</main>
+  <main class="main-content">
+    <h1>Swinger Destinations</h1>
+    <p class="muted">Destinations page (placeholder).</p>
+  </main>
 
-<script src="./config.js"></script>
-<script type="module">
-  import { initLogo } from "./ui-common.js";
-  initLogo();
-</script>
+  <script src="./config.js"></script>
+
+  <!-- inject header -->
+  <script src="./header-loader.js"></script>
+
+  <!-- init logo after header exists -->
+  <script type="module">
+    import { initLogo } from "./ui-common.js";
+    initLogo();
+  </script>
 
 </body>
 </html>
