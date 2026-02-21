@@ -471,6 +471,7 @@ select option{ background: #121212; color: #fff; }
   letter-spacing: .02em;
 }
 
+/* Hours (base) */
 .hours-table{
   width: 100%;
   border-collapse: collapse;
@@ -561,21 +562,6 @@ select option{ background: #121212; color: #fff; }
   text-align: center;
 }
 
-/* Hours mais compacto */
-.modal-panel .hours-table td{
-  padding: 10px 8px;
-  font-size: 13px;
-}
-
-.modal-panel .hours-table td.d{
-  width: 62px;
-  opacity: .80;
-}
-
-.modal-panel .hours-note{
-  margin: 8px 4px 0;
-}
-
 /* Entry mais “apertado” */
 .modal-panel .kv{
   padding: 6px 0;
@@ -625,18 +611,24 @@ body.modal-open{
   overflow: hidden;
 }
 
-
-/* ✅ Hours – ultra compacto (coloca NO FIM do clubs.css) */
+/* ✅ Hours – ultra compacto (NO FIM do clubs.css) */
 .club-modal .hours-table td{
-  padding: 7px 10px !important;   /* ↓ altura das linhas */
-  font-size: 12px !important;     /* ↓ texto */
-  line-height: 1.1 !important;    /* ↓ altura visual */
+  padding: 2px 6px !important;
+  font-size: 11px !important;
+  line-height: 1.0 !important;
 }
 
 .club-modal .hours-table td.d{
-  width: 62px !important;         /* ↓ coluna do dia */
+  width: 46px !important;
 }
 
-.club-modal .hours-table td.h{
-  font-variant-numeric: tabular-nums;
+.club-modal .hours-table tr{
+  border-bottom: 1px solid rgba(212,175,55,.04) !important;
+}
+
+.club-modal .hours-note{
+  margin: 4px 2px 0 !important;
+  font-size: 10px !important;
+  line-height: 1.15 !important;
+  opacity: .7 !important;
 }
