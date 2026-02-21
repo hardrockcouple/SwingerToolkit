@@ -4,7 +4,7 @@ window.CONFIG = {
   DATA_SOURCE: "./clubs.json",
 
   // Logo
-  LOGO_PATH: "./assets/img/logo_txt_full_140px.jpg",
+  LOGO_PATH: "assets/img/logo_txt_full_140px.jpg",
 
   // Nome do site
   SITE_NAME: "SW Clubs Directory",
