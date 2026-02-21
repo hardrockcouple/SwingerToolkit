@@ -197,18 +197,17 @@
 }
 
 .dropdown a{
-  color: rgba(255,255,255,.85);
+  color: rgba(255,255,255,.75);
   text-decoration: none;
   font-weight: 600;
   font-size: 14px;
-
-  padding: 8px 10px;
-  border-radius: 10px;
+  padding: 6px 4px;
+  position: relative;
+  transition: .2s;
 }
 
 .dropdown a:hover{
   color: var(--menu-hover);
-  background: rgba(255,255,255,.06);
 }
 
 /* separadores */
