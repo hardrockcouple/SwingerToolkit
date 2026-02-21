@@ -3,17 +3,18 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Home</title>
+  <title>Swinger Toolkit</title>
 
   <link rel="stylesheet" href="./styles.css" />
   <link rel="stylesheet" href="./header.css" />
+  <link rel="stylesheet" href="./home.css" />
 </head>
 <body>
 
 <header class="navbar">
   <div class="nav-left">
-    <img id="siteLogo" class="logo-img" alt="Logo" />
-    <nav class="navLinks">
+    <img id="siteLogo" class="logo-img" alt="Swinger Toolkit" />
+    <nav class="navLinks" aria-label="Menu">
       <a href="index.html" class="active">Home</a>
       <a href="clubs.html">Clubs</a>
       <a href="shopping.html">Shopping</a>
@@ -23,9 +24,50 @@
   </div>
 </header>
 
-<main class="main-content">
-  <h1 style="margin:0;">Home</h1>
-  <p style="color:#bdbdbd;margin-top:10px;">Página inicial (placeholder).</p>
+<main class="main-content home">
+  <section class="hero">
+    <p class="kicker">SWINGER TOOLKIT</p>
+    <h1>Your curated guide to clubs, brands & destinations</h1>
+    <p class="lead">
+      We’re a swinger couple for nearly 10 years. After countless trips, nights out, and real-world experience,
+      we realized the best information is scattered across forums, blogs, and outdated posts.
+      This is our attempt to bring it together — clean, practical, and easy to use.
+    </p>
+
+    <div class="hero-actions">
+      <a class="cta primary" href="clubs.html">Explore Clubs</a>
+      <a class="cta" href="capdagde.html">Explore Destinations</a>
+      <a class="cta" href="shopping.html">Explore Shopping</a>
+    </div>
+  </section>
+
+  <section class="feature-grid" aria-label="What you’ll find here">
+    <article class="feature">
+      <h3>Clubs</h3>
+      <p>Search by country/city, open the map, and check details like opening times, rules and pricing.</p>
+      <a class="feature-link" href="clubs.html">Go to Clubs →</a>
+    </article>
+
+    <article class="feature">
+      <h3>Shopping</h3>
+      <p>Curated brands and stores for outfits, lingerie, accessories and lifestyle essentials.</p>
+      <a class="feature-link" href="shopping.html">Go to Shopping →</a>
+    </article>
+
+    <article class="feature">
+      <h3>Destinations</h3>
+      <p>Practical travel notes: where to stay, what to do, what to expect — from real visits.</p>
+      <a class="feature-link" href="capdagde.html">Go to Destinations →</a>
+    </article>
+  </section>
+
+  <section class="note" aria-label="Disclaimer">
+    <h2>Respect, consent & safety</h2>
+    <p class="muted">
+      This project is informational. Always follow local laws, venue rules, and community etiquette.
+      Consent and respect come first — everywhere, always.
+    </p>
+  </section>
 </main>
 
 <script src="./config.js"></script>
