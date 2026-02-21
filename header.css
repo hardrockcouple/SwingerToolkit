@@ -169,10 +169,10 @@
 /* dropdown */
 .has-dropdown .dropdown{
   position: absolute;
-  top: 100%;                 /* ✅ encostado ao item */
+  top: calc(100% - 4px);   /* 🔥 sobe o dropdown */
   margin-top: 6px;           /* ✅ pequeno espaço sem “buraco” */
   left: 50%;
-  transform: translateX(-50%) translateY(8px);
+  transform: translateX(-50%) translateY(4px);
 
   padding: 10px 12px;
   border-radius: 14px;
