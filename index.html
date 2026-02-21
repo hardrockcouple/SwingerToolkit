@@ -11,22 +11,22 @@
 </head>
 <body>
 
-  <!-- Header injected by header-loader.js -->
+  <!-- Header injected -->
   <div id="siteHeader"></div>
 
   <main class="main-content home">
     <section class="hero">
       <p class="kicker">SWINGER TOOLKIT</p>
-      <h1>Your curated guide to clubs, brands & destinations</h1>
+      <h1>Your curated guide to clubs, brands &amp; destinations</h1>
       <p class="lead">
-        XXXWe’re a swinger couple for nearly 10 years. After countless trips, nights out, and real-world experience,
+        We’re a swinger couple for nearly 10 years. After countless trips, nights out, and real-world experience,
         we realized the best information is scattered across forums, blogs, and outdated posts.
         This is our attempt to bring it together — clean, practical, and easy to use.
       </p>
 
       <div class="hero-actions">
         <a class="cta primary" href="clubs.html">Explore Clubs</a>
-        <a class="cta" href="capdagde.html">Explore Destinations</a>
+        <a class="cta" href="destinations.html">Explore Destinations</a>
         <a class="cta" href="shopping.html">Explore Shopping</a>
       </div>
     </section>
@@ -47,12 +47,12 @@
       <article class="feature">
         <h3>Destinations</h3>
         <p>Practical travel notes: where to stay, what to do, what to expect — from real visits.</p>
-        <a class="feature-link" href="capdagde.html">Go to Destinations →</a>
+        <a class="feature-link" href="destinations.html">Go to Destinations →</a>
       </article>
     </section>
 
     <section class="note" aria-label="Disclaimer">
-      <h2>Respect, consent & safety</h2>
+      <h2>Respect, consent &amp; safety</h2>
       <p class="muted">
         This project is informational. Always follow local laws, venue rules, and community etiquette.
         Consent and respect come first — everywhere, always.
@@ -62,11 +62,12 @@
 
   <script src="./config.js"></script>
 
-  <script type="module">
-    import { loadHeader } from "./header-loader.js";
-    import { initLogo } from "./ui-common.js";
+  <!-- inject header -->
+  <script src="./header-loader.js"></script>
 
-    await loadHeader();
+  <!-- init logo after header exists -->
+  <script type="module">
+    import { initLogo } from "./ui-common.js";
     initLogo();
   </script>
 
