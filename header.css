@@ -169,31 +169,25 @@
 /* dropdown */
 .has-dropdown .dropdown{
   position: absolute;
-  top: calc(100% - 4px);   /* 🔥 sobe o dropdown */
-  margin-top: 6px;           /* ✅ pequeno espaço sem “buraco” */
+  top: calc(100% - 4px);
   left: 50%;
   transform: translateX(-50%) translateY(4px);
 
-  padding: 10px 12px;
-  border-radius: 14px;
-
-  background: rgba(18,18,20,.98);
-  border: 1px solid rgba(255,255,255,.10);
-
-  box-shadow:
-    0 20px 40px rgba(0,0,0,.45),
-    0 0 0 1px rgba(212,175,55,.08);
-
   display: flex;
   flex-direction: row;
-  gap: 0;
   align-items: center;
-  white-space: nowrap;
+  gap: 18px;
+
+  padding: 6px 0;
+
+  background: transparent;      /* 🔥 sem fundo */
+  border: none;                 /* 🔥 sem border */
+  box-shadow: none;             /* 🔥 sem sombra */
 
   opacity: 0;
   pointer-events: none;
   transition: .2s ease;
-  z-index: 10;
+  white-space: nowrap;
 }
 
 .has-dropdown:hover .dropdown{
