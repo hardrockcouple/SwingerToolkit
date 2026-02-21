@@ -3,8 +3,8 @@ window.CONFIG = {
   // Fonte de dados (GitHub Pages: caminho relativo ao root do repo publicado)
   DATA_SOURCE: "./clubs.json",
 
-  // Logo
-  LOGO_PATH: "assets/img/logo_txt_full_140px.jpg",
+  // Logo (caminho relativo ao root do site)
+  logoUrl: "./assets/img/logo_txt_full_140px.jpg",
 
   // Nome do site
   SITE_NAME: "SW Clubs Directory",

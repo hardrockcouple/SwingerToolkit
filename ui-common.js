@@ -9,18 +9,32 @@ export function initLogo({ retries = 25, delayMs = 80 } = {}) {
     img.dataset.logoInit = "1";
 
     img.addEventListener("error", () => {
+      // Se falhar, tenta fallback uma vez (sem ficar “preso” invisível)
       img.style.visibility = "hidden";
     });
   }
 
+  function resolveUrl(path) {
+    // Garante URL absoluta (funciona bem em GH Pages e com base tags)
+    return new URL(path, document.baseURI).toString();
+  }
+
   function trySet() {
     const cfg = window.CONFIG || {};
-    if (cfg.LOGO_PATH) {
-      img.src = cfg.LOGO_PATH;
-      img.style.visibility = "visible";
-      return true;
-    }
-    return false;
+
+    // ✅ novo nome (logoUrl)
+    const path = cfg.logoUrl || cfg.LOGO_PATH; // mantém compatibilidade (opcional)
+    if (!path) return false;
+
+    const nextSrc = resolveUrl(path);
+
+    // evita reatribuir sempre (menos flicker)
+    if (img.src !== nextSrc) img.src = nextSrc;
+
+    img.decoding = "async";
+    img.loading = "eager";
+    img.style.visibility = "visible";
+    return true;
   }
 
   // tenta já
@@ -50,11 +64,11 @@ export function setActiveNav() {
 }
 
 export function updateLayoutVars() {
-  const nav = document.querySelector('.navbar');
+  const nav = document.querySelector(".navbar");
   if (!nav) return;
-  document.documentElement.style.setProperty('--navbar-h', `${nav.offsetHeight}px`);
+  document.documentElement.style.setProperty("--navbar-h", `${nav.offsetHeight}px`);
 }
 
 // mantém as vars actualizadas se o ecrã mudar
-window.addEventListener('resize', () => requestAnimationFrame(updateLayoutVars));
-window.addEventListener('orientationchange', () => requestAnimationFrame(updateLayoutVars));
+window.addEventListener("resize", () => requestAnimationFrame(updateLayoutVars));
+window.addEventListener("orientationchange", () => requestAnimationFrame(updateLayoutVars));

@@ -67,10 +67,14 @@
   <!-- inject header -->
   <script src="header-loader.js"></script>
 
-  <!-- init logo after header exists -->
+  <!-- init logo ONLY after header exists -->
   <script type="module">
-    import { initLogo } from './ui-common.js';
-    initLogo();
+    import { initLogo, updateLayoutVars } from "./ui-common.js";
+
+    window.addEventListener("header:loaded", () => {
+      initLogo();
+      updateLayoutVars();
+    });
   </script>
 
   <script
