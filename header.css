@@ -135,6 +135,24 @@
   color:var(--menu-hover);
 }
 
+/* ✅ enquanto o submenu está aberto, o botão fica dourado (sem mexer no HTML) */
+.has-dropdown:hover .nav-trigger,
+.has-dropdown:focus-within .nav-trigger{
+  color: var(--menu-hover);
+}
+
+/* ✅ underline no botão enquanto submenu está aberto */
+.has-dropdown:hover .nav-trigger::after,
+.has-dropdown:focus-within .nav-trigger::after{
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:-6px;
+  height:2px;
+  background:var(--menu-hover);
+}
+
 /* Se quiseres estado "active" no botão, podes aplicar via classe no HTML:
    <button class="nav-trigger active" ...> */
 .nav-trigger.active{
@@ -152,8 +170,9 @@
 
 /* =========================
    ✅ Dropdown HORIZONTAL
-   - mais perto do trigger
+   - ligeiramente mais baixo (2–4px)
    - não fecha ao atravessar (ponte invisível)
+   - links mais compactos
 ========================= */
 
 /* ponte invisível entre trigger e dropdown */
@@ -163,26 +182,26 @@
   left:-12px;
   right:-12px;
   top:100%;
-  height:12px; /* ✅ cobre o "gap" */
+  height:12px; /* cobre o "gap" */
 }
 
 /* dropdown */
 .has-dropdown .dropdown{
   position: absolute;
-  top: calc(100% - 4px);
+  top: calc(100% + 4px); /* ✅ desce só 4px */
   left: 50%;
-  transform: translateX(-50%) translateY(4px);
+  transform: translateX(-50%) translateY(2px);
 
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 18px;
+  gap: 0;                 /* ✅ controla-se pelos separadores */
 
-  padding: 6px 0;
+  padding: 4px 0;         /* ✅ mais compacto */
 
-  background: transparent;      /* 🔥 sem fundo */
-  border: none;                 /* 🔥 sem border */
-  box-shadow: none;             /* 🔥 sem sombra */
+  background: transparent;
+  border: none;
+  box-shadow: none;
 
   opacity: 0;
   pointer-events: none;
@@ -190,7 +209,10 @@
   white-space: nowrap;
 }
 
-.has-dropdown:hover .dropdown{
+/* ✅ manter aberto também quando o rato está no próprio menu */
+.has-dropdown:hover .dropdown,
+.has-dropdown:focus-within .dropdown,
+.dropdown:hover{
   opacity: 1;
   transform: translateX(-50%) translateY(0);
   pointer-events: auto;
@@ -201,7 +223,8 @@
   text-decoration: none;
   font-weight: 600;
   font-size: 14px;
-  padding: 6px 4px;
+
+  padding: 2px 8px;       /* ✅ menos altura/largura */
   position: relative;
   transition: .2s;
 }
@@ -210,9 +233,9 @@
   color: var(--menu-hover);
 }
 
-/* separadores */
+/* separadores (mais compactos) */
 .dropdown a + a{
   border-left: 1px solid rgba(255,255,255,.10);
-  margin-left: 10px;
-  padding-left: 14px;
+  margin-left: 8px;       /* ✅ menos espaço */
+  padding-left: 10px;     /* ✅ menos espaço */
 }
