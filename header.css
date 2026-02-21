@@ -59,7 +59,12 @@
   padding:12px var(--pad-x);
   display:flex;
   align-items:center;
-  justify-content:space-between;
+
+  /* ✅ controla a “respiração” entre logo e menu */
+  gap: 56px;
+
+  /* ❌ remove o afastamento extremo */
+  justify-content: flex-start;
 }
 
 .logo-link{
@@ -73,10 +78,14 @@
   width:auto;
 }
 
+/* ✅ menu com alinhamento mais natural e consistente */
 .navLinks{
   display:flex;
   gap:26px;
   align-items:center;
+
+  /* empurra o menu para a direita, mas sem “criar vazio” no meio */
+  margin-left: auto;
 }
 
 .navLinks a{
