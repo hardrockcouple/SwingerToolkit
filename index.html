@@ -11,70 +11,65 @@
 </head>
 <body>
 
-<header class="navbar">
-  <div class="nav-left">
-    <img id="siteLogo" class="logo-img" alt="Swinger Toolkit" />
-    <nav class="navLinks" aria-label="Menu">
-      <a href="index.html" class="active">Home</a>
-      <a href="clubs.html">Clubs</a>
-      <a href="shopping.html">Shopping</a>
-      <a href="capdagde.html">Cap D'Agde</a>
-      <a href="outras.html">Others</a>
-    </nav>
-  </div>
-</header>
+  <!-- Header injected by header-loader.js -->
+  <div id="siteHeader"></div>
 
-<main class="main-content home">
-  <section class="hero">
-    <p class="kicker">SWINGER TOOLKIT</p>
-    <h1>Your curated guide to clubs, brands & destinations</h1>
-    <p class="lead">
-      We’re a swinger couple for nearly 10 years. After countless trips, nights out, and real-world experience,
-      we realized the best information is scattered across forums, blogs, and outdated posts.
-      This is our attempt to bring it together — clean, practical, and easy to use.
-    </p>
+  <main class="main-content home">
+    <section class="hero">
+      <p class="kicker">SWINGER TOOLKIT</p>
+      <h1>Your curated guide to clubs, brands & destinations</h1>
+      <p class="lead">
+        We’re a swinger couple for nearly 10 years. After countless trips, nights out, and real-world experience,
+        we realized the best information is scattered across forums, blogs, and outdated posts.
+        This is our attempt to bring it together — clean, practical, and easy to use.
+      </p>
 
-    <div class="hero-actions">
-      <a class="cta primary" href="clubs.html">Explore Clubs</a>
-      <a class="cta" href="capdagde.html">Explore Destinations</a>
-      <a class="cta" href="shopping.html">Explore Shopping</a>
-    </div>
-  </section>
+      <div class="hero-actions">
+        <a class="cta primary" href="clubs.html">Explore Clubs</a>
+        <a class="cta" href="capdagde.html">Explore Destinations</a>
+        <a class="cta" href="shopping.html">Explore Shopping</a>
+      </div>
+    </section>
 
-  <section class="feature-grid" aria-label="What you’ll find here">
-    <article class="feature">
-      <h3>Clubs</h3>
-      <p>Search by country/city, open the map, and check details like opening times, rules and pricing.</p>
-      <a class="feature-link" href="clubs.html">Go to Clubs →</a>
-    </article>
+    <section class="feature-grid" aria-label="What you’ll find here">
+      <article class="feature">
+        <h3>Clubs</h3>
+        <p>Search by country/city, open the map, and check details like opening times, rules and pricing.</p>
+        <a class="feature-link" href="clubs.html">Go to Clubs →</a>
+      </article>
 
-    <article class="feature">
-      <h3>Shopping</h3>
-      <p>Curated brands and stores for outfits, lingerie, accessories and lifestyle essentials.</p>
-      <a class="feature-link" href="shopping.html">Go to Shopping →</a>
-    </article>
+      <article class="feature">
+        <h3>Shopping</h3>
+        <p>Curated brands and stores for outfits, lingerie, accessories and lifestyle essentials.</p>
+        <a class="feature-link" href="shopping.html">Go to Shopping →</a>
+      </article>
 
-    <article class="feature">
-      <h3>Destinations</h3>
-      <p>Practical travel notes: where to stay, what to do, what to expect — from real visits.</p>
-      <a class="feature-link" href="capdagde.html">Go to Destinations →</a>
-    </article>
-  </section>
+      <article class="feature">
+        <h3>Destinations</h3>
+        <p>Practical travel notes: where to stay, what to do, what to expect — from real visits.</p>
+        <a class="feature-link" href="capdagde.html">Go to Destinations →</a>
+      </article>
+    </section>
 
-  <section class="note" aria-label="Disclaimer">
-    <h2>Respect, consent & safety</h2>
-    <p class="muted">
-      This project is informational. Always follow local laws, venue rules, and community etiquette.
-      Consent and respect come first — everywhere, always.
-    </p>
-  </section>
-</main>
+    <section class="note" aria-label="Disclaimer">
+      <h2>Respect, consent & safety</h2>
+      <p class="muted">
+        This project is informational. Always follow local laws, venue rules, and community etiquette.
+        Consent and respect come first — everywhere, always.
+      </p>
+    </section>
+  </main>
 
-<script src="./config.js"></script>
-<script type="module">
-  import { initLogo } from "./ui-common.js";
-  initLogo();
-</script>
+  <script src="./config.js"></script>
+
+  <!-- inject header -->
+  <script src="./header-loader.js"></script>
+
+  <!-- init logo after header exists -->
+  <script type="module">
+    import { initLogo } from "./ui-common.js";
+    initLogo();
+  </script>
 
 </body>
 </html>
