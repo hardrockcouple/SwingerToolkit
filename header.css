@@ -71,6 +71,7 @@
 .navLinks{
   display:flex;
   gap:26px;
+  align-items:center;
 }
 
 .navLinks a{
@@ -111,12 +112,67 @@
   align-items: center;
 }
 
-/* ✅ Dropdown HORIZONTAL (substitui o bloco antigo) */
+/* =========================
+   Destinations trigger (sem link)
+   (assume HTML: <button class="nav-trigger" ...>)
+========================= */
+.nav-trigger{
+  appearance:none;
+  background:transparent;
+  border:0;
+  padding:0;
+  margin:0;
+  cursor:pointer;
+
+  color:var(--menu-normal);
+  font-weight:700;
+  font-size:inherit;
+  position:relative;
+  transition:.2s;
+}
+
+.nav-trigger:hover{
+  color:var(--menu-hover);
+}
+
+/* Se quiseres estado "active" no botão, podes aplicar via classe no HTML:
+   <button class="nav-trigger active" ...> */
+.nav-trigger.active{
+  color:var(--menu-hover);
+}
+.nav-trigger.active::after{
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:-6px;
+  height:2px;
+  background:var(--menu-hover);
+}
+
+/* =========================
+   ✅ Dropdown HORIZONTAL
+   - mais perto do trigger
+   - não fecha ao atravessar (ponte invisível)
+========================= */
+
+/* ponte invisível entre trigger e dropdown */
+.has-dropdown::after{
+  content:"";
+  position:absolute;
+  left:-12px;
+  right:-12px;
+  top:100%;
+  height:12px; /* ✅ cobre o "gap" */
+}
+
+/* dropdown */
 .has-dropdown .dropdown{
   position: absolute;
-  top: calc(100% + 10px);
+  top: 100%;                 /* ✅ encostado ao item */
+  margin-top: 6px;           /* ✅ pequeno espaço sem “buraco” */
   left: 50%;
-  transform: translateX(-50%) translateY(10px);
+  transform: translateX(-50%) translateY(8px);
 
   padding: 10px 12px;
   border-radius: 14px;
@@ -129,14 +185,15 @@
     0 0 0 1px rgba(212,175,55,.08);
 
   display: flex;
-  flex-direction: row;          /* ✅ horizontal */
-  gap: 0;                       /* vamos usar separadores */
+  flex-direction: row;
+  gap: 0;
   align-items: center;
-  white-space: nowrap;          /* ✅ não quebra linha */
+  white-space: nowrap;
 
   opacity: 0;
   pointer-events: none;
   transition: .2s ease;
+  z-index: 10;
 }
 
 .has-dropdown:hover .dropdown{
@@ -160,7 +217,7 @@
   background: rgba(255,255,255,.06);
 }
 
-/* ✅ separadores tipo " | " */
+/* separadores */
 .dropdown a + a{
   border-left: 1px solid rgba(255,255,255,.10);
   margin-left: 10px;
