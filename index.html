@@ -62,12 +62,11 @@
 
   <script src="./config.js"></script>
 
-  <!-- inject header -->
-  <script src="./header-loader.js"></script>
-
-  <!-- init logo after header exists -->
   <script type="module">
+    import { loadHeader } from "./header-loader.js";
     import { initLogo } from "./ui-common.js";
+
+    await loadHeader();
     initLogo();
   </script>
 

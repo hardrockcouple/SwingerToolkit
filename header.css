@@ -98,3 +98,8 @@
   height:2px;
   background:var(--menu-hover);
 }
+.logo-link{
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+}

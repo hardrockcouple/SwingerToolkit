@@ -1,28 +1,21 @@
+// header-loader.js (ES module)
 export async function loadHeader() {
-  try {
-    const response = await fetch("header.html");
-    const headerHTML = await response.text();
+  const mount = document.getElementById('siteHeader');
+  if (!mount) return;
 
-    // Inserir o header no início do body
-    document.body.insertAdjacentHTML("afterbegin", headerHTML);
+  // cache-bust para GH Pages não te baralhar
+  const res = await fetch(`./header.html?v=${Date.now()}`, { cache: 'no-store' });
+  if (!res.ok) throw new Error(`Failed to load header.html (HTTP ${res.status})`);
 
-    // Ativar link atual automaticamente
-    const currentPage = window.location.pathname.split("/").pop() || "index.html";
+  const html = await res.text();
+  mount.innerHTML = html;
 
-    const links = document.querySelectorAll(".navLinks a");
+  // marcar link activo automaticamente
+  const path = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
 
-    links.forEach(link => {
-      if (link.getAttribute("href") === currentPage) {
-        link.classList.add("active");
-      }
-    });
-
-    // Inicializar logo (já que agora ele é carregado dinamicamente)
-    if (window.initLogo) {
-      window.initLogo();
-    }
-
-  } catch (error) {
-    console.error("Erro ao carregar header:", error);
-  }
+  mount.querySelectorAll('.navLinks a').forEach(a => {
+    const href = (a.getAttribute('href') || '').toLowerCase();
+    if (href === path) a.classList.add('active');
+    else a.classList.remove('active');
+  });
 }
