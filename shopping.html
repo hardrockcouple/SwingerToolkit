@@ -21,17 +21,16 @@
   <script src="./config.js"></script>
 
   <!-- inject header -->
-  <script src="./header-loader.js"></script>
+  <script src="./header-loader.js" defer></script>
 
   <!-- init logo ONLY after header exists -->
   <script type="module">
-  import { initLogo } from "./ui-common.js";
+    import { initLogo } from "./ui-common.js";
 
-  // espera que o header seja injetado
-  window.addEventListener("header:loaded", () => {
-    initLogo();
-  }, { once: true });
-</script>
+    window.addEventListener("header:loaded", () => {
+      initLogo();
+    }, { once: true });
+  </script>
 
 </body>
 </html>

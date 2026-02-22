@@ -19,7 +19,7 @@
       <p class="kicker">SWINGER TOOLKIT</p>
       <h1>Your curated guide to clubs, brands &amp; destinations</h1>
       <p class="lead">
-        xxxWe’re a swinger couple for nearly 10 years. After countless trips, nights out, and real-world experience,
+        We’re a swinger couple for nearly 10 years. After countless trips, nights out, and real-world experience,
         we realized the best information is scattered across forums, blogs, and outdated posts.
         This is our attempt to bring it together — clean, practical, and easy to use.
       </p>
@@ -63,17 +63,16 @@
   <script src="./config.js"></script>
 
   <!-- inject header -->
-  <script src="./header-loader.js"></script>
+  <script src="./header-loader.js" defer></script>
 
   <!-- init logo ONLY after header exists -->
- <script type="module">
-  import { initLogo } from "./ui-common.js";
+  <script type="module">
+    import { initLogo } from "./ui-common.js";
 
-  // espera que o header seja injetado
-  window.addEventListener("header:loaded", () => {
-    initLogo();
-  }, { once: true });
-</script>
+    window.addEventListener("header:loaded", () => {
+      initLogo();
+    }, { once: true });
+  </script>
 
 </body>
 </html>

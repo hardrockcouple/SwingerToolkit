@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Clubs – Swinger Toolkit</title>
 
-  <link rel="stylesheet" href="styles.css" />
-  <link rel="stylesheet" href="header.css" />
-  <link rel="stylesheet" href="clubs.css" />
+  <link rel="stylesheet" href="./styles.css" />
+  <link rel="stylesheet" href="./header.css" />
+  <link rel="stylesheet" href="./clubs.css" />
 
   <!-- Leaflet (map) -->
   <link
@@ -26,7 +26,13 @@
   <main class="main-content">
     <section class="clubs-toolbar" aria-label="Filtros">
       <div class="toolbar-row">
-        <input id="searchInput" class="input" type="search" placeholder="Search by name..." autocomplete="off" />
+        <input
+          id="searchInput"
+          class="input"
+          type="search"
+          placeholder="Search by name..."
+          autocomplete="off"
+        />
 
         <select id="countrySelect" class="select" aria-label="Country">
           <option value="">Country</option>
@@ -62,20 +68,19 @@
     <div id="modalBody" class="modal-body"></div>
   </aside>
 
-  <script src="config.js"></script>
+  <script src="./config.js"></script>
 
   <!-- inject header -->
-  <script src="header-loader.js"></script>
+  <script src="./header-loader.js" defer></script>
 
   <!-- init logo ONLY after header exists -->
- <script type="module">
-  import { initLogo } from "./ui-common.js";
+  <script type="module">
+    import { initLogo } from "./ui-common.js";
 
-  // espera que o header seja injetado
-  window.addEventListener("header:loaded", () => {
-    initLogo();
-  }, { once: true });
-</script>
+    window.addEventListener("header:loaded", () => {
+      initLogo();
+    }, { once: true });
+  </script>
 
   <script
     src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
@@ -83,6 +88,6 @@
     crossorigin=""
   ></script>
 
-  <script src="clubs.js"></script>
+  <script src="./clubs.js"></script>
 </body>
 </html>
