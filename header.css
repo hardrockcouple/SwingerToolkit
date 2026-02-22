@@ -220,7 +220,6 @@
   padding-left: 10px;
 }
 .drink-btn{
-  margin-left: 28px;
   padding: 10px 18px;
   border-radius: 999px;
 
@@ -242,8 +241,20 @@
 
   transition: all .25s ease;
 }
+.drink-link{
+  padding: 8px 16px;
+  border-radius: 999px;
 
-.drink-btn:hover{
-  box-shadow: 0 0 20px rgba(212,175,55,.25);
-  transform: translateY(-1px);
+  border: 1px solid rgba(212,175,55,.6);
+  color: rgba(212,175,55,.9);
+
+  font-weight: 600;
+  letter-spacing: .05em;
+
+  transition: all .25s ease;
+}
+
+.drink-link:hover{
+  background: rgba(212,175,55,.08);
+  box-shadow: 0 0 16px rgba(212,175,55,.25);
 }
