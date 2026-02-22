@@ -23,11 +23,29 @@
 }
 
 .kicker{
-  margin: 0 0 10px;
+  margin: 0 0 12px;
+
+  /* vibe do logo: caps + tracking alto */
+  text-transform: uppercase;
+  letter-spacing: .28em;
   font-weight: 800;
-  letter-spacing: .16em;
   font-size: 12px;
-  color: rgba(211,169,74,.95);
+
+  /* dourado mais “metal” */
+  color: rgba(212,175,55,.92);
+
+  /* dá aquele “brilho” subtil */
+  text-shadow:
+    0 1px 0 rgba(0,0,0,.55),
+    0 0 18px rgba(212,175,55,.10);
+}
+
+/* faz o “— LIFESTYLE —” ficar mais discreto */
+.kicker span{
+  opacity: .45;              /* menos visível */
+  font-weight: 700;
+  letter-spacing: .34em;
+  color: rgba(212,175,55,.75);
 }
 
 .hero h1{
