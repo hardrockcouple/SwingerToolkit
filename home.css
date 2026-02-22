@@ -23,51 +23,53 @@
 }
 
 .kicker{
-  margin: 0 0 12px;
+  margin: 0 0 18px;
+  text-align: center;
 
-  /* vibe do logo: caps + tracking alto */
-  text-transform: uppercase;
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  font-size: 18px;                 /* maior */
   letter-spacing: .28em;
-  font-weight: 800;
-  font-size: 12px;
+  text-transform: uppercase;
 
-  /* dourado mais “metal” */
-  color: rgba(212,175,55,.92);
+  background: linear-gradient(
+    180deg,
+    #f6d97a 0%,
+    #d4af37 45%,
+    #9f7d21 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 
-  /* dá aquele “brilho” subtil */
   text-shadow:
-    0 1px 0 rgba(0,0,0,.55),
-    0 0 18px rgba(212,175,55,.10);
+    0 1px 0 rgba(0,0,0,.6),
+    0 0 20px rgba(212,175,55,.15);
 }
 
-/* faz o “— LIFESTYLE —” ficar mais discreto */
+/* lifestyle menos visível */
 .kicker span{
-  opacity: .45;              /* menos visível */
-  font-weight: 700;
-  letter-spacing: .34em;
-  color: rgba(212,175,55,.75);
+  opacity: .45;
+  font-size: .75em;
+  letter-spacing: .35em;
 }
 
 .hero h1{
-  margin: 0 0 16px;
-  font-size: 28px;
-  line-height: 1.2;
+  margin: 0 0 14px;
+  font-size: 26px;      /* mais pequeno */
   font-weight: 700;
+  line-height: 1.25;
+  text-align: center;   /* alinhado com o kicker */
 }
 
 .lead{
-  margin: 0 0 18px;
-  font-size: 17px;
-  line-height: 1.65;
-  color: rgba(255,255,255,.82);
-  max-width: 72ch;
+  margin: 0 auto 22px;
+  text-align: center;
+  max-width: 680px;
+  font-size: 15px;
 }
 
 .hero-actions{
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 10px;
+  justify-content: center;
 }
 
 .cta{
