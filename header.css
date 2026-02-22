@@ -16,14 +16,20 @@
   --navbar-h: 104px;
 }
 
-.navbar{
+/* ✅ sticky aplicado ao wrapper do header injetado */
+#siteHeader{
   position: sticky;
-  top: 0;                 /* ✅ isto é o que faltava */
+  top: 0;
   z-index: 300;
   background: var(--header-bg);
-  border-bottom: 0;
-
   isolation: isolate;
+}
+
+/* navbar deixa de ser sticky (para evitar conflitos) */
+.navbar{
+  position: relative;
+  background: var(--header-bg);
+  border-bottom: 0;
   overflow: visible;
 }
 
@@ -60,10 +66,10 @@
   display:flex;
   align-items:center;
 
-  /* ✅ controla a “respiração” entre logo e menu */
+  /* ✅ respiração entre logo e menu */
   gap: 56px;
 
-  /* ❌ remove o afastamento extremo */
+  /* ✅ sem afastamento extremo */
   justify-content: flex-start;
 }
 
@@ -78,13 +84,11 @@
   width:auto;
 }
 
-/* ✅ menu com alinhamento mais natural e consistente */
+/* ✅ menu mais para a direita, sem “vazio” no meio */
 .navLinks{
   display:flex;
   gap:26px;
   align-items:center;
-
-  /* empurra o menu para a direita, mas sem “criar vazio” no meio */
   margin-left: auto;
 }
 
@@ -96,13 +100,9 @@
   transition:.2s;
 }
 
-.navLinks a:hover{
-  color:var(--menu-hover);
-}
+.navLinks a:hover{ color:var(--menu-hover); }
 
-.navLinks a.active{
-  color:var(--menu-hover);
-}
+.navLinks a.active{ color:var(--menu-hover); }
 
 .navLinks a.active::after{
   content:"";
@@ -138,14 +138,10 @@
   transition:.2s;
 }
 
-.nav-trigger:hover{
-  color:var(--menu-hover);
-}
+.nav-trigger:hover{ color:var(--menu-hover); }
 
 /* Estado active opcional */
-.nav-trigger.active{
-  color:var(--menu-hover);
-}
+.nav-trigger.active{ color:var(--menu-hover); }
 .nav-trigger.active::after{
   content:"";
   position:absolute;
@@ -188,8 +184,8 @@
 .has-dropdown .dropdown{
   position: absolute;
 
-  /* ✅ mais perto do menu principal */
-  top: calc(100% + 2px);
+  /* ✅ 2–4px abaixo do menu principal */
+  top: calc(100% + 3px);
   left: 50%;
   transform: translateX(-50%) translateY(2px);
 
@@ -198,7 +194,7 @@
   align-items: center;
 
   /* ✅ itens menos afastados */
-  gap: 10px;
+  gap: 8px;
 
   padding: 4px 0;
 
@@ -225,17 +221,14 @@
   font-size: 14px;
 
   padding: 2px 4px;
-  position: relative;
   transition: .2s;
 }
 
-.dropdown a:hover{
-  color: var(--menu-hover);
-}
+.dropdown a:hover{ color: var(--menu-hover); }
 
-/* separadores (mais compactos) */
+/* separadores compactos */
 .dropdown a + a{
   border-left: 1px solid rgba(255,255,255,.10);
-  margin-left: 8px;
-  padding-left: 12px;
+  margin-left: 6px;
+  padding-left: 10px;
 }
