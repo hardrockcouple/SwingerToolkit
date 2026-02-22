@@ -57,7 +57,14 @@
   pointer-events:none;
 }
 
-max-width
+/* ✅ LAYOUT PRINCIPAL (isto faltava) */
+.nav-left{
+  width: 100%;
+  padding: 12px 28px;      /* logo mais à esquerda + menu mais à direita */
+  display: flex;
+  align-items: center;
+  gap: 56px;               /* “respiração” entre logo e menu */
+}
 
 .logo-link{
   display: inline-flex;
@@ -66,11 +73,12 @@ max-width
 }
 
 .logo-img{
-  height:82px;
-  width:auto;
+  height: 82px;
+  width: auto;
+  display: block;
 }
 
-/* ✅ menu mais para a direita, sem “vazio” no meio */
+/* ✅ menu à direita */
 .navLinks{
   display:flex;
   gap:26px;
@@ -85,11 +93,9 @@ max-width
   position:relative;
   transition:.2s;
 }
-
 .navLinks a:hover{ color:var(--menu-hover); }
 
 .navLinks a.active{ color:var(--menu-hover); }
-
 .navLinks a.active::after{
   content:"";
   position:absolute;
@@ -123,10 +129,9 @@ max-width
   position:relative;
   transition:.2s;
 }
-
 .nav-trigger:hover{ color:var(--menu-hover); }
 
-/* Estado active opcional */
+/* Estado active (quando estás em destinations.html) */
 .nav-trigger.active{ color:var(--menu-hover); }
 .nav-trigger.active::after{
   content:"";
@@ -170,18 +175,16 @@ max-width
 .has-dropdown .dropdown{
   position: absolute;
 
-  /* ✅ 2–4px abaixo do menu principal */
-  top: calc(100% + 3px);
+  /* ✅ um bocadinho mais abaixo do menu */
+  top: calc(100% + 6px);                /* estava +3px */
   left: 50%;
-  transform: translateX(-50%) translateY(2px);
+  transform: translateX(-50%) translateY(4px);
 
   display: flex;
   flex-direction: row;
   align-items: center;
 
-  /* ✅ itens menos afastados */
   gap: 8px;
-
   padding: 4px 0;
 
   background: transparent;
@@ -205,11 +208,9 @@ max-width
   text-decoration: none;
   font-weight: 600;
   font-size: 14px;
-
   padding: 2px 4px;
   transition: .2s;
 }
-
 .dropdown a:hover{ color: var(--menu-hover); }
 
 /* separadores compactos */
