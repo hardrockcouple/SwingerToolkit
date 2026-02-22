@@ -57,21 +57,7 @@
   pointer-events:none;
 }
 
-.nav-left{
-  width:100%;
-  max-width: var(--maxw);
-  margin: 0 auto;
-
-  padding:12px var(--pad-x);
-  display:flex;
-  align-items:center;
-
-  /* ✅ respiração entre logo e menu */
-  gap: 56px;
-
-  /* ✅ sem afastamento extremo */
-  justify-content: flex-start;
-}
+max-width
 
 .logo-link{
   display: inline-flex;
