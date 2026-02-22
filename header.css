@@ -18,7 +18,7 @@
 
 .navbar{
   position: sticky;
-  top: 0;
+  top: 0;                 /* ✅ isto é o que faltava */
   z-index: 300;
   background: var(--header-bg);
   border-bottom: 0;
