@@ -698,3 +698,24 @@ body.modal-open{
     0 0 0 3px rgba(211,169,74,.18),
     0 0 32px rgba(211,169,74,.35) !important;
 }
+
+.club-tooltip{
+  background: rgba(18,18,20,.96);
+  border: 1px solid rgba(211,169,74,.55);
+  color: #fff;
+  font-weight: 700;
+  font-size: 12px;
+  padding: 6px 10px;
+  border-radius: 10px;
+
+  box-shadow:
+    0 8px 24px rgba(0,0,0,.55),
+    0 0 16px rgba(211,169,74,.15);
+
+  backdrop-filter: blur(2px);
+}
+
+/* remove default tooltip arrow shadow */
+.leaflet-tooltip-top:before{
+  border-top-color: rgba(211,169,74,.55) !important;
+}

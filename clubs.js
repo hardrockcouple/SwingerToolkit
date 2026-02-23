@@ -439,8 +439,16 @@
         `<b>${escapeHtml(c.name)}</b><br>` +
         `${escapeHtml(c.city || '')}${c.city && c.country ? ', ' : ''}${escapeHtml(c.country || '')}`;
 
-      m.bindPopup(popup, { closeButton: false });
-      m.on('click', () => openModal(c));
+// Tooltip on hover (nome do clube)
+m.bindTooltip(escapeHtml(c.name), {
+  direction: 'top',
+  offset: [0, -8],
+  opacity: 0.95,
+  className: 'club-tooltip'
+});
+
+// Click abre modal
+m.on('click', () => openModal(c));
 
       markersLayer.addLayer(m);
     });
