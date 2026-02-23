@@ -597,3 +597,75 @@ select option{ background: #121212; color: #fff; }
 body.modal-open{
   overflow: hidden;
 }
+/* =========================
+   Map markers + clusters (Gold theme)
+========================= */
+
+/* Single club dot (divIcon) */
+.club-dot span{
+  display:block;
+  width:12px;
+  height:12px;
+  border-radius:50%;
+  background: rgba(211,169,74,.95);
+  box-shadow:
+    0 0 0 2px rgba(0,0,0,.60),
+    0 0 14px rgba(211,169,74,.28);
+}
+
+/* Cluster base */
+.marker-cluster{
+  background: transparent !important;
+}
+
+/* Outer ring */
+.marker-cluster > div{
+  width: 40px !important;
+  height: 40px !important;
+  margin-left: -20px !important;
+  margin-top: -20px !important;
+
+  border-radius: 999px !important;
+
+  background:
+    radial-gradient(circle at 30% 30%,
+      rgba(255,255,255,.14),
+      rgba(0,0,0,0) 45%),
+    radial-gradient(circle at 50% 60%,
+      rgba(211,169,74,.35),
+      rgba(0,0,0,0) 65%),
+    rgba(10,10,10,.88) !important;
+
+  border: 1px solid rgba(211,169,74,.70) !important;
+
+  box-shadow:
+    0 10px 26px rgba(0,0,0,.55),
+    0 0 0 3px rgba(211,169,74,.10),
+    0 0 18px rgba(211,169,74,.18) !important;
+
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+}
+
+/* Count text */
+.marker-cluster div span{
+  color: rgba(211,169,74,.98) !important;
+  font-weight: 900 !important;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif !important;
+  font-size: 13px !important;
+  text-shadow: 0 1px 0 rgba(0,0,0,.65);
+}
+
+/* Slightly bigger cluster sizes */
+.marker-cluster-small > div{ transform: scale(0.95); }
+.marker-cluster-medium > div{ transform: scale(1.05); }
+.marker-cluster-large > div{ transform: scale(1.15); }
+
+/* Optional: hover glow */
+.marker-cluster:hover > div{
+  box-shadow:
+    0 12px 30px rgba(0,0,0,.60),
+    0 0 0 3px rgba(211,169,74,.14),
+    0 0 26px rgba(211,169,74,.28) !important;
+}
