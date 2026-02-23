@@ -3,7 +3,7 @@
 (function () {
   const $ = (id) => document.getElementById(id);
 
-  // Mantém a altura dos filtros em CSS var para o layout (top padding / drawers)
+  // Mantém a altura dos filtros em CSS var para o layout
   function updateFiltersVar() {
     const bar = document.querySelector('.clubs-toolbar');
     if (!bar) return;
@@ -33,6 +33,8 @@
 
   let mode = 'grid';
   let map = null;
+
+  // ✅ MarkerCluster layer
   let markersLayer = null;
 
   // calcula já e mantém actualizado
@@ -55,7 +57,6 @@
     const city = safeText(raw.city || raw.town);
     const website = safeText(raw.website || raw.url);
 
-    // geo may come in many shapes
     const lat = Number(raw.lat ?? raw.latitude ?? raw.Latitude ?? raw.LAT);
     const lng = Number(raw.lng ?? raw.lon ?? raw.long ?? raw.longitude ?? raw.Longitude ?? raw.LNG);
 
@@ -63,7 +64,7 @@
 
     return {
       ...raw,
-      name: name,
+      name,
       country: country || '',
       city: city || '',
       website: website || '',
@@ -90,7 +91,6 @@
     if (mode === 'map') {
       ensureMap();
       refreshMap();
-      // Leaflet needs invalidateSize after display
       setTimeout(() => map && map.invalidateSize(), 50);
     }
   }
@@ -118,7 +118,8 @@
 
   function fillCountries() {
     const countries = uniqSorted(allClubs.map((c) => c.country));
-    els.country.innerHTML = '<option value="">Country</option>' +
+    els.country.innerHTML =
+      '<option value="">Country</option>' +
       countries.map((c) => `<option value="${escapeHtmlAttr(c)}">${escapeHtml(c)}</option>`).join('');
   }
 
@@ -127,7 +128,8 @@
     const cities = uniqSorted(allClubs.filter((c) => !ctry || c.country === ctry).map((c) => c.city));
 
     els.city.disabled = cities.length === 0;
-    els.city.innerHTML = '<option value="">City</option>' +
+    els.city.innerHTML =
+      '<option value="">City</option>' +
       cities.map((c) => `<option value="${escapeHtmlAttr(c)}">${escapeHtml(c)}</option>`).join('');
   }
 
@@ -150,17 +152,6 @@
 
   function escapeHtmlAttr(s) {
     return escapeHtml(s).replaceAll('`', '&#096;');
-  }
-  
-  function prettyDomain(url) {
-    const u = safeText(url);
-    if (!u) return '';
-    try {
-      const parsed = new URL(u);
-      return parsed.hostname.replace(/^www\./, '');
-    } catch {
-      return u.replace(/^https?:\/\//, '').replace(/^www\./, '');
-    }
   }
 
   function normalizeTel(phone) {
@@ -205,17 +196,19 @@
       ['sunday', 'Sun'],
     ];
 
-    const rows = days.map(([key, label]) => {
-      const raw = safeText(c[`open_time_${key}`]);
-      const isClosed = !raw || raw.toLowerCase() === 'closed';
-      const display = isClosed ? 'Closed' : raw;
-      return `
-        <tr class="${isClosed ? 'closed' : ''}">
-          <td class="d">${label}</td>
-          <td class="h">${escapeHtml(display)}</td>
-        </tr>
-      `;
-    }).join('');
+    const rows = days
+      .map(([key, label]) => {
+        const raw = safeText(c[`open_time_${key}`]);
+        const isClosed = !raw || raw.toLowerCase() === 'closed';
+        const display = isClosed ? 'Closed' : raw;
+        return `
+          <tr class="${isClosed ? 'closed' : ''}">
+            <td class="d">${label}</td>
+            <td class="h">${escapeHtml(display)}</td>
+          </tr>
+        `;
+      })
+      .join('');
 
     const note = safeText(c.open_time_notes);
     const noteHtml = note ? `<div class="hours-note">${escapeHtml(note)}</div>` : '';
@@ -230,7 +223,6 @@
 
   function renderGrid() {
     els.gridView.innerHTML = '';
-
     const frag = document.createDocumentFragment();
 
     filtered.forEach((c) => {
@@ -269,9 +261,7 @@
 
   function openModal(c) {
     const typeInline = safeText(c.type);
-    const typeBadge = typeInline
-      ? `<span class="modal-type-badge">${escapeHtml(typeInline)}</span>`
-      : '';
+    const typeBadge = typeInline ? `<span class="modal-type-badge">${escapeHtml(typeInline)}</span>` : '';
 
     els.modalTitle.innerHTML = `
       <span class="modal-title-text">${escapeHtml(c.name || '—')}</span>
@@ -279,33 +269,25 @@
     `;
 
     const websiteBtn = c.website
-      ? `<a class="modal-btn primary" href="${escapeHtmlAttr(c.website)}" target="_blank" rel="noopener noreferrer">
-           Website
-         </a>`
+      ? `<a class="modal-btn primary" href="${escapeHtmlAttr(c.website)}" target="_blank" rel="noopener noreferrer">Website</a>`
       : '';
 
-    const mapHref = (c.lat != null && c.lng != null && String(c.lat).trim() && String(c.lng).trim())
-      ? `https://www.google.com/maps?q=${encodeURIComponent(String(c.lat).trim() + ',' + String(c.lng).trim())}`
-      : '';
+    const mapHref =
+      c.lat != null && c.lng != null && String(c.lat).trim() && String(c.lng).trim()
+        ? `https://www.google.com/maps?q=${encodeURIComponent(String(c.lat).trim() + ',' + String(c.lng).trim())}`
+        : '';
 
     const mapBtn = mapHref
       ? `<a class="modal-btn" href="${escapeHtmlAttr(mapHref)}" target="_blank" rel="noopener noreferrer">Maps</a>`
       : '';
 
     const tel = normalizeTel(c.phone);
-
     const phoneBtn = tel
-      ? `<a class="modal-btn"
-        href="tel:${escapeHtmlAttr(tel)}"
-        title="${escapeHtml(c.phone)}">
-        Phone
-        </a>`
+      ? `<a class="modal-btn" href="tel:${escapeHtmlAttr(tel)}" title="${escapeHtml(c.phone)}">Phone</a>`
       : '';
 
     const email = safeText(c.email);
-    const emailBtn = email
-      ? `<a class="modal-btn" href="mailto:${escapeHtmlAttr(email)}">Email</a>`
-      : '';
+    const emailBtn = email ? `<a class="modal-btn" href="mailto:${escapeHtmlAttr(email)}">Email</a>` : '';
 
     const location = [safeText(c.city), safeText(c.country)].filter(Boolean).join(', ') || '—';
     const address = safeText(c.address) || '—';
@@ -324,15 +306,14 @@
 
     const amenities = amenitiesFromClub(c);
     const amenitiesHtml = amenities.length
-      ? `<div class="amenities">${amenities.map(a => `<span class="amenity">${escapeHtml(a)}</span>`).join('')}</div>`
+      ? `<div class="amenities">${amenities.map((a) => `<span class="amenity">${escapeHtml(a)}</span>`).join('')}</div>`
       : `<span class="muted">—</span>`;
 
-    // ✅ ÚNICA ALTERAÇÃO: Notes vai para dentro do painel Entry (logo após Pricing model)
     const notesInlineHtml = notes.length
       ? `
         <div class="modal-subsection" style="margin-top: 12px;">
           <div class="modal-subtitle">Notes</div>
-          <ul class="notes">${notes.map(n => `<li>${escapeHtml(n)}</li>`).join('')}</ul>
+          <ul class="notes">${notes.map((n) => `<li>${escapeHtml(n)}</li>`).join('')}</ul>
         </div>
       `
       : '';
@@ -378,10 +359,8 @@
     els.modal.classList.add('open');
     els.overlay.setAttribute('aria-hidden', 'false');
     els.modal.setAttribute('aria-hidden', 'false');
-
     document.body.classList.add('modal-open');
 
-    // focus close button for accessibility
     setTimeout(() => els.modalClose.focus(), 0);
   }
 
@@ -412,7 +391,21 @@
       maxZoom: 19,
     }).addTo(map);
 
-    markersLayer = L.layerGroup().addTo(map);
+    // ✅ cluster layer (se plugin existir)
+    if (L.markerClusterGroup) {
+      markersLayer = L.markerClusterGroup({
+        showCoverageOnHover: false,
+        spiderfyOnMaxZoom: true,
+        disableClusteringAtZoom: 12,
+        maxClusterRadius: 50,
+      });
+    } else {
+      // fallback se o plugin não carregar por algum motivo
+      markersLayer = L.layerGroup();
+      console.warn('MarkerCluster não encontrado — a usar layerGroup fallback.');
+    }
+
+    markersLayer.addTo(map);
   }
 
   function refreshMap() {
@@ -424,23 +417,38 @@
 
     filtered.forEach((c) => {
       if (c.lat == null || c.lng == null) return;
-      points.push([c.lat, c.lng]);
 
-      const m = L.circleMarker([c.lat, c.lng], {
-        radius: 7,
-        weight: 2,
-        color: '#d3a94a',
-        fillColor: '#d3a94a',
-        fillOpacity: 0.35,
+      const lat = Number(c.lat);
+      const lng = Number(c.lng);
+      if (!Number.isFinite(lat) || !Number.isFinite(lng)) return;
+
+      points.push([lat, lng]);
+
+      // ✅ circleMarker é bonito mas não clusteriza no plugin
+      // por isso usamos marker com divIcon “dot”
+      const icon = L.divIcon({
+        className: 'club-dot',
+        html: '<span></span>',
+        iconSize: [14, 14],
+        iconAnchor: [7, 7],
       });
 
-      const popup = `<b>${escapeHtml(c.name)}</b><br>${escapeHtml(c.city || '')}${c.city && c.country ? ', ' : ''}${escapeHtml(c.country || '')}`;
-      m.bindPopup(popup);
+      const m = L.marker([lat, lng], { icon });
+
+      const popup =
+        `<b>${escapeHtml(c.name)}</b><br>` +
+        `${escapeHtml(c.city || '')}${c.city && c.country ? ', ' : ''}${escapeHtml(c.country || '')}`;
+
+      m.bindPopup(popup, { closeButton: false });
       m.on('click', () => openModal(c));
-      m.addTo(markersLayer);
+
+      markersLayer.addLayer(m);
     });
 
-    if (points.length) {
+    // ✅ ajustar bounds
+    if (points.length === 1) {
+      map.setView(points[0], 12);
+    } else if (points.length > 1) {
       try {
         map.fitBounds(points, { padding: [30, 30] });
       } catch (_) {
@@ -451,13 +459,11 @@
 
   async function loadClubs() {
     try {
-      // cache-bust to avoid GH Pages caching surprises
       const url = `clubs.json?v=${Date.now()}`;
       const res = await fetch(url, { cache: 'no-store' });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
 
-      // Data can be an array or object with key
       const list = Array.isArray(data) ? data : (data.clubs || data.items || []);
       allClubs = list.map(normalizeClub).filter(Boolean);
 
@@ -469,7 +475,8 @@
     } catch (err) {
       console.error('Erro a carregar clubs.json:', err);
       els.count.textContent = '0 results';
-      els.gridView.innerHTML = '<div style="max-width:1100px;margin:0 auto;color:rgba(255,255,255,.75)">Erro a carregar os clubs. Vê a consola.</div>';
+      els.gridView.innerHTML =
+        '<div style="max-width:1100px;margin:0 auto;color:rgba(255,255,255,.75)">Erro a carregar os clubs. Vê a consola.</div>';
     }
   }
 
