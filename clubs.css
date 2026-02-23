@@ -597,75 +597,104 @@ select option{ background: #121212; color: #fff; }
 body.modal-open{
   overflow: hidden;
 }
+
 /* =========================
-   Map markers + clusters (Gold theme)
+   ✅ Map markers + clusters (Gold refined)
 ========================= */
 
-/* Single club dot (divIcon) */
+/* ---------- Individual club dot ---------- */
+.club-dot{
+  background: transparent !important;
+  border: none !important;
+}
+
 .club-dot span{
   display:block;
-  width:12px;
-  height:12px;
+  width:13px;
+  height:13px;
   border-radius:50%;
+
   background: rgba(211,169,74,.95);
+
   box-shadow:
-    0 0 0 2px rgba(0,0,0,.60),
-    0 0 14px rgba(211,169,74,.28);
+    0 0 0 2px rgba(0,0,0,.65),
+    0 0 10px rgba(211,169,74,.35),
+    0 0 18px rgba(211,169,74,.18);
+
+  transition: transform .15s ease, box-shadow .15s ease;
 }
 
-/* Cluster base */
+.club-dot:hover span{
+  transform: scale(1.15);
+  box-shadow:
+    0 0 0 2px rgba(0,0,0,.75),
+    0 0 16px rgba(211,169,74,.55),
+    0 0 28px rgba(211,169,74,.28);
+}
+
+
+/* ---------- Cluster container reset ---------- */
 .marker-cluster{
   background: transparent !important;
+  border: none !important;
 }
 
-/* Outer ring */
+
+/* ---------- Cluster visual ---------- */
 .marker-cluster > div{
-  width: 40px !important;
-  height: 40px !important;
-  margin-left: -20px !important;
-  margin-top: -20px !important;
+  width: 42px !important;
+  height: 42px !important;
+  margin-left: -21px !important;
+  margin-top: -21px !important;
 
   border-radius: 999px !important;
 
   background:
     radial-gradient(circle at 30% 30%,
-      rgba(255,255,255,.14),
+      rgba(255,255,255,.15),
       rgba(0,0,0,0) 45%),
-    radial-gradient(circle at 50% 60%,
-      rgba(211,169,74,.35),
-      rgba(0,0,0,0) 65%),
-    rgba(10,10,10,.88) !important;
+    radial-gradient(circle at 50% 65%,
+      rgba(211,169,74,.38),
+      rgba(0,0,0,0) 70%),
+    rgba(12,12,14,.92) !important;
 
-  border: 1px solid rgba(211,169,74,.70) !important;
+  border: 1px solid rgba(211,169,74,.75) !important;
 
   box-shadow:
-    0 10px 26px rgba(0,0,0,.55),
+    0 12px 30px rgba(0,0,0,.60),
     0 0 0 3px rgba(211,169,74,.10),
-    0 0 18px rgba(211,169,74,.18) !important;
+    0 0 22px rgba(211,169,74,.22) !important;
 
   display:flex !important;
   align-items:center !important;
   justify-content:center !important;
+
+  transition: transform .15s ease, box-shadow .15s ease;
 }
 
-/* Count text */
+
+/* ---------- Cluster count text ---------- */
 .marker-cluster div span{
   color: rgba(211,169,74,.98) !important;
   font-weight: 900 !important;
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif !important;
   font-size: 13px !important;
+  letter-spacing: .02em;
   text-shadow: 0 1px 0 rgba(0,0,0,.65);
 }
 
-/* Slightly bigger cluster sizes */
-.marker-cluster-small > div{ transform: scale(0.95); }
+
+/* ---------- Cluster size scaling ---------- */
+.marker-cluster-small > div{ transform: scale(.95); }
 .marker-cluster-medium > div{ transform: scale(1.05); }
 .marker-cluster-large > div{ transform: scale(1.15); }
 
-/* Optional: hover glow */
+
+/* ---------- Hover glow ---------- */
 .marker-cluster:hover > div{
+  transform: scale(1.1);
   box-shadow:
-    0 12px 30px rgba(0,0,0,.60),
-    0 0 0 3px rgba(211,169,74,.14),
-    0 0 26px rgba(211,169,74,.28) !important;
+    0 16px 38px rgba(0,0,0,.70),
+    0 0 0 3px rgba(211,169,74,.18),
+    0 0 32px rgba(211,169,74,.35) !important;
 }
