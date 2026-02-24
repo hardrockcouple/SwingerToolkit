@@ -290,7 +290,19 @@
     const emailBtn = email ? `<a class="modal-btn" href="mailto:${escapeHtmlAttr(email)}">Email</a>` : '';
 
     const location = [safeText(c.city), safeText(c.country)].filter(Boolean).join(', ') || '—';
-    const address = safeText(c.address) || '—';
+
+    // ✅ Address-on-request
+    const addressOnRequest = yes(c.address_on_request);
+    const address = addressOnRequest ? 'Address on request' : (safeText(c.address) || '—');
+    const addressNote = addressOnRequest
+      ? `
+        <div class="kv">
+          <div class="k">Note</div>
+          <div class="v">Exact address provided directly by the venue.</div>
+        </div>
+      `
+      : '';
+
     const hoursTable = openingHoursTable(c);
 
     const entryPolicy = safeText(c.entry_policy) || '—';
@@ -328,8 +340,11 @@
 
       <div class="modal-section">
         <div class="modal-section-title">General Info</div>
+
         <div class="kv"><div class="k">Location</div><div class="v">${escapeHtml(location)}</div></div>
+
         <div class="kv"><div class="k">Address</div><div class="v pre">${escapeHtml(address)}</div></div>
+        ${addressNote}
 
         <div class="modal-columns">
           <div class="modal-panel">
@@ -400,7 +415,6 @@
         maxClusterRadius: 50,
       });
     } else {
-      // fallback se o plugin não carregar por algum motivo
       markersLayer = L.layerGroup();
       console.warn('MarkerCluster não encontrado — a usar layerGroup fallback.');
     }
@@ -424,8 +438,6 @@
 
       points.push([lat, lng]);
 
-      // ✅ circleMarker é bonito mas não clusteriza no plugin
-      // por isso usamos marker com divIcon “dot”
       const icon = L.divIcon({
         className: 'club-dot',
         html: '<span></span>',
@@ -435,25 +447,20 @@
 
       const m = L.marker([lat, lng], { icon });
 
-      const popup =
-        `<b>${escapeHtml(c.name)}</b><br>` +
-        `${escapeHtml(c.city || '')}${c.city && c.country ? ', ' : ''}${escapeHtml(c.country || '')}`;
+      // ✅ Tooltip on hover (nome do clube)
+      m.bindTooltip(escapeHtml(c.name), {
+        direction: 'top',
+        offset: [0, -8],
+        opacity: 0.95,
+        className: 'club-tooltip',
+      });
 
-// Tooltip on hover (nome do clube)
-m.bindTooltip(escapeHtml(c.name), {
-  direction: 'top',
-  offset: [0, -8],
-  opacity: 0.95,
-  className: 'club-tooltip'
-});
-
-// Click abre modal
-m.on('click', () => openModal(c));
+      // ✅ Click abre modal
+      m.on('click', () => openModal(c));
 
       markersLayer.addLayer(m);
     });
 
-    // ✅ ajustar bounds
     if (points.length === 1) {
       map.setView(points[0], 12);
     } else if (points.length > 1) {
