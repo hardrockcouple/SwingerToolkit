@@ -22,40 +22,25 @@
     inset 0 1px 0 rgba(255,255,255,.04);
 }
 
-/* ✅ SWINGER – LIFESTYLE – TOOLKIT (Georgia, centrado, estilo logo) */
+/* Kicker (clean) */
 .kicker{
   margin: 0 0 18px;
   text-align: center;
 
-  font-family: Georgia, "Times New Roman", serif;
-  font-weight: 800;
+  font-family: Georgia, "Times New Roman", Times, serif;
+  font-weight: 700;
   font-size: 20px;
   letter-spacing: .22em;
   text-transform: uppercase;
 
-  background: linear-gradient(
-    180deg,
-    #f6d97a 0%,
-    #d4af37 45%,
-    #9f7d21 100%
-  );
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-
-  text-shadow:
-    0 1px 0 rgba(0,0,0,.6),
-    0 0 20px rgba(212,175,55,.15);
+  /* CLEAN: cor sólida, sem gradiente, sem sombras */
+  color: rgba(211,169,74,.92);
+  text-shadow: none;
 }
 
-/* separadores */
-.kicker .sep{
-  margin: 0 .35em;
-  opacity: .6;
-}
-
-/* “LIFESTYLE” menos visível */
-.kicker .dim{
-  opacity: .45;
+/* “LIFESTYLE” mais discreto */
+.kicker span{
+  opacity: .38;
   font-size: .78em;
   letter-spacing: .30em;
 }
