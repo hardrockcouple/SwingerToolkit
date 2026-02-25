@@ -8,7 +8,7 @@
 .hero{
   max-width: 1040px;
   margin: 0 auto 26px;
-  padding: 34px;
+  padding: 30px 34px 32px;   /* menos ar em cima */
   border-radius: 22px;
 
   background:
@@ -24,33 +24,32 @@
 
 /* Kicker (clean) */
 .kicker{
-  margin: 0 0 18px;
+  margin: 0 0 10px;        /* menos espaço abaixo */
   text-align: center;
 
   font-family: Georgia, "Times New Roman", Times, serif;
-  font-weight: 700;
-  font-size: 20px;
-  letter-spacing: .22em;
+  font-weight: 800;
+  font-size: 18px;
+  letter-spacing: .12em;   /* mais fechado */
   text-transform: uppercase;
 
-  /* CLEAN: cor sólida, sem gradiente, sem sombras */
   color: rgba(211,169,74,.92);
   text-shadow: none;
 }
 
-/* “LIFESTYLE” mais discreto */
 .kicker span{
-  opacity: .38;
+  opacity: .28;            /* lifestyle bem mais discreto */
+  font-weight: 500;
   font-size: .78em;
-  letter-spacing: .30em;
+  letter-spacing: .16em;
 }
 
 .hero h1{
   margin: 0 0 14px;
-  font-size: 26px;      /* mais pequeno */
+  font-size: 26px;
   font-weight: 700;
   line-height: 1.25;
-  text-align: center;   /* alinhado com o kicker */
+  text-align: center;
 }
 
 .lead{
