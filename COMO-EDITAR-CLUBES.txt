@@ -1,0 +1,33 @@
+EDITOR DE CLUBES — SWINGER TOOLKIT
+=================================
+
+1. Extrai primeiro todos os ficheiros do ZIP para uma pasta.
+
+2. Abre o ficheiro "clubs-admin.html" no Chrome ou no Edge.
+
+3. Carrega em "Abrir clubs.json" e seleciona o ficheiro "clubs.json"
+   que está na mesma pasta.
+
+4. Pesquisa um clube na coluna da esquerda ou usa "+ Novo clube".
+   As alterações ficam preparadas no editor enquanto trabalhas.
+
+5. No fim, carrega em "Guardar JSON".
+   No Chrome/Edge, o editor grava diretamente no ficheiro selecionado.
+
+6. Para maior segurança, podes usar "Criar cópia" antes de fazeres
+   alterações extensas.
+
+NOTAS
+-----
+
+- O editor funciona localmente no teu computador. Não envia o JSON para
+  nenhum serviço externo.
+
+- "Limpar registos vazios" remove as linhas sem nome que vieram da
+  exportação do Excel. A remoção só fica definitiva quando carregares em
+  "Guardar JSON".
+
+- Se fechares a página com alterações por guardar, o navegador apresenta
+  um aviso.
+
+- Atalho para guardar: Ctrl+S.

@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Swinger Toolkit</title>
+
+  <link rel="stylesheet" href="./styles.css" />
+  <link rel="stylesheet" href="./header.css" />
+  <link rel="stylesheet" href="./home.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Header injected -->
+  <div id="siteHeader"></div>
+
+  <main class="main-content home">
+    <section class="hero">
+     <p class="kicker">SWINGER<span> - LIFESTYLE - </span>TOOLKIT</p>
+      <h1>Your curated guide to clubs, destinations, brands &amp; shopping</h1>
+      <p class="lead">
+        For nearly ten years, we’ve explored the lifestyle across cities, countries, and cultures — 
+        from intimate local clubs to iconic international destinations. 
+        Along the way, we realised that truly useful information is surprisingly hard to find: 
+        scattered across forums, outdated posts, and second-hand opinions.
+        Swinger Toolkit was born from that frustration. A carefully curated space where experience 
+        replaces speculation, clarity replaces noise, and every recommendation is grounded in real 
+        visits. Thoughtfully organised. Discreet. Practical. Designed to make your next experience 
+        easier — and better.
+      </p>
+
+      <div class="hero-actions">
+        <a class="cta primary" href="clubs.html">Explore Clubs</a>
+        <a class="cta" href="destinations.html">Explore Destinations</a>
+        <a class="cta" href="shopping.html">Explore Shopping</a>
+      </div>
+    </section>
+
+    <section class="feature-grid" aria-label="What you’ll find here">
+      <article class="feature">
+        <h3>Clubs</h3>
+        <p>Search by country/city, open the map, and check details like opening times, rules and pricing.</p>
+        <a class="feature-link" href="clubs.html">Go to Clubs →</a>
+      </article>
+
+      <article class="feature">
+        <h3>Shopping</h3>
+        <p>Curated brands and stores for outfits, lingerie, accessories and lifestyle essentials.</p>
+        <a class="feature-link" href="shopping.html">Go to Shopping →</a>
+      </article>
+
+      <article class="feature">
+        <h3>Destinations</h3>
+        <p>Practical travel notes: where to stay, what to do, what to expect — from real visits.</p>
+        <a class="feature-link" href="destinations.html">Go to Destinations →</a>
+      </article>
+    </section>
+
+    <section class="note" aria-label="Disclaimer">
+      <h2>Respect, consent &amp; safety</h2>
+      <p class="muted">
+        This project is informational. Always follow local laws, venue rules, and community etiquette.
+        Consent and respect come first — everywhere, always.
+      </p>
+    </section>
+  </main>
+
+  <script src="./config.js"></script>
+
+  <!-- inject header -->
+  <script src="./header-loader.js" defer></script>
+
+  <!-- init logo ONLY after header exists -->
+  <script type="module">
+    import { initLogo } from "./ui-common.js";
+
+    window.addEventListener("header:loaded", () => {
+      initLogo();
+    }, { once: true });
+  </script>
+
+</body>
+</html>

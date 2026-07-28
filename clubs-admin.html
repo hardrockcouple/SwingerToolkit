@@ -1,0 +1,417 @@
+<!doctype html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="robots" content="noindex,nofollow" />
+  <title>SWTK — Editor de clubes</title>
+
+  <link rel="stylesheet" href="./clubs-admin.css" />
+</head>
+<body>
+  <header class="admin-header">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true">◆</div>
+      <div>
+        <div class="brand-name">SWINGER TOOLKIT</div>
+        <div class="brand-subtitle">EDITOR DE CLUBES</div>
+      </div>
+    </div>
+
+    <div id="fileActions" class="header-actions is-hidden">
+      <button id="btnChangeFile" class="button button-ghost" type="button">Trocar ficheiro</button>
+      <button id="btnBackup" class="button button-ghost" type="button">Criar cópia</button>
+      <button id="btnSaveJson" class="button button-primary" type="button">Guardar JSON</button>
+    </div>
+  </header>
+
+  <main>
+    <section id="startScreen" class="start-screen">
+      <div class="start-card">
+        <p class="eyebrow">GESTÃO LOCAL</p>
+        <h1>Editar o <span>clubs.json</span> sem passar pelo Excel</h1>
+        <p class="start-lead">
+          Abre o ficheiro atual, altera ou adiciona clubes através do formulário
+          e grava tudo diretamente no mesmo JSON.
+        </p>
+
+        <div class="start-actions">
+          <button id="btnOpenJson" class="button button-primary button-large" type="button">
+            Abrir clubs.json
+          </button>
+          <label class="button button-ghost button-large file-fallback">
+            Importar ficheiro
+            <input id="fileInput" type="file" accept=".json,application/json" />
+          </label>
+        </div>
+
+        <div class="start-notes">
+          <div>
+            <strong>Chrome ou Edge</strong>
+            <span>Permitem guardar diretamente no ficheiro que selecionares.</span>
+          </div>
+          <div>
+            <strong>Outros navegadores</strong>
+            <span>Continuam a funcionar, mas descarregam um novo clubs.json.</span>
+          </div>
+        </div>
+
+        <p id="startMessage" class="message" role="status" aria-live="polite"></p>
+      </div>
+    </section>
+
+    <section id="adminApp" class="admin-app is-hidden">
+      <aside class="records-panel">
+        <div class="file-summary">
+          <div>
+            <span class="summary-label">FICHEIRO ABERTO</span>
+            <strong id="fileName">clubs.json</strong>
+          </div>
+          <span id="saveMode" class="mode-badge">gravação direta</span>
+        </div>
+
+        <div class="records-tools">
+          <div class="records-count-row">
+            <strong id="recordsCount">0 clubes</strong>
+            <button id="btnNewClub" class="button button-small button-primary" type="button">
+              + Novo clube
+            </button>
+          </div>
+
+          <label class="search-box">
+            <span class="sr-only">Pesquisar clubes</span>
+            <input id="recordSearch" type="search" placeholder="Pesquisar nome, cidade ou país…" />
+          </label>
+
+          <div class="list-options">
+            <label>
+              Ordenar
+              <select id="sortRecords">
+                <option value="name">Nome</option>
+                <option value="country">País e cidade</option>
+                <option value="original">Ordem do JSON</option>
+              </select>
+            </label>
+            <button id="btnCleanEmpty" class="text-button" type="button">
+              Limpar registos vazios
+            </button>
+          </div>
+
+          <p id="emptyRecordsNote" class="empty-note"></p>
+        </div>
+
+        <div id="recordsList" class="records-list" role="listbox" aria-label="Clubes"></div>
+      </aside>
+
+      <section class="editor-panel">
+        <div id="emptySelection" class="empty-selection">
+          <div class="empty-selection-icon" aria-hidden="true">✦</div>
+          <h2>Seleciona um clube</h2>
+          <p>Escolhe um registo da lista ou cria um novo clube.</p>
+        </div>
+
+        <form id="clubForm" class="club-form is-hidden" novalidate>
+          <div class="editor-toolbar">
+            <div>
+              <p class="eyebrow">REGISTO</p>
+              <h1 id="editorTitle">Novo clube</h1>
+              <p id="editorLocation" class="editor-location"></p>
+            </div>
+            <div class="editor-actions">
+              <button id="btnDuplicate" class="button button-ghost" type="button">Duplicar</button>
+              <button id="btnDelete" class="button button-danger" type="button">Apagar</button>
+            </div>
+          </div>
+
+          <div id="validationBanner" class="validation-banner is-hidden" role="alert"></div>
+
+          <section class="form-section">
+            <div class="section-heading">
+              <div>
+                <span>01</span>
+                <h2>Identificação</h2>
+              </div>
+              <p>Informação principal usada nos cartões e nos filtros.</p>
+            </div>
+
+            <div class="form-grid">
+              <label class="field field-span-2">
+                <span>Nome do clube <b>*</b></span>
+                <input name="name" type="text" required autocomplete="off" />
+              </label>
+
+              <label class="field">
+                <span>ID <b>*</b></span>
+                <input name="id" type="text" maxlength="12" required autocomplete="off" />
+                <small>Identificador único do registo.</small>
+              </label>
+
+              <label class="toggle-field">
+                <input name="visited" type="checkbox" data-boolean="yes-no" />
+                <span class="toggle" aria-hidden="true"></span>
+                <span>
+                  <strong>Visitado</strong>
+                  <small>Mostra o selo VISITED no cartão.</small>
+                </span>
+              </label>
+
+              <label class="field">
+                <span>País <b>*</b></span>
+                <input name="country" type="text" list="countriesList" required autocomplete="off" />
+              </label>
+
+              <label class="field">
+                <span>Cidade <b>*</b></span>
+                <input name="city" type="text" list="citiesList" required autocomplete="off" />
+              </label>
+
+              <label class="field field-span-2">
+                <span>Tipo</span>
+                <input name="type" type="text" list="typesList" placeholder="Ex.: club + spa" autocomplete="off" />
+              </label>
+            </div>
+          </section>
+
+          <section class="form-section">
+            <div class="section-heading">
+              <div>
+                <span>02</span>
+                <h2>Localização e contactos</h2>
+              </div>
+              <p>Morada, coordenadas e canais oficiais do espaço.</p>
+            </div>
+
+            <div class="form-grid">
+              <label class="field field-span-2">
+                <span>Website</span>
+                <input name="website" type="url" placeholder="https://…" autocomplete="off" />
+              </label>
+
+              <label class="field">
+                <span>Email</span>
+                <input name="email" type="email" autocomplete="off" />
+              </label>
+
+              <label class="field">
+                <span>Telefone</span>
+                <input name="phone" type="tel" autocomplete="off" />
+              </label>
+
+              <label class="toggle-field field-span-2">
+                <input name="address_on_request" type="checkbox" data-boolean="true-false" />
+                <span class="toggle" aria-hidden="true"></span>
+                <span>
+                  <strong>Morada fornecida apenas a pedido</strong>
+                  <small>A morada exata não será mostrada publicamente.</small>
+                </span>
+              </label>
+
+              <label class="field field-span-2">
+                <span>Morada</span>
+                <textarea name="address" rows="4" placeholder="Uma linha por cada parte da morada"></textarea>
+              </label>
+
+              <label class="field">
+                <span>Latitude</span>
+                <input name="lat" type="number" step="any" min="-90" max="90" inputmode="decimal" />
+              </label>
+
+              <label class="field">
+                <span>Longitude</span>
+                <input name="lng" type="number" step="any" min="-180" max="180" inputmode="decimal" />
+              </label>
+            </div>
+          </section>
+
+          <section class="form-section">
+            <div class="section-heading">
+              <div>
+                <span>03</span>
+                <h2>Horário</h2>
+              </div>
+              <p>Usa “closed” nos dias em que o clube não abre.</p>
+            </div>
+
+            <div class="hours-grid">
+              <label class="field">
+                <span>Segunda</span>
+                <input name="open_time_monday" type="text" placeholder="closed" />
+              </label>
+              <label class="field">
+                <span>Terça</span>
+                <input name="open_time_tuesday" type="text" placeholder="closed" />
+              </label>
+              <label class="field">
+                <span>Quarta</span>
+                <input name="open_time_wednesday" type="text" placeholder="closed" />
+              </label>
+              <label class="field">
+                <span>Quinta</span>
+                <input name="open_time_thursday" type="text" placeholder="closed" />
+              </label>
+              <label class="field">
+                <span>Sexta</span>
+                <input name="open_time_friday" type="text" placeholder="22:00 - 04:00" />
+              </label>
+              <label class="field">
+                <span>Sábado</span>
+                <input name="open_time_saturday" type="text" placeholder="22:00 - 04:00" />
+              </label>
+              <label class="field">
+                <span>Domingo</span>
+                <input name="open_time_sunday" type="text" placeholder="closed" />
+              </label>
+            </div>
+
+            <label class="field">
+              <span>Notas sobre o horário</span>
+              <textarea name="open_time_notes" rows="3"></textarea>
+            </label>
+          </section>
+
+          <section class="form-section">
+            <div class="section-heading">
+              <div>
+                <span>04</span>
+                <h2>Entrada e preços</h2>
+              </div>
+              <p>Políticas de acesso e valores habituais para casais.</p>
+            </div>
+
+            <div class="form-grid">
+              <label class="field">
+                <span>Política de entrada</span>
+                <input name="entry_policy" type="text" list="entryPoliciesList" autocomplete="off" />
+              </label>
+
+              <label class="field">
+                <span>Política para singles</span>
+                <input name="singles_policy" type="text" list="singlesPoliciesList" autocomplete="off" />
+              </label>
+
+              <label class="field field-span-2">
+                <span>Notas sobre a entrada</span>
+                <textarea name="entry_notes" rows="3"></textarea>
+              </label>
+
+              <label class="field">
+                <span>Modelo de preço</span>
+                <input name="pricing_model" type="text" list="pricingModelsList" autocomplete="off" />
+              </label>
+
+              <label class="field">
+                <span>Faixa de preço</span>
+                <select name="price_range">
+                  <option value=""></option>
+                  <option value="low">low</option>
+                  <option value="medium">medium</option>
+                  <option value="high">high</option>
+                </select>
+              </label>
+
+              <label class="field">
+                <span>Preço mínimo — casal</span>
+                <input name="price_couples_min" type="text" placeholder="30,00 €" />
+              </label>
+
+              <label class="field">
+                <span>Preço máximo — casal</span>
+                <input name="price_couples_max" type="text" placeholder="60,00 €" />
+              </label>
+
+              <label class="field">
+                <span>Moeda</span>
+                <input name="price_currency" type="text" list="currenciesList" placeholder="EUR" />
+              </label>
+
+              <label class="field">
+                <span>Política de estacionamento</span>
+                <input name="parking_policy" type="text" list="parkingPoliciesList" autocomplete="off" />
+              </label>
+
+              <label class="field">
+                <span>Política de fumo</span>
+                <input name="smoking_policy" type="text" list="smokingPoliciesList" autocomplete="off" />
+              </label>
+
+              <label class="field field-span-2">
+                <span>Notas sobre os preços</span>
+                <textarea name="pricing_notes" rows="3"></textarea>
+              </label>
+            </div>
+          </section>
+
+          <section class="form-section">
+            <div class="section-heading">
+              <div>
+                <span>05</span>
+                <h2>Comodidades</h2>
+              </div>
+              <p>Seleciona tudo o que o clube disponibiliza.</p>
+            </div>
+
+            <div class="amenities-grid">
+              <label class="amenity-check">
+                <input name="has_sauna" type="checkbox" data-boolean="yes-no" />
+                <span>Sauna</span>
+              </label>
+              <label class="amenity-check">
+                <input name="has_pool" type="checkbox" data-boolean="yes-no" />
+                <span>Piscina</span>
+              </label>
+              <label class="amenity-check">
+                <input name="has_darkroom" type="checkbox" data-boolean="yes-no" />
+                <span>Darkroom</span>
+              </label>
+              <label class="amenity-check">
+                <input name="has_private_rooms" type="checkbox" data-boolean="yes-no" />
+                <span>Salas privadas</span>
+              </label>
+              <label class="amenity-check">
+                <input name="has_lockers" type="checkbox" data-boolean="yes-no" />
+                <span>Cacifos</span>
+              </label>
+              <label class="amenity-check">
+                <input name="has_bar" type="checkbox" data-boolean="yes-no" />
+                <span>Bar</span>
+              </label>
+              <label class="amenity-check">
+                <input name="has_outdoor_area" type="checkbox" data-boolean="yes-no" />
+                <span>Zona exterior</span>
+              </label>
+              <label class="amenity-check">
+                <input name="has_dancefloor" type="checkbox" data-boolean="yes-no" />
+                <span>Pista de dança</span>
+              </label>
+            </div>
+          </section>
+
+          <div class="form-footer">
+            <p>
+              As alterações ficam preparadas neste editor. Usa
+              <strong>Guardar JSON</strong> no topo para as gravar no ficheiro.
+            </p>
+            <button id="btnSaveBottom" class="button button-primary" type="button">
+              Guardar JSON
+            </button>
+          </div>
+        </form>
+      </section>
+    </section>
+  </main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <datalist id="countriesList"></datalist>
+  <datalist id="citiesList"></datalist>
+  <datalist id="typesList"></datalist>
+  <datalist id="entryPoliciesList"></datalist>
+  <datalist id="singlesPoliciesList"></datalist>
+  <datalist id="pricingModelsList"></datalist>
+  <datalist id="parkingPoliciesList"></datalist>
+  <datalist id="smokingPoliciesList"></datalist>
+  <datalist id="currenciesList"></datalist>
+
+  <script src="./clubs-admin.js"></script>
+</body>
+</html>
